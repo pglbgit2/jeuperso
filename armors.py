@@ -64,6 +64,10 @@ class ARMOR(items.ITEM):
         else: 
             damage -= self.durability
             self.durability = 0
-            
+    
+    def repair(self, reparation):
+        self.durability += reparation
+        if self.durability > self.maxDur:
+            self.durability = self.maxDur
             
             
