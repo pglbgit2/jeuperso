@@ -1,4 +1,4 @@
-
+import items
 
 
 ## DEFAULT SWORD ATTRIBUTES ##
@@ -34,18 +34,48 @@ SPIKED_CLUB_COST = 15
 SPIKED_CLUB_SPEED = 18
 SPIKED_CLUB = (SPIKED_CLUB_DAMAGE, SPIKED_CLUB_WEIGHT, SPIKED_CLUB_COST, SPIKED_CLUB_SPEED)
 
-class WEAPON:
+## IRON ARROW ##
+
+ARROW_DAMAGE = 5
+ARROW_WEIGHT = 0.2
+ARROW_COST = 0.3
+ARROW_SPEED = 10
+ARROW = (ARROW_DAMAGE, ARROW_WEIGHT, ARROW_COST, ARROW_SPEED)
+
+## ROCK ##
+ROCK_DAMAGE = 3
+ROCK_WEIGHT = 0.7
+ROCK_COST = 0
+ROCK_SPEED = 10
+ROCK = (ROCK_DAMAGE, ROCK_WEIGHT, ROCK_COST, ROCK_SPEED)
+
+## SPEAR ##
+
+SPEAR_DAMAGE = 6
+SPEAR_WEIGHT = 12
+SPEAR_COST = 20
+SPEAR_SPEED = 12
+SPEAR = (SPEAR_DAMAGE, SPEAR_WEIGHT, SPEAR_COST, SPEAR_SPEED)
+
+## RANGE AMMO ##
+
+RANGE = ["ARROW", "ROCK"]
+
+## THROWABLE ##
+
+THROWABLE = ["KNIFE", "ROCK", "SPEAR"]
+
+class WEAPON(items.ITEM):
     def __init__(self, _cost : int, _damage : int, _weight : int, _speed : int):
-        self.cost = _cost
+        super().__init__(_cost,_weight)
         self.damage =_damage
-        self.weight = _weight
         self.speed = _speed
         
     def upgrade(self, damage_boost : int):
         self.damage += damage_boost
     
     @staticmethod
-    def get_weapon(weapon_name):
+    def get_melee_weapon(weapon_name):
         if weapon_name in globals():
             (WEAPON_DAMAGE, WEAPON_WEIGHT, WEAPON_COST, WEAPON_SPEED) = globals()[weapon_name]
             return WEAPON(WEAPON_DAMAGE, WEAPON_WEIGHT, WEAPON_COST, WEAPON_SPEED)
