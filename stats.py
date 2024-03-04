@@ -1,7 +1,7 @@
 import rules
 
 DEFAULT_STATS = {
-    rules.QM : 1, # Indicates level of action
+    rules.QM : 1, # Indicates level of action, default is 1
     rules.CM : 1,
     rules.SM : 1,
     rules.BA : 1,
@@ -13,5 +13,3 @@ DEFAULT_STATS = {
 }
 
 
-def use_stats(stats : dict):
-    return {** DEFAULT_STATS, **stats}

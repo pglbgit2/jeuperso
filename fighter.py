@@ -19,7 +19,8 @@ class CHARACTER:
         self.money = gold
         self.faction = faction
         self.weight = 0
-        self.skills = stats.use_stats(skills)  
+        self.skills = {**stats.DEFAULT_STATS, **skills}
+        self.actions = []
         
         
     def max_weight(self):
@@ -49,6 +50,7 @@ class CHARACTER:
 
     def getInitiative(self):
         return random.randint(0,100)
+    
         
     @staticmethod
     def instantiate_from_race(race:str, name:str, faction: str):

@@ -7,4 +7,6 @@ class Player(fighter.CHARACTER):
     
     
     def getInitiative(self):
-        interaction.askFor("Roll 1d100 dice for Initiative, Give result")
+        return interaction.askFor("Roll 1d100 dice for Initiative, Give result")
+        
+   
