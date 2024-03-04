@@ -1,11 +1,12 @@
-import armors, items, weapons, races
+import armors, items, weapons, races, stats
 from typing import List, Union, Type
-
+import random
 
 FACTIONS = ["Heroes","Bandits","City"]
 
-class FIGHTER:
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = []):
+
+class CHARACTER:
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : dict = {}):
         self.HP = HP
         self.MaxHP = MaxHP
         self.stamina = Stamina
@@ -18,6 +19,8 @@ class FIGHTER:
         self.money = gold
         self.faction = faction
         self.weight = 0
+        self.skills = stats.use_stats(skills)  
+        
         
     def max_weight(self):
         return self.stamina*30
@@ -33,7 +36,7 @@ class FIGHTER:
         return self.weight
     
     def get_speed(self):
-        return self.max_weight() - self.total_weight()
+        return (self.max_weight() - self.total_weight())/10
             
     def put_into_inventory(self, stuff : items.ITEM):
         if self.total_weight() <= self.max_weight() and stuff not in self.inventory:
@@ -43,12 +46,15 @@ class FIGHTER:
     def lootAll(self, loot: List[items.ITEM]):
         for item in loot:
             self.put_into_inventory(item)
-        
+
+    def getInitiative(self):
+        return random.randint(0,100)
         
     @staticmethod
     def instantiate_from_race(race:str, name:str, faction: str):
-        if race in races.RACES:
+        if race in races.RACES and faction in FACTIONS:
             Race = getattr(races, race)
-            return FIGHTER(name = name, faction = faction, **Race)
+            return CHARACTER(name = name, faction = faction, **Race)
         
-#billy = FIGHTER.instantiate_from_race("HUMAN", "billy", "team1")
+# billy = CHARACTER.instantiate_from_race("HUMAN", "billy", "Heroes")
+# print(billy.faction)
