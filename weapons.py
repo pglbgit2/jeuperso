@@ -69,7 +69,8 @@ ROCK = {"damage" : ROCK_DAMAGE, "weight" : ROCK_WEIGHT, "cost" : ROCK_COST}
 BOW_ACCURACY = 0.20
 BOW_WEIGHT = 15
 BOW_COST = 30
-BOW =  {"accuracy" : BOW_ACCURACY, "weight" : BOW_WEIGHT, "cost" : BOW_COST}
+BOW_MUNITION = "ARROW"
+BOW =  {"accuracy" : BOW_ACCURACY, "weight" : BOW_WEIGHT, "cost" : BOW_COST, "munition" : BOW_MUNITION}
 
 ######################
 
@@ -103,9 +104,10 @@ class WEAPON(items.ITEM):
             return None
     
 class RANGE_WEAPON(items.ITEM):
-    def __init__(self, _cost : int, _accuracy : int, _weight : int):      
+    def __init__(self, _cost : int, _accuracy : int, _weight : int, _munition : str):      
         super().__init__(_cost,_weight)
         self.accuracy = _accuracy
+        self.munition = _munition
 
     @staticmethod
     def get_range_weapon(weapon_name):

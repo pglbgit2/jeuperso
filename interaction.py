@@ -21,19 +21,21 @@ def getPlayerActions(player : player.Player, units : Dict[str:fighter.CHARACTER]
         while finished == False:
             try:
                 Actions = []
-                strActions = input("Expected Format: action1 on fighter1 ; action2 on fighter2 ; ...")
+                strActions = input("Expected Format: action1 on fighter1, fighter2 ; action2 on fighter2 ; ...")
                 parsedActions = strActions.split(" ; ")
                 for strAction in parsedActions:
-                    [actionName, fighterName] = strAction.split(" on ")
+                    [actionName, fightersName] = strAction.split(" on ")
+                    fightersName = fightersName.split(", ")
                     if actionName not in rules.ACTIONS_NAMES.keys():
                         print("given Action Name: "+actionName+" do not exist")
                         raise Exception()
-                    if fighterName not in units.keys():
-                        print("given fighter name"+fighterName+" do not exist")
-                        raise Exception()
-                    Actions.append(rules.Action(rules.ACTIONS_NAMES[actionName], player, units[fighterName]))
+                    for fighterName in fightersName:
+                        if fighterName not in units.keys():
+                            print("given fighter name"+fighterName+" do not exist")
+                            raise Exception()
                     
-                
+                    
+                finished = True                    
             except Exception as e:
                 continue
     return Actions

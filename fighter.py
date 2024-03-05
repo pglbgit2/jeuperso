@@ -1,15 +1,16 @@
-import armors, items, weapons, races, stats
-from typing import List, Union, Type
+import armors, items, weapons, races, defaultSkills
+from typing import List, Union
 import random
 
 FACTIONS = ["Heroes","Bandits","City"]
 
 
 class CHARACTER:
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : dict = {}):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = defaultSkills.DEFAULT_SKILLS):
         self.HP = HP
         self.MaxHP = MaxHP
         self.stamina = Stamina
+        self.MaxStamina = Stamina
         self.magic = magic
         self.stamina_regeneration = stamina_regeneration
         self.equipment = Equipment
@@ -19,8 +20,8 @@ class CHARACTER:
         self.money = gold
         self.faction = faction
         self.weight = 0
-        self.skills = {**stats.DEFAULT_STATS, **skills}
-        self.actions = []
+        self.skills = skills
+        self.defensePoints = 0
         
         
     def max_weight(self):
@@ -50,6 +51,13 @@ class CHARACTER:
 
     def getInitiative(self):
         return random.randint(0,100)
+    
+    def addSkill(self, skill:str):
+        if skill not in self.skills:
+            self.skills.append(skill)
+            
+    def useSkill(self,skill:str):
+        pass
     
         
     @staticmethod
