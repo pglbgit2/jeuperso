@@ -9,3 +9,5 @@ SD = "Stoical_Defense"
 CD = "Classic_Defense"
 
 DEFAULT_SKILLS = [QM, CM, SM, BA, QA, CA, LD, SD, CD]
+
+

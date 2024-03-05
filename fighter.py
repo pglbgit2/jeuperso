@@ -13,8 +13,13 @@ class CHARACTER:
         self.MaxStamina = Stamina
         self.magic = magic
         self.stamina_regeneration = stamina_regeneration
-        self.equipment = Equipment
         self.inventory = Inventory
+        self.bodyArmor = None
+        self.legsArmor = None
+        self.leftTool = None
+        self.rightTool = None
+        self.headArmor = None
+        self.equipAll(Equipment)
         self.race = race
         self.name = name
         self.money = gold
@@ -22,15 +27,40 @@ class CHARACTER:
         self.weight = 0
         self.skills = skills
         self.defensePoints = 0
-        
-        
+       
+    
     def max_weight(self):
         return self.stamina*30
         
-    def equip(self, stuff : Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]):
-        if stuff in self.inventory and stuff not in self.equipment:
-            self.equipment.append(stuff)
+    def equip(self, stuff : Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], side="left"):
+        if stuff in self.inventory:
+            if isinstance(stuff, armors.ARMOR):
+                if stuff.name in armors.BODY:
+                    self.bodyArmor = stuff
+                    return
+                if stuff.name in armors.HEAD:
+                    self.headArmor = stuff
+                    return
+                if stuff.name in armors.LEGS:
+                    self.legsArmor = stuff
+                    return
+                
+            if stuff.name in weapons.TWO_HAND_WEAPONS:
+                self.leftTool = stuff
+                self.rightTool = stuff
+                return
+            else:
+                if side == "left":
+                    self.leftTool = stuff
+                    return
+                self.rightTool = stuff
+                
     
+    def equipAll(self, loadsOfStuff : List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]]):
+        for stuff in loadsOfStuff:
+            self.equip(stuff)
+            
+            
     def total_weight(self):
         if self.weight == 0:
             for item in self.inventory:

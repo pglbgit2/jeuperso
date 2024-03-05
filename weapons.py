@@ -85,9 +85,13 @@ RANGE_PROJECTILE = ["ARROW", "ROCK"]
 
 RANGE_WEAPONS = ["BOW"]
 
+ONE_HAND_WEAPONS = ["SWORD", "KNIFE"]
+
+TWO_HAND_WEAPONS = ["BOW", "LONG_SWORD", "SPEAR"]
+
 class WEAPON(items.ITEM):
-    def __init__(self, cost : int, damage : int, weight : int, speed : int):
-        super().__init__(cost,weight)
+    def __init__(self, name : str, cost : int, damage : int, weight : int, speed : int):
+        super().__init__(name,cost,weight)
         self.damage = damage
         self.speed = speed
         
@@ -98,22 +102,22 @@ class WEAPON(items.ITEM):
     def get_melee_weapon(weapon_name):
         if weapon_name in globals() and weapon_name in MELEE_WEAPONS:
             weapon = globals()[weapon_name]
-            return WEAPON(**weapon)
+            return WEAPON(name=weapon_name, **weapon)
         else:
             print("No Weapon with such name")
             return None
     
 class RANGE_WEAPON(items.ITEM):
-    def __init__(self, _cost : int, _accuracy : int, _weight : int, _munition : str):      
-        super().__init__(_cost,_weight)
+    def __init__(self, name, _cost : int, _accuracy : int, _weight : int, _munition : str):      
+        super().__init__(name,_cost,_weight)
         self.accuracy = _accuracy
         self.munition = _munition
-
+        
     @staticmethod
     def get_range_weapon(weapon_name):
         if weapon_name in globals() and weapon_name in RANGE_WEAPONS:
             range = globals()[weapon_name]
-            return RANGE_WEAPON(**range)
+            return RANGE_WEAPON(name=weapon_name, **range)
         else:
             print("No Weapon with such name")
             return None

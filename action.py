@@ -10,7 +10,7 @@ class Action:
         if action_name not in Action.ACTIONS_DICT.keys():
             Action.ACTIONS_DICT[action_name] = self
             self.name = action_name
-            self.upgrades : List['Action']= []
+            self.upgrades : List['Action'] = []
             self.staminaCost = StaminaCost
             self.upgradeExpCost = UpgradeExpCost
         else: raise Exception("Already Existing Action")
@@ -22,19 +22,22 @@ class Action:
     def acts(self, fighter : fighter.CHARACTER, context : Union[Dict[Tuple[int,int] : fighter.CHARACTER], fighter.CHARACTER], targets : Union[List[Tuple[int,int]], fighter.CHARACTER]):
         pass
     
-    def checkForUpgrades(self):
-        pass
+    
     
 
 
 class Movement(Action):
     def __init__(self, action_name: str, StaminaCost: int, UpgradeExpCost: int):
         super().__init__(action_name, StaminaCost, UpgradeExpCost)
-
+    
 
 class Quick_Movement(Movement):
-    def __init__(self, action_name: str, StaminaCost: int, UpgradeExpCost: int):
-        super().__init__(action_name, StaminaCost, UpgradeExpCost)
+    Level_Parameters = {
+        1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10},
+        2 : {"StaminaCost" : 3, "UpgradeCost" : 15}
+    }
+    def __init__(self, level: int):
+        super().__init__("Quick_Movement"+"-lv"+str(level), **Quick_Movement.Level_Parameters[level])
     
 class Classic_Movement(Movement):
     def __init__(self, action_name: str, StaminaCost: int, UpgradeExpCost: int):
