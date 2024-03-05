@@ -6,7 +6,7 @@ FACTIONS = ["Heroes","Bandits","City"]
 
 
 class CHARACTER:
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = defaultSkills.DEFAULT_SKILLS):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = defaultSkills.DEFAULT_SKILLS, dodge : float = 0.15):
         self.HP = HP
         self.MaxHP = MaxHP
         self.stamina = Stamina
@@ -25,8 +25,12 @@ class CHARACTER:
         self.money = gold
         self.faction = faction
         self.weight = 0
+        for skill in skills:
+            if skill in defaultSkills.DEFAULT_SKILLS:
+                skill += "-lv1"
         self.skills = skills
         self.defensePoints = 0
+        self.dodgePercent = dodge
        
     
     def max_weight(self):
@@ -54,7 +58,21 @@ class CHARACTER:
                     self.leftTool = stuff
                     return
                 self.rightTool = stuff
-                
+    
+    def protection_damage(self, damage : int, damage_type:str, protection : armors.ARMOR):
+        damage = protection.damage_absorption(damage, damage_type)
+        if protection.durability == 0:
+            protection = None
+        return damage
+    
+    def take_damage(self, damage : int, damage_type : str):
+        if self.headArmor != None:
+            damage = self.protection_damage(damage, damage_type , self.headArmor)
+        if self.bodyArmor != None:
+            damage = self.protection_damage(damage, damage_type, self.bodyArmor)
+        if self.legsArmor != None:
+            damage = self.protection_damage(damage, damage_type, self.legsArmor)
+        self.HP -= damage
     
     def equipAll(self, loadsOfStuff : List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]]):
         for stuff in loadsOfStuff:
@@ -89,6 +107,8 @@ class CHARACTER:
     def useSkill(self,skill:str):
         pass
     
+    def dodge(self, modification = 0):
+        return random.randint(0,100) <= self.dodgePercent + modification
         
     @staticmethod
     def instantiate_from_race(race:str, name:str, faction: str):

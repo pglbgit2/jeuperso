@@ -20,3 +20,6 @@ class Player(fighter.CHARACTER):
                     
     def useSkill(self,skill:str):
         self.actionCounter[skill] += 1
+        
+    def dodge(self,modification=0):
+        return interaction.askFor("Roll 1d100 dice for Dodging, Give result")

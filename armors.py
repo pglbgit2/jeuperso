@@ -65,7 +65,7 @@ class ARMOR(items.ITEM):
     def __init__(self, cost : int, weight : int, durability : int, absorption : Dict[str:int]):
         super().__init__(cost,weight)
         self.maxDur = durability
-        self.maxAbs = absorption
+        self.absorption = absorption
         self.durability = durability
         
     @staticmethod
@@ -77,14 +77,13 @@ class ARMOR(items.ITEM):
             print("No armor with such name")
             return None
         
-    def damage_absorption(self, damage:int):
-        toTake = max(damage - self.maxAbs,0)
-        if self.durability > toTake:
-            self.durability -= toTake
-            damage -= toTake
-        else: 
-            damage -= self.durability
-            self.durability = 0
+    def damage_absorption(self, damage:int, damage_type : str):
+        absorbed = self.absorption[damage_type]*damage
+        if absorbed > self.durability:
+            absorbed = self.durability
+        self.durability -= absorbed
+        return damage - absorbed
+        
     
     def repair(self, reparation):
         self.durability += reparation

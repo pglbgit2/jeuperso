@@ -5,12 +5,13 @@
 
 ## HUMANS ##
 HUMAN  = {
-    "HP" : 22,
+    "HP" : 20,
     "MaxHP" : 20,
     "Stamina" : 5,
     "magic" : 0,
     "stamina_regeneration"  : 5, 
-    "race"  :  "Human"
+    "race"  :  "Human",
+    "dodge" : 0.15
 }
 
 
