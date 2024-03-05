@@ -79,6 +79,8 @@ class ARMOR(items.ITEM):
         
     def damage_absorption(self, damage:int, damage_type : str):
         absorbed = self.absorption[damage_type]*damage
+        if absorbed > damage:
+            absorbed = damage
         if absorbed > self.durability:
             absorbed = self.durability
         self.durability -= absorbed

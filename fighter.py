@@ -31,6 +31,7 @@ class CHARACTER:
         self.skills = skills
         self.defensePoints = 0
         self.dodgePercent = dodge
+        self.dodgeUsual = dodge
        
     
     def max_weight(self):
@@ -66,11 +67,15 @@ class CHARACTER:
         return damage
     
     def take_damage(self, damage : int, damage_type : str):
-        if self.headArmor != None:
+        if self.defensePoints < 0:
+            damage = damage / -self.defensePoints
+        else:
+            damage -= self.defensePoints
+        if self.headArmor != None and damage > 0:
             damage = self.protection_damage(damage, damage_type , self.headArmor)
-        if self.bodyArmor != None:
+        if self.bodyArmor != None and damage > 0:
             damage = self.protection_damage(damage, damage_type, self.bodyArmor)
-        if self.legsArmor != None:
+        if self.legsArmor != None and damage > 0:
             damage = self.protection_damage(damage, damage_type, self.legsArmor)
         self.HP -= damage
     
