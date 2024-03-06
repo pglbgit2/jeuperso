@@ -149,19 +149,22 @@ class Classic_Defense(Defense):
     def __init__(self, level : int):
         super().__init__("Classic_Defense"+"-lv"+str(level),level=level, **Classic_Defense.Level_Parameters[level])
     
-    
-def setupMultiLevelActions(actionName):
-    pass
+
 
 def setupActions():
     import sys, inspect
     for name, obj in inspect.getmembers(sys.modules[__name__]):
         if inspect.isclass(obj):
             if obj not in ABSTRACT:
-                print(obj)
+                #print(obj)
                 if hasattr(obj, 'Level_Parameters'):
+                    ClassLevel = []
+                    i = 0
                     for level in obj.Level_Parameters.keys():
-                        obj(level)   
+                        ClassLevel.append(obj(level))
+                        if i>0:
+                            ClassLevel[i-1].upgrades.append(ClassLevel[i])
+                        i+=1
                 else:
                     obj()
 
@@ -170,4 +173,4 @@ ABSTRACT = [Action, Attack, Defense, Movement]
                 
 if __name__ == '__main__':
     setupActions()
-    print(Action.ACTIONS_DICT)
+    #print(Action.ACTIONS_DICT)
