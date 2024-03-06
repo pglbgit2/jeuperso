@@ -1,4 +1,4 @@
-import fighter, rules, action, player, interaction
+import fighter, rules, action, player, interaction, items
 from typing import List, Dict, Union, Tuple
 
 class Battle:
@@ -7,11 +7,10 @@ class Battle:
             action.setupActions()
         if action.Action.ACTIONS_DICT == {} or fighters == []:
             raise Exception("Can not start battle")
-        self.inBattle = True
         self.fighters = fighters
         self.fightersNames : Dict[str, fighter.CHARACTER] = {}
         self.factionsWarriors : Dict[str,List[str]] = {}
-        self.defeatedWarriors = []
+        self.defeatedWarriors : List[fighter.CHARACTER] = []
         for warrior in fighters:
             self.fightersNames[warrior.name] = warrior
             if warrior.faction not in self.factionsWarriors.keys():
@@ -89,7 +88,14 @@ class Battle:
             exec(buf)
     
     def hasBattleEnded(self):
-        pass
+        count = 0
+        for faction in self.factionsWarriors.keys():
+            if self.factionsWarriors[faction] != []:
+                count += 1
+            if count >= 2:
+                return False
+        assert count != 0 # means everyone died
+        return True
                 
     def turn(self):
         self.beginTurn()
@@ -97,3 +103,42 @@ class Battle:
         self.executeActions()
         if interaction.TERMINAL == 1:
             self.manualChanges()
+    
+    def collectLoot(self):
+        loot : Tuple[List[items.ITEM], int] = ([],0) # (inventory, gold)
+        for dead in self.defeatedWarriors:
+            loot[0].extend(dead.inventory)
+            if dead.money > 0:
+                loot[1] += dead.money
+        return loot
+    
+    def shareLoot(self, loot : Tuple[List[items.ITEM], int]):
+        for item in loot[0]:
+            given = False
+            while not given:
+                characterName = interaction.askFor("Who to give "+item.name)
+                if characterName not in self.fightersNames.keys():
+                    continue
+                self.fightersNames[characterName].put_into_inventory(item)
+                
+        while loot[1] != 0:
+            characterName = interaction.askFor("Who to give gold")
+            if characterName not in self.fightersNames.keys():
+                continue
+            amount = int(interaction.askFor("Remaining gold: "+loot[1]+", how much to give ?"))
+            if amount > loot[1]:
+                continue
+            else: 
+                self.fightersNames[characterName].money += amount
+                loot[1] -= amount
+                
+            
+                
+            
+    
+    def battle(self):
+        while not self.hasBattleEnded():
+            self.turn()
+        loot = self.collectLoot()
+        self.shareLoot(loot)
+        
