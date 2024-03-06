@@ -90,10 +90,11 @@ ONE_HAND_WEAPONS = ["SWORD", "KNIFE"]
 TWO_HAND_WEAPONS = ["BOW", "LONG_SWORD", "SPEAR"]
 
 class WEAPON(items.ITEM):
-    def __init__(self, name : str, cost : int, damage : int, weight : int, speed : int):
+    def __init__(self, name : str, cost : int, damage : int, weight : int, speed : int, type : str):
         super().__init__(name,cost,weight)
         self.damage = damage
         self.speed = speed
+        self.damageType = type
         
     def upgrade(self, damage_boost : int):
         self.damage += damage_boost

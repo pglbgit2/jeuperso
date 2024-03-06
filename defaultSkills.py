@@ -7,7 +7,8 @@ CA = "Classic_Attack"
 LD = "Light_Defense"
 SD = "Stoical_Defense"
 CD = "Classic_Defense"
+E = "Equip"
 
-DEFAULT_SKILLS = [QM, CM, SM, BA, QA, CA, LD, SD, CD]
+DEFAULT_SKILLS = [QM, CM, SM, BA, QA, CA, LD, SD, CD, E]
 
 

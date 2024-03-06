@@ -1,12 +1,12 @@
 
 from typing import List, Tuple, Dict, Union
-import fighter, player
+import fighter, armors, weapons
 
 
 class Action:
     ACTIONS_DICT = {}
     
-    def __init__(self, action_name : str, StaminaCost: int, UpgradeExpCost : int, level : int):
+    def __init__(self, action_name : str, StaminaCost: int, UpgradeExpCost : int, level : int, dodge_alteration : int):
         if action_name not in Action.ACTIONS_DICT.keys():
             Action.ACTIONS_DICT[action_name] = self
             self.name = action_name
@@ -14,6 +14,7 @@ class Action:
             self.staminaCost = StaminaCost
             self.upgradeExpCost = UpgradeExpCost
             self.level = level
+            self.dodge_alteration = dodge_alteration
         else: raise Exception("Already Existing Action")
     
     def addUpgrade(self, upgrade: 'Action'):
@@ -21,19 +22,23 @@ class Action:
             self.upgrades.append(upgrade)
             
     def acts(self, fighter : fighter.CHARACTER, targets : Union[Tuple[int,int], List[fighter.CHARACTER]], hand="left"):
+        fighter.dodgePercent += fighter.dodgePercent * self.dodge_alteration
+    
+    
+class Equip(Action): # Must consider Equip as special action: not upgradable
+    def __init__(self):
+        super().__init__("Equip", 1, 0, 1, 0)
+    
+    def acts(self, fighter : fighter.CHARACTER, targets : List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]], hand="left"):
         pass
-    
-    
-    
-
 
 class Movement(Action):
     def __init__(self, action_name: str, StaminaCost: int, UpgradeExpCost: int, speed : int, dodge_alteration :int, level : int):
-        super().__init__(action_name, StaminaCost, UpgradeExpCost, level)
+        super().__init__(action_name, StaminaCost, UpgradeExpCost, level, dodge_alteration)
         self.speed = speed
-        self.dodge_alter = dodge_alteration
     
     def acts(self, fighter : fighter.CHARACTER, targets : Tuple[int,int], hand="left"):
+        super(Movement, self).acts(fighter,targets)
         pass # move fighter at target emplacement if possible
 
 class Quick_Movement(Movement):
@@ -64,11 +69,12 @@ class Slow_Movement(Movement):
         
         
 class Attack(Action):
-    def __init__(self, action_name: str, StaminaCost: int, UpgradeExpCost: int, damageFactor : int, level : int):
-        super().__init__(action_name, StaminaCost, UpgradeExpCost, level)
+    def __init__(self, action_name: str, StaminaCost: int, UpgradeExpCost: int, damageFactor : int, level : int, dodge_alteration : int):
+        super().__init__(action_name, StaminaCost, UpgradeExpCost, level, dodge_alteration)
         self.factor = damageFactor
         
     def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], hand="left"):
+        super(Attack,self).acts(fighter, targets)
         potential_damage = 0
         if hand == "left" :
             potential_damage += fighter.leftTool 
@@ -108,11 +114,12 @@ class Classic_Attack(Attack):
        
         
 class Defense(Action):
-    def __init__(self, action_name: str, StaminaCost: int, UpgradeExpCost: int, defensePoints : int, level:int):
-        super().__init__(action_name, StaminaCost, UpgradeExpCost, level)        
+    def __init__(self, action_name: str, StaminaCost: int, UpgradeExpCost: int, defensePoints : int, level:int, dodge_alteration : int):
+        super().__init__(action_name, StaminaCost, UpgradeExpCost, level, dodge_alteration)        
         self.defensePoints = defensePoints
         
     def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], hand="left"):
+        super(Defense,self).acts(fighter,targets)
         assert len(targets) == 1 and targets[0] == fighter
         fighter.defensePoints += self.defensePoints 
 
@@ -135,7 +142,7 @@ class Stoical_Defense(Defense): # for stoical_Defense, damage is divided by the 
         
 class Classic_Defense(Defense):
     Level_Parameters = {
-        1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"defensePoints" : 3},
+        1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"defensePoints" : 4},
         2 : {"StaminaCost" : 3, "UpgradeCost" : 20, "dodge_alteration" : 0,"defensePoints" : 5}
     }
     def __init__(self, level : int):

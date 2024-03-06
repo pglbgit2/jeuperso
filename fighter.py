@@ -1,12 +1,12 @@
 import armors, items, weapons, races, defaultSkills
-from typing import List, Union
-import random
+from typing import List, Union, Dict
+import random, copy
 
 FACTIONS = ["Heroes","Bandits","City"]
 
 
 class CHARACTER:
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = defaultSkills.DEFAULT_SKILLS, dodge : float = 0.15):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = copy.copy(defaultSkills.DEFAULT_SKILLS), dodge : float = 0.15, skillsLevel : Dict[str:int] = {}):
         self.HP = HP
         self.MaxHP = MaxHP
         self.stamina = Stamina
@@ -25,14 +25,26 @@ class CHARACTER:
         self.money = gold
         self.faction = faction
         self.weight = 0
-        for skill in skills:
-            if skill in defaultSkills.DEFAULT_SKILLS:
-                skill += "-lv1"
         self.skills = skills
+        self.basicSkillsLevel = {}
+        for skill in skills:
+            if skill != "Equip" and skill in defaultSkills.DEFAULT_SKILLS :
+                self.basicSkillsLevel[skill] = 1
+        self.basicSkillsLevel = {**self.basicSkillsLevel, **skillsLevel}
         self.defensePoints = 0
         self.dodgePercent = dodge
         self.dodgeUsual = dodge
-       
+        self.actions = []
+    
+    
+    def newTurn(self):
+        self.stamina = min(self.stamina +self.stamina_regeneration, self.MaxStamina)
+        self.defensePoints = 0
+        self.dodgePercent = self.dodgeUsual
+        self.actions = []
+    
+    def setUpActions(self, fightersNames : List[str]):
+        pass
     
     def max_weight(self):
         return self.stamina*30
@@ -105,16 +117,28 @@ class CHARACTER:
     def getInitiative(self):
         return random.randint(0,100)
     
-    def addSkill(self, skill:str):
+    def addSkill(self, skill:str, Upgradable = False):
         if skill not in self.skills:
             self.skills.append(skill)
+            if Upgradable:
+                self.basicSkillsLevel[skill] = 1
+            return True
+        return False
             
     def useSkill(self,skill:str):
         pass
     
-    def dodge(self, modification = 0):
-        return random.randint(0,100) <= self.dodgePercent + modification
-        
+    def getStrLevelOfSkill(self, skillName : str):
+        if skillName in self.basicSkillsLevel.keys():
+            return "lv-"+self.basicSkillsLevel[skillName]
+        else:
+            return ""
+    
+    def dodge(self):
+        if self.dodgePercent > 0:
+            return random.randint(0,100) <= self.dodgePercent
+        else:
+            return False
     @staticmethod
     def instantiate_from_race(race:str, name:str, faction: str):
         if race in races.RACES and faction in FACTIONS:

@@ -10,16 +10,19 @@ class Player(fighter.CHARACTER):
 
     
     def getInitiative(self):
-        return interaction.askFor("Roll 1d100 dice for Initiative, Give result")
+        return interaction.askFor(self.name+", roll 1d100 dice for Initiative, Give result")
         
    
     def addSkill(self, skill:str):
-        if skill not in self.skills:
-            self.skills.append(skill)
+        if super(fighter.CHARACTER,self).addSkill(skill):
             self.actionCounter[skill] = 0
                     
     def useSkill(self,skill:str):
         self.actionCounter[skill] += 1
         
     def dodge(self,modification=0):
-        return interaction.askFor("Roll 1d100 dice for Dodging, Give result")
+        return int(interaction.askFor(self.name+", roll 1d100 dice for Dodging, Give result"))+modification
+    
+    def setUpActions(self, unitsList : List[str]):
+        self.actions = interaction.getPlayerActions(unitsList, self.skills)
+        return self.actions
