@@ -3,7 +3,7 @@ from typing import List, Tuple, Dict, Union
 import fighter, armors, weapons
 
 class Action:
-    ACTIONS_DICT = {}
+    ACTIONS_DICT : Dict[str,'Action'] = {}
     
     def __init__(self, action_name : str, StaminaCost: int, UpgradeExpCost : int, level : int, dodge_alteration : int):
         if action_name not in Action.ACTIONS_DICT.keys():
@@ -20,7 +20,7 @@ class Action:
         if upgrade not in self.upgrades:
             self.upgrades.append(upgrade)
             
-    def acts(self, fighter : fighter.CHARACTER, targets : Union[Tuple[int,int], List[fighter.CHARACTER]], hand="left"):
+    def acts(self, fighter : fighter.CHARACTER, targets : Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]], hand="left"):
         fighter.dodgePercent += fighter.dodgePercent * self.dodge_alteration
     
     
@@ -119,9 +119,8 @@ class Defense(Action):
         super().__init__(action_name, StaminaCost, UpgradeExpCost, level, dodge_alteration)        
         self.defensePoints = defensePoints
         
-    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], hand="left"):
-        super(Defense,self).acts(fighter,targets)
-        assert len(targets) == 1 and targets[0] == fighter
+    def acts(self, fighter : fighter.CHARACTER, hand="left"):
+        super(Defense,self).acts(fighter,None)
         fighter.defensePoints += self.defensePoints 
 
 class Light_Defense(Defense):

@@ -5,14 +5,18 @@ class Battle:
     def __init__(self, fighters : List[fighter.CHARACTER]):
         if action.Action.ACTIONS_DICT == {}:
             action.setupActions()
+        if action.Action.ACTIONS_DICT == {} or fighters == []:
+            raise Exception("Can not start battle")
+        self.inBattle = True
         self.fighters = fighters
-        self.fightersNames : List[str] = []
-        self.factionsWarriors : Dict[List[str]] = {}
-        for fighter in fighters:
-            self.fightersNames.append(fighter.name)
-            if fighter.faction not in self.factionsWarriors.keys():
-                self.factionsWarriors[fighter.faction] = []   
-            self.factionsWarriors[fighter.faction].append(fighter.name)
+        self.fightersNames : Dict[str, fighter.CHARACTER] = {}
+        self.factionsWarriors : Dict[str,List[str]] = {}
+        self.defeatedWarriors = []
+        for warrior in fighters:
+            self.fightersNames[warrior.name] = warrior
+            if warrior.faction not in self.factionsWarriors.keys():
+                self.factionsWarriors[warrior.faction] = []   
+            self.factionsWarriors[warrior.faction].append(warrior.name)
     
     def beginTurn(self):
         map(lambda x: x.newTurn(),self.fighters)    
@@ -48,12 +52,48 @@ class Battle:
                 actionValidated = not isinstance(fighter, player.Player) or self.checkValidity(fighter, actions, self.factionsWarriors[fighter.faction])
             fighter.actions = actions
     
+    def namesToCharacters(self, namesList : List[str]):
+        fighters = []
+        for name in namesList:
+            fighters.append(self.fightersNames[name])
+    
+    def killWarrior(self, fighter : fighter.CHARACTER):
+        self.defeatedWarriors.append(fighter)
+        self.factionsWarriors[fighter.faction].remove(fighter.name)
+        self.fightersNames.pop(fighter.name,None)
     
     def executeActions(self):
         for fighter in rules.getTurnPriority(self.fighters):
-            pass
+            if fighter.HP <= 0:
+                self.killWarrior(fighter)
+            else:    
+                for actionDict in fighter.actions:
+                    if "Attack" in actionDict["name"]:
+                        action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["hand"])
+                        continue
+                    if "Equip" == actionDict["name"]:
+                        action.Action.ACTIONS_DICT["Equip"].acts(fighter, fighter.getItemFromInventoryByName(actionDict["name"]), actionDict["hand"])
+                        continue
+                    if "Defense" in actionDict["name"]:
+                        action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter,None)
+                        continue
+                    if "Movement" in actionDict["name"]:
+                        action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, actionDict["target"])
     
+    def manualChanges(self):
+        buf = ""
+        while True:
+            buf = input("Command of Game Master")
+            if buf == "exit":
+                break
+            exec(buf)
+    
+    def hasBattleEnded(self):
+        pass
+                
     def turn(self):
         self.beginTurn()
         self.prepareActions()
         self.executeActions()
+        if interaction.TERMINAL == 1:
+            self.manualChanges()

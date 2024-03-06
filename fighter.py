@@ -48,6 +48,12 @@ class CHARACTER:
     
     def max_weight(self):
         return self.stamina*30
+    
+    def getItemFromInventoryByName(self, name : str):
+        for item in self.inventory:
+            if item.name == name:
+                return item
+        return None
         
     def equip(self, stuff : Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], side="left"):
         if stuff in self.inventory:

@@ -1,7 +1,7 @@
 import defaultSkills
 import fighter, interaction
 import armors, items, weapons
-from typing import List, Union
+from typing import List, Union, Dict
 
 class Player(fighter.CHARACTER):
     def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = defaultSkills.DEFAULT_SKILLS):
@@ -23,6 +23,6 @@ class Player(fighter.CHARACTER):
     def dodge(self,modification=0):
         return int(interaction.askFor(self.name+", roll 1d100 dice for Dodging, Give result"))+modification
     
-    def setUpActions(self, unitsList : List[str]):
-        self.actions = interaction.getPlayerActions(unitsList, self.skills)
+    def setUpActions(self, unitsList : Dict[str,fighter.CHARACTER]):
+        self.actions = interaction.getPlayerActions(unitsList.keys(), self.skills)
         return self.actions
