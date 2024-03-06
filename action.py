@@ -2,7 +2,6 @@
 from typing import List, Tuple, Dict, Union
 import fighter, armors, weapons
 
-
 class Action:
     ACTIONS_DICT = {}
     
@@ -25,12 +24,14 @@ class Action:
         fighter.dodgePercent += fighter.dodgePercent * self.dodge_alteration
     
     
-class Equip(Action): # Must consider Equip as special action: not upgradable
+class Equip(Action): 
     def __init__(self):
         super().__init__("Equip", 1, 0, 1, 0)
     
-    def acts(self, fighter : fighter.CHARACTER, targets : List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]], hand="left"):
-        pass
+    def acts(self, fighter : fighter.CHARACTER, targets : Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], hand="left"):
+        fighter.equip(targets,hand)
+    
+    
 
 class Movement(Action):
     def __init__(self, action_name: str, StaminaCost: int, UpgradeExpCost: int, speed : int, dodge_alteration :int, level : int):
@@ -44,7 +45,7 @@ class Movement(Action):
 class Quick_Movement(Movement):
     Level_Parameters = {
         1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10, "speed" : 5, "dodge_alteration" : -0.15},
-        2 : {"StaminaCost" : 3, "UpgradeCost" : 25, "speed" : 8, "dodge_alteration" : -0.20}
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 25, "speed" : 8, "dodge_alteration" : -0.20}
     }
     def __init__(self, level: int):
         super().__init__("Quick_Movement"+"-lv"+str(level), level=level, **Quick_Movement.Level_Parameters[level])
@@ -52,15 +53,15 @@ class Quick_Movement(Movement):
 class Classic_Movement(Movement):
     Level_Parameters = {
         1 : {"StaminaCost" : 2, "UpgradeExpCost" : 10, "speed" : 3, "dodge_alteration" : 0},
-        2 : {"StaminaCost" : 2, "UpgradeCost" : 20, "speed" : 4, "dodge_alteration" : 0}
+        2 : {"StaminaCost" : 2, "UpgradeExpCost" : 20, "speed" : 4, "dodge_alteration" : 0}
     }
     def __init__(self, level: int):
-        super().__init__("Classic_Movement"+"-lv"+str(level), level=level **Classic_Movement.Level_Parameters[level])
+        super().__init__("Classic_Movement"+"-lv"+str(level), level=level, **Classic_Movement.Level_Parameters[level])
         
 class Slow_Movement(Movement):
     Level_Parameters = {
         1 : {"StaminaCost" : 1, "UpgradeExpCost" : 10, "speed" : 1, "dodge_alteration" : 0.15},
-        2 : {"StaminaCost" : 1, "UpgradeCost" : 20, "speed" : 1, "dodge_alteration" : 0.20}
+        2 : {"StaminaCost" : 1, "UpgradeExpCost" : 20, "speed" : 1, "dodge_alteration" : 0.20}
     }
     def __init__(self, level: int):
         super().__init__("Slow_Movement"+"-lv"+str(level), level=level, **Slow_Movement.Level_Parameters[level])
@@ -89,7 +90,7 @@ class Attack(Action):
 class Brutal_Attack(Attack):
     Level_Parameters = {
         1 : {"StaminaCost" : 4, "UpgradeExpCost" : 10,  "dodge_alteration" : -1,"damageFactor" : 2.25},
-        2 : {"StaminaCost" : 4, "UpgradeCost" : 20, "dodge_alteration" : -1,"damageFactor" : 2.5}
+        2 : {"StaminaCost" : 4, "UpgradeExpCost" : 20, "dodge_alteration" : -1,"damageFactor" : 2.5}
     }
     def __init__(self, level : int):
         super().__init__("Brutal_Attack"+"-lv"+str(level),level=level, **Brutal_Attack.Level_Parameters[level])
@@ -97,7 +98,7 @@ class Brutal_Attack(Attack):
 class Quick_Attack(Attack):
     Level_Parameters = {
         1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"damageFactor" : 0.5},
-        2 : {"StaminaCost" : 3, "UpgradeCost" : 20, "dodge_alteration" : 0,"damageFactor" : 0.5}
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"damageFactor" : 0.5}
     }
     def __init__(self, level : int):
         super().__init__("Quick_Attack"+"-lv"+str(level),level=level, **Quick_Attack.Level_Parameters[level])
@@ -105,7 +106,7 @@ class Quick_Attack(Attack):
 class Classic_Attack(Attack):
     Level_Parameters = {
         1 : {"StaminaCost" : 2, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"damageFactor" : 1},
-        2 : {"StaminaCost" : 2, "UpgradeCost" : 20, "dodge_alteration" : 0,"damageFactor" : 1}
+        2 : {"StaminaCost" : 2, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"damageFactor" : 1}
     }
     def __init__(self, level : int):
         super().__init__("Classic_Attack"+"-lv"+str(level),level=level, **Classic_Attack.Level_Parameters[level])
@@ -126,7 +127,7 @@ class Defense(Action):
 class Light_Defense(Defense):
     Level_Parameters = {
         1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"defensePoints" : 1},
-        2 : {"StaminaCost" : 3, "UpgradeCost" : 20, "dodge_alteration" : 0,"defensePoints" : 1}
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"defensePoints" : 1}
     }
     def __init__(self, level : int):
         super().__init__("Light_Defense"+"-lv"+str(level),level=level, **Light_Defense.Level_Parameters[level])
@@ -134,7 +135,7 @@ class Light_Defense(Defense):
 class Stoical_Defense(Defense): # for stoical_Defense, damage is divided by the absolute value of defensePoints in fighter.py but it is the only action authorized for unit
     Level_Parameters = {
         1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10,  "dodge_alteration" : -1,"defensePoints" : -3},
-        2 : {"StaminaCost" : 3, "UpgradeCost" : 20, "dodge_alteration" : -1,"defensePoints" : -5}
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : -1,"defensePoints" : -5}
     }
     def __init__(self, level : int):
         super().__init__("Stoical_Defense"+"-lv"+str(level),level=level, **Stoical_Defense.Level_Parameters[level])
@@ -143,11 +144,30 @@ class Stoical_Defense(Defense): # for stoical_Defense, damage is divided by the 
 class Classic_Defense(Defense):
     Level_Parameters = {
         1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"defensePoints" : 4},
-        2 : {"StaminaCost" : 3, "UpgradeCost" : 20, "dodge_alteration" : 0,"defensePoints" : 5}
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"defensePoints" : 5}
     }
     def __init__(self, level : int):
         super().__init__("Classic_Defense"+"-lv"+str(level),level=level, **Classic_Defense.Level_Parameters[level])
     
     
-    
+def setupMultiLevelActions(actionName):
+    pass
 
+def setupActions():
+    import sys, inspect
+    for name, obj in inspect.getmembers(sys.modules[__name__]):
+        if inspect.isclass(obj):
+            if obj not in ABSTRACT:
+                print(obj)
+                if hasattr(obj, 'Level_Parameters'):
+                    for level in obj.Level_Parameters.keys():
+                        obj(level)   
+                else:
+                    obj()
+
+ABSTRACT = [Action, Attack, Defense, Movement]
+
+                
+if __name__ == '__main__':
+    setupActions()
+    print(Action.ACTIONS_DICT)

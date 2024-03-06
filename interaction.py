@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import List
 import ast, re
 
 TERMINAL = 0
@@ -69,6 +69,9 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                         if hand == "right":
                             if rightHandUsed == False:
                                 rightHandUsed = True
+                                Actions.append({"name" : actionName, "target" : fightersName, "hand" : hand})
+                        if hand != "left" and hand != "right":
+                            raise Exception("Not correct hand")
                 finished = True                    
             except Exception as e:
                 throwError(e.args[0])

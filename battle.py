@@ -3,6 +3,8 @@ from typing import List, Dict, Union, Tuple
 
 class Battle:
     def __init__(self, fighters : List[fighter.CHARACTER]):
+        if action.Action.ACTIONS_DICT == {}:
+            action.setupActions()
         self.fighters = fighters
         self.fightersNames : List[str] = []
         self.factionsWarriors : Dict[List[str]] = {}
@@ -31,11 +33,10 @@ class Battle:
                 if not any(someAction["object"] == stuff for stuff in fighter.inventory):
                     interaction.throwError("Using an item that player do not possess")
                     return False
+        return True
                 
         
-    
-    def intoActions(self, fighter : fighter.CHARACTER, actions : List[Dict[str:Union[str,Tuple[int,int]]]]):
-        pass
+
     
     def prepareActions(self):
         for fighter in self.fighters:
@@ -45,9 +46,14 @@ class Battle:
                 for someAction in actions:
                     someAction+=fighter.getStrLevelOfSkill(someAction["name"])
                 actionValidated = not isinstance(fighter, player.Player) or self.checkValidity(fighter, actions, self.factionsWarriors[fighter.faction])
-            fighter.actions = self.intoActions(fighter, actions)
-            
+            fighter.actions = actions
+    
+    
+    def executeActions(self):
+        for fighter in rules.getTurnPriority(self.fighters):
+            pass
     
     def turn(self):
         self.beginTurn()
         self.prepareActions()
+        self.executeActions()

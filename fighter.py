@@ -6,7 +6,7 @@ FACTIONS = ["Heroes","Bandits","City"]
 
 
 class CHARACTER:
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = copy.copy(defaultSkills.DEFAULT_SKILLS), dodge : float = 0.15, skillsLevel : Dict[str:int] = {}):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = copy.copy(defaultSkills.DEFAULT_SKILLS), dodge : float = 0.15, skillsLevel : Dict[str,int] = {}):
         self.HP = HP
         self.MaxHP = MaxHP
         self.stamina = Stamina
@@ -28,7 +28,7 @@ class CHARACTER:
         self.skills = skills
         self.basicSkillsLevel = {}
         for skill in skills:
-            if skill != "Equip" and skill in defaultSkills.DEFAULT_SKILLS :
+            if skill not in defaultSkills.NOT_UPGRADABLE and skill in defaultSkills.DEFAULT_SKILLS :
                 self.basicSkillsLevel[skill] = 1
         self.basicSkillsLevel = {**self.basicSkillsLevel, **skillsLevel}
         self.defensePoints = 0

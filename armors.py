@@ -62,7 +62,7 @@ LEGS = ["LEATHER_LP"]
 
 
 class ARMOR(items.ITEM):
-    def __init__(self, cost : int, weight : int, durability : int, absorption : Dict[str:int]):
+    def __init__(self, cost : int, weight : int, durability : int, absorption : Dict[str,int]):
         super().__init__(cost,weight)
         self.maxDur = durability
         self.absorption = absorption

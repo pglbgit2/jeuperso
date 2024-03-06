@@ -10,5 +10,4 @@ CD = "Classic_Defense"
 E = "Equip"
 
 DEFAULT_SKILLS = [QM, CM, SM, BA, QA, CA, LD, SD, CD, E]
-
-
+NOT_UPGRADABLE = [E]
