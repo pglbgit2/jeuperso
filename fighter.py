@@ -302,7 +302,7 @@ class CHARACTER:
             return None
             
         
-billy = CHARACTER.instantiate_from_race("CITY_GARD", "billy", "Heroes")
-billy.saveFighter("billy.sav")
-billy2 = CHARACTER.retrieveFighter("billy.sav")
-print(billy2.inventory)
+# billy = CHARACTER.instantiate_from_race("CITY_GARD", "billy", "Heroes")
+# billy.saveFighter("billy.sav")
+# billy2 = CHARACTER.retrieveFighter("billy.sav")
+# print(billy2.inventory)

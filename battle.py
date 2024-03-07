@@ -3,6 +3,7 @@ from typing import List, Dict, Union, Tuple
 
 class Battle:
     def __init__(self, fighters : List[fighter.CHARACTER]):
+        assert not any(fighter1.name == fighter2.name for fighter1 in fighters for fighter2 in fighters if fighter1 != fighter2)
         if action.Action.ACTIONS_DICT == {}:
             action.setupActions()
         if action.Action.ACTIONS_DICT == {} or fighters == []:
