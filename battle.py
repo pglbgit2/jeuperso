@@ -22,7 +22,7 @@ class Battle:
         map(lambda x: x.newTurn(),self.fighters)    
         
     
-    def checkValidity(self, fighter : fighter.CHARACTER, actions : List[Dict[str:Union[str,Tuple[int,int]]]], alliesName : List[str]):
+    def checkValidity(self, fighter : fighter.CHARACTER, actions : List[Dict[str,Union[str,Tuple[int,int]]]], alliesName : List[str]):
         for someAction in actions:
             if "Stoical_Defense" == someAction and len(actions) > 1:
                 interaction.throwError("Can not use Stoical_defense and other action in same turn")
@@ -65,10 +65,11 @@ class Battle:
     def prepareActions(self):
         for fighter in self.fighters:
             actionValidated = False
-            while not actionValidated : 
-                actions = fighter.setUpActions(self.fightersNames, self.getEstimatedPowerOfFactions())
+            while not actionValidated :
+                interaction.showInformation("Turn of "+fighter.name)
+                actions = fighter.setUpActions(self.fightersNames, self.getEstimatedPowerOfFactions(), [self.getWarriorsOfFaction(faction) for faction in self.factionsWarriors.keys()])
                 for someAction in actions:
-                    someAction+=fighter.getStrLevelOfSkill(someAction["name"])
+                    someAction["name"]+=str(fighter.getStrLevelOfSkill(someAction["name"]))
                 actionValidated = not isinstance(fighter, player.Player) or self.checkValidity(fighter, actions, self.factionsWarriors[fighter.faction])
             fighter.actions = actions
     

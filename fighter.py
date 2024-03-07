@@ -2,7 +2,7 @@ import armors, items, weapons, races, defaultSkills, interaction
 from typing import List, Union, Dict
 import random, copy, ast
 
-FACTIONS = ["Heroes","Bandits","City"]
+FACTIONS = ["Heroes","Bandits"]
 
 
 class CHARACTER:
@@ -50,9 +50,9 @@ class CHARACTER:
     def getEstimatedPower(self):
         return self.HP
     
-    def setUpActions(self, fightersByName : Dict[str, 'CHARACTER'], teamEstimatedPower : Dict[str,int]):
+    def setUpActions(self, fightersByName : Dict[str, 'CHARACTER'], teamEstimatedPower : Dict[str,int], fightersByFaction : Dict[str,List['CHARACTER']]):
         if self.isControlledByGM:
-            self.actions = interaction.getPlayerActions(fightersByName.keys(), self.skills)
+            self.actions = interaction.getPlayerActions(self.name, fightersByName.keys(), self.skills)
             return self.actions
         else:
             actions = []
@@ -66,16 +66,30 @@ class CHARACTER:
                 attackProbability -= 0.2
                 
             while staminaCost < self.stamina:
+                action = {}
+                leftHandUsed = False
+                rightHandUsed = False
+                
                 if random.random() <= attackProbability:
-                    action = random.choice([defaultSkills.CA, defaultSkills.QA])
+                    action["name"] = random.choice([defaultSkills.CA, defaultSkills.QA])
+                    action["target"] = random.choice(random.choice([team for team in teamEstimatedPower.keys() if team != self.faction]))
+                    if not leftHandUsed: 
+                        action["hand"] = "left"
+                    else:
+                        if not rightHandUsed:
+                            action["hand"] = "right"
+                        else:
+                            action = None
                 else:
-                    action = defaultSkills.CD
-                actions.append(action)
-                staminaCost += defaultSkills.DEFAULT_SKILLS_COST[action]
+                    action["name"] = defaultSkills.CD
+                    action["target"] = self.name
+                if action != None:
+                    actions.append(action)
+                    staminaCost += defaultSkills.DEFAULT_SKILLS_COST[action]
             if staminaCost > self.stamina:
                 actions.pop()
                 while staminaCost != self.stamina:
-                    actions.append(defaultSkills.LD)
+                    actions.append({"name" : defaultSkills.LD, "target" : self.name})
                     staminaCost += 1
             self.actions = actions
             return actions
@@ -173,7 +187,7 @@ class CHARACTER:
     
     def getStrLevelOfSkill(self, skillName : str):
         if skillName in self.basicSkillsLevel.keys():
-            return "lv-"+self.basicSkillsLevel[skillName]
+            return "lv-"+str(self.basicSkillsLevel[skillName])
         else:
             return ""
     
