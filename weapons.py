@@ -1,4 +1,4 @@
-import items
+import items, interaction
 
 ###### MELEE WEAPON ######
 ## DEFAULT SWORD ATTRIBUTES ##
@@ -101,11 +101,12 @@ class WEAPON(items.ITEM):
     
     @staticmethod
     def get_melee_weapon(weapon_name):
-        if weapon_name in globals() and weapon_name in MELEE_WEAPONS:
+     
+        if weapon_name in globals().keys() and weapon_name in MELEE_WEAPONS:
             weapon = globals()[weapon_name]
             return WEAPON(name=weapon_name, **weapon)
         else:
-            print("No Weapon with such name")
+            interaction.throwError("No Weapon with such name")
             return None
     
 class RANGE_WEAPON(items.ITEM):
@@ -120,6 +121,7 @@ class RANGE_WEAPON(items.ITEM):
             range = globals()[weapon_name]
             return RANGE_WEAPON(name=weapon_name, **range)
         else:
-            print("No Weapon with such name")
+            interaction.throwError("No Weapon with such name")
             return None
 
+#print(WEAPON.get_melee_weapon("SWORD"))

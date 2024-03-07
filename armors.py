@@ -1,4 +1,4 @@
-import items
+import items, interaction
 from typing import Dict
 
 
@@ -62,8 +62,8 @@ LEGS = ["LEATHER_LP"]
 
 
 class ARMOR(items.ITEM):
-    def __init__(self, cost : int, weight : int, durability : int, absorption : Dict[str,int]):
-        super().__init__(cost,weight)
+    def __init__(self,name:str, cost : int, weight : int, durability : int, absorption : Dict[str,int]):
+        super().__init__(name,cost,weight)
         self.maxDur = durability
         self.absorption = absorption
         self.durability = durability
@@ -72,9 +72,9 @@ class ARMOR(items.ITEM):
     def get_armor(armor_name):
         if armor_name in globals():
             armor = globals()[armor_name]
-            return ARMOR(**armor)
+            return ARMOR(name=armor_name,**armor)
         else:
-            print("No armor with such name")
+            interaction.throwError("No armor with such name")
             return None
         
     def damage_absorption(self, damage:int, damage_type : str):

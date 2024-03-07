@@ -125,16 +125,17 @@ class Battle:
             characterName = interaction.askFor("Who to give gold")
             if characterName not in self.fightersNames.keys():
                 continue
-            amount = int(interaction.askFor("Remaining gold: "+loot[1]+", how much to give ?"))
+            amountStr = interaction.askFor("Remaining gold: "+loot[1]+", how much to give ?")
+            if not amountStr.isdigit():
+                interaction.throwError("That is not a number")
+                continue
+            amount = int(amountStr)
             if amount > loot[1]:
                 continue
             else: 
                 self.fightersNames[characterName].money += amount
                 loot[1] -= amount
                 
-            
-                
-            
     
     def battle(self):
         while not self.hasBattleEnded():

@@ -1,6 +1,5 @@
 
-
-### RACES & DEFAULT CHARACTER CLASS ###
+### RACES ###
 
 
 ## HUMANS ##
@@ -15,6 +14,29 @@ HUMAN  = {
 }
 
 
+### CHARACTER CLASSES ###
+
+THIEF = {
+    "HP" : 22,
+    "MaxHP" : 22,
+    "Stamina" : 5,
+    "magic" : 0,
+    "gold" : 5,
+    "stamina_regeneration" : 5,
+    "dodge" : 0.20,
+    "Inventory" : {"weapons" : [("KNIFE",True)], "armors" : [], "items" : []} # Tuple is (Object, toEquip)
+}
+
+CITY_GARD = {
+    "HP" : 24,
+    "MaxHP" : 24,
+    "magic" : 0,
+    "gold" : 5,
+    "stamina_regeneration" : 5,
+    "dodge" : 0.15,
+    "Inventory" : {"weapons" : [("SWORD",True)], "armors" : [("CHAIN_MAIL",True)], "items" : []}
+}
+
 ### ALL RACES & CLASSES LISTED BELOW ###
 
-RACES = ["HUMAN"]
+RACES = ["HUMAN", "THIEF", "CITY_GARD"]

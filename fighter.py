@@ -1,4 +1,4 @@
-import armors, items, weapons, races, defaultSkills
+import armors, items, weapons, races, defaultSkills, interaction
 from typing import List, Union, Dict
 import random, copy
 
@@ -43,7 +43,7 @@ class CHARACTER:
         self.dodgePercent = self.dodgeUsual
         self.actions = []
     
-    def setUpActions(self, fightersNames : List[str]):
+    def setUpActions(self, fightersNames : List[str], faction):
         pass
     
     def max_weight(self):
@@ -99,7 +99,8 @@ class CHARACTER:
     
     def equipAll(self, loadsOfStuff : List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]]):
         for stuff in loadsOfStuff:
-            self.equip(stuff)
+            if stuff != None:
+                self.equip(stuff)
             
             
     def total_weight(self):
@@ -112,9 +113,10 @@ class CHARACTER:
         return (self.max_weight() - self.total_weight())/10
             
     def put_into_inventory(self, stuff : items.ITEM):
-        if self.total_weight() <= self.max_weight() and stuff not in self.inventory:
-            self.inventory.append(stuff)
-            self.weight += stuff.weight
+        if stuff != None:
+            if self.total_weight() <= self.max_weight() and stuff not in self.inventory:
+                self.inventory.append(stuff)
+                self.weight += stuff.weight
     
     def lootAll(self, loot: List[items.ITEM]):
         for item in loot:
@@ -145,11 +147,62 @@ class CHARACTER:
             return random.randint(0,100) <= self.dodgePercent
         else:
             return False
+
+    @staticmethod
+    def instantiate_from_dict(Race : Dict, name : str, faction : str):
+        if faction in FACTIONS:
+            if "Inventory" in Race.keys():
+                    Race["Equipment"] = []
+                    Inventory = []
+                    if "weapons" in Race["Inventory"].keys():
+                        for weapon in Race["Inventory"]["weapons"]:
+                            toEquip = weapon[1]
+                            if weapon[0] in weapons.MELEE_WEAPONS:
+                                weapon = weapons.WEAPON.get_melee_weapon(weapon[0])
+                                if weapon != None:
+                                    Inventory.append(weapon)
+                                    if toEquip:
+                                        Race["Equipment"].append(weapon)
+                                    
+                            elif weapon[0] in weapons.RANGE_WEAPONS:
+                                toEquip = weapon[1]
+                                weapon = weapons.RANGE_WEAPON.get_range_weapon(weapon[0])
+                                if weapon != None:
+                                    Inventory.append(weapon)
+                                    if toEquip:
+                                        Race["Equipment"].append(weapon)
+                    if "armors" in Race["Inventory"].keys():
+                        for armor in Race["Inventory"]["armors"]:
+                            print(armor)
+                            toEquip = armor[1]
+                            armor = armors.ARMOR.get_armor(armor[0])
+                            if armor != None:
+                                Inventory.append(armor)
+                                if toEquip and armor != None:
+                                    Race["Equipment"].append(armor)
+                    if "items" in Race["Inventory"].keys():            
+                        for item in Race["Inventory"]["items"]:
+                            item = items.ITEM.get_item(item)
+                            if item != None:
+                                Inventory.append(item)
+                    Race["Inventory"] = Inventory
+            return CHARACTER(name = name, faction = faction, **Race)
+        else: 
+            interaction.throwError("faction do not exist")
+            return None
+
+
     @staticmethod
     def instantiate_from_race(race:str, name:str, faction: str):
-        if race in races.RACES and faction in FACTIONS:
-            Race = getattr(races, race)
-            return CHARACTER(name = name, faction = faction, **Race)
+        if race in races.RACES :
+            Race = copy.copy(getattr(races, race))
+            return CHARACTER.instantiate_from_dict(Race, name, faction)
+        else : 
+            interaction.throwError("Race do not exist, create it and add it to race & class array")
+            return None
+            
         
-# billy = CHARACTER.instantiate_from_race("HUMAN", "billy", "Heroes")
+# billy = CHARACTER.instantiate_from_race("CITY_GARD", "billy", "Heroes")
 # print(billy.faction)
+# print(billy.inventory)
+# print(billy.leftTool.name)
