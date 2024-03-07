@@ -85,6 +85,7 @@ class Battle:
         fighters = []
         for name in namesList:
             fighters.append(self.fightersNames[name])
+        return fighters
     
     def killWarrior(self, fighter : fighter.CHARACTER):
         self.defeatedWarriors.append(fighter)

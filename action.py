@@ -79,12 +79,15 @@ class Attack(Action):
         potential_damage = 0
         if hand == "left" :
             potential_damage += fighter.leftTool.damage
-        else : potential_damage += fighter.rightTool.damage
+            damage_type = fighter.leftTool.damageType
+        else : 
+            potential_damage += fighter.rightTool.damage
+            damage_type = fighter.rightTool.damageType
         potential_damage = potential_damage * self.factor
         
         for target in targets:
             if self.name.startswith("Quick_Attack") or target.dodge() != True:
-                target.take_damage(potential_damage)
+                target.take_damage(potential_damage, damage_type)
         fighter.useSkill(self.name)
         
 class Brutal_Attack(Attack):

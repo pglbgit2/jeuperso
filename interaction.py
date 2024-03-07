@@ -27,13 +27,13 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
         finished = False
         Actions = []
         while finished == False:
-            print("Actions input of "+playerName+"\n")
             try:
                 Actions = []
                 allActionsInserted = False
                 leftHandUsed = False
                 rightHandUsed = False
                 while not allActionsInserted:
+                    print("Actions input of "+playerName+"\n")
                     actionName = input("Action Name among+"+str(valid_actions)+" or end to stop\n")
                     if actionName == "end":
                         allActionsInserted = True
