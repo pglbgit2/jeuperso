@@ -18,7 +18,15 @@ class Battle:
                 self.factionsWarriors[warrior.faction] = []   
             self.factionsWarriors[warrior.faction].append(warrior.name)
     
+    
+    def actualizeHP(self):
+        if interaction.MOD == interaction.TERMINAL:
+            for name in self.fightersNames.keys():
+                someFighter = self.fightersNames[name]
+                print(someFighter.name+" HP:"+str(someFighter.HP))
+    
     def beginTurn(self):
+        self.actualizeHP()
         map(lambda x: x.newTurn(),self.fighters)    
         
     
@@ -66,7 +74,7 @@ class Battle:
         for fighter in self.fighters:
             actionValidated = False
             while not actionValidated :
-                interaction.showInformation("Turn of "+fighter.name)
+                interaction.showInformation("Turn of "+fighter.name+"\n")
                 actions = fighter.setUpActions(self.fightersNames, self.getEstimatedPowerOfFactions(), [self.getWarriorsOfFaction(faction) for faction in self.factionsWarriors.keys()])
                 for someAction in actions:
                     someAction["name"]+=str(fighter.getStrLevelOfSkill(someAction["name"]))
@@ -104,10 +112,14 @@ class Battle:
     def manualChanges(self):
         buf = ""
         while True:
-            buf = input("Command of Game Master")
+            buf = input("Command of Game Master\n")
             if buf == "exit":
                 break
-            exec(buf)
+            try:
+                exec(buf)
+            except Exception as e:
+                print("something had gone wrong:")
+                print(e)
     
     def hasBattleEnded(self):
         count = 0
@@ -123,7 +135,7 @@ class Battle:
         self.beginTurn()
         self.prepareActions()
         self.executeActions()
-        if interaction.TERMINAL == 1:
+        if interaction.MOD == interaction.TERMINAL:
             self.manualChanges()
     
     def collectLoot(self):

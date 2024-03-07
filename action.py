@@ -78,8 +78,8 @@ class Attack(Action):
         super(Attack,self).acts(fighter, targets)
         potential_damage = 0
         if hand == "left" :
-            potential_damage += fighter.leftTool 
-        else : potential_damage += fighter.rightTool
+            potential_damage += fighter.leftTool.damage
+        else : potential_damage += fighter.rightTool.damage
         potential_damage = potential_damage * self.factor
         
         for target in targets:

@@ -1,7 +1,7 @@
 from typing import List
 import ast, re
 
-TERMINAL = 0
+TERMINAL = 1
 MOVEMENT = 0
 MOD = TERMINAL
 
@@ -27,7 +27,7 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
         finished = False
         Actions = []
         while finished == False:
-            print("Actions input of"+playerName+"\n")
+            print("Actions input of "+playerName+"\n")
             try:
                 Actions = []
                 allActionsInserted = False
@@ -72,13 +72,15 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                         if hand == "left":
                             if leftHandUsed == False:
                                 leftHandUsed = True
-                                Actions.append({"name" : actionName, "target" : fightersName, "hand" : hand})
+                                Actions.append({"name" : actionName, "targets" : fightersName, "hand" : hand})
                                 continue
                             else: raise Exception("Left hand already used")
                         if hand == "right":
                             if rightHandUsed == False:
                                 rightHandUsed = True
-                                Actions.append({"name" : actionName, "target" : fightersName, "hand" : hand})
+                                if not isinstance(fightersName, List):
+                                    fightersName = [fightersName]
+                                Actions.append({"name" : actionName, "targets" : fightersName, "hand" : hand})
                             else: raise Exception("Right hand already used")
                         if hand != "left" and hand != "right":
                             raise Exception("Not correct hand")

@@ -72,7 +72,7 @@ class CHARACTER:
                 
                 if random.random() <= attackProbability:
                     action["name"] = random.choice([defaultSkills.CA, defaultSkills.QA])
-                    action["target"] = random.choice(random.choice([team for team in teamEstimatedPower.keys() if team != self.faction]))
+                    action["targets"] = [random.choice(random.choice([team for team in teamEstimatedPower.keys() if team != self.faction]))]
                     if not leftHandUsed: 
                         action["hand"] = "left"
                     else:
@@ -187,7 +187,7 @@ class CHARACTER:
     
     def getStrLevelOfSkill(self, skillName : str):
         if skillName in self.basicSkillsLevel.keys():
-            return "lv-"+str(self.basicSkillsLevel[skillName])
+            return "-lv"+str(self.basicSkillsLevel[skillName])
         else:
             return ""
     
