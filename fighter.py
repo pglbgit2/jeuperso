@@ -50,7 +50,7 @@ class CHARACTER:
     def getEstimatedPower(self):
         return self.HP
     
-    def setUpActions(self, fightersByName : Dict[str, 'CHARACTER'], teamEstimatedPower : Dict[str:int]):
+    def setUpActions(self, fightersByName : Dict[str, 'CHARACTER'], teamEstimatedPower : Dict[str,int]):
         if self.isControlledByGM:
             self.actions = interaction.getPlayerActions(fightersByName.keys(), self.skills)
             return self.actions
@@ -61,6 +61,10 @@ class CHARACTER:
                 attackProbability = 0.4
             else: 
                 attackProbability = 0.6
+                
+            if all(teamEstimatedPower[self.faction] <= teamEstimatedPower[enemy] for enemy in teamEstimatedPower.keys()):
+                attackProbability -= 0.2
+                
             while staminaCost < self.stamina:
                 if random.random() <= attackProbability:
                     action = random.choice([defaultSkills.CA, defaultSkills.QA])
@@ -193,7 +197,7 @@ class CHARACTER:
             "dodge" : self.dodgeUsual
         }
         if self.inventory != []:
-            fighterDict["Inventory"] = []
+            fighterDict["Inventory"] = {}
             fighterDict["Inventory"]["weapons"] = []
             fighterDict["Inventory"]["armors"] = []
             fighterDict["Inventory"]["items"] = []
@@ -208,25 +212,41 @@ class CHARACTER:
         return fighterDict
     
     def saveFighter(self, filename : str):
-        with open(filename) as file:
-            fighterDict = self.getDictInfos()
-            file.write(self.name+"\n")
-            file.write(self.faction+"\n")
-            file.write(str(fighterDict))
+        path = "./characters/"+filename
+        try:
+            with open(path, "w+") as file:
+                fighterDict = self.getDictInfos()
+                file.write(self.name+"\n")
+                file.write(self.faction+"\n")
+                file.write(str(fighterDict)+"\n")
+                file.close()
+        except Exception as e:
+            print(e.args)
+            interaction.throwError("problem while saving "+self.name)
 
     @staticmethod
     def retrieveFighter(filename : str):
-        with open(filename) as file:
-            NameLine = file.readline()
-            factionLine = file.readline()
-            dictLine = file.readline()
-            if dictLine != None:
-                fighterDictStr = ast.literal_eval(dictLine)
-                if isinstance(fighterDictStr, Dict):
-                    return CHARACTER.instantiate_from_dict(name=NameLine, faction=factionLine, Race=fighterDictStr)
-                else: return None
-            else:
-                return None
+        path = "./characters/"+filename
+        try:
+            with open(path, "r") as file:
+                NameLine = file.readline()[:-1]
+                factionLine = file.readline()[:-1]
+                dictLine = file.readline()[:-1]
+                if dictLine != None:
+                    fighterDictStr = ast.literal_eval(dictLine)
+                    if isinstance(fighterDictStr, Dict):
+                        file.close()
+                        print(factionLine)
+                        return CHARACTER.instantiate_from_dict(name=NameLine, faction=factionLine, Race=fighterDictStr)
+                    else:
+                        file.close() 
+                        return None
+                else:
+                    file.close()
+                    return None
+        except Exception as e:
+            print(e.args)
+            interaction.throwError("file "+filename+" do not exist")
     
     @staticmethod
     def instantiate_from_dict(Race : Dict, name : str, faction : str):
@@ -282,7 +302,7 @@ class CHARACTER:
             return None
             
         
-# billy = CHARACTER.instantiate_from_race("CITY_GARD", "billy", "Heroes")
-# print(billy.faction)
-# print(billy.inventory)
-# print(billy.leftTool.name)
+billy = CHARACTER.instantiate_from_race("CITY_GARD", "billy", "Heroes")
+billy.saveFighter("billy.sav")
+billy2 = CHARACTER.retrieveFighter("billy.sav")
+print(billy2.inventory)
