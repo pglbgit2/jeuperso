@@ -1,6 +1,6 @@
 import armors, items, weapons, races, defaultSkills, interaction
 from typing import List, Union, Dict
-import random, copy
+import random, copy, ast
 
 FACTIONS = ["Heroes","Bandits","City"]
 
@@ -36,6 +36,7 @@ class CHARACTER:
         self.dodgeUsual = dodge
         self.actions = []
         self.isControlledByGM = True
+        
     
     
     def newTurn(self):
@@ -177,7 +178,56 @@ class CHARACTER:
             return random.randint(0,100) <= self.dodgePercent
         else:
             return False
+    
+    
+    def isEquipped(self, item : Union[weapons.WEAPON, weapons.RANGE_WEAPON, armors.ARMOR]):
+        return item == self.bodyArmor or item == self.leftTool or item == self.legsArmor or item == self.headArmor or item == self.rightTool
+    
+    def getDictInfos(self):
+        fighterDict = { 
+            "HP" : self.HP,
+            "MaxHP" : self.MaxHP,
+            "magic" : self.magic,
+            "gold" : self.money,
+            "stamina_regeneration" : self.stamina_regeneration,
+            "dodge" : self.dodgeUsual
+        }
+        if self.inventory != []:
+            fighterDict["Inventory"] = []
+            fighterDict["Inventory"]["weapons"] = []
+            fighterDict["Inventory"]["armors"] = []
+            fighterDict["Inventory"]["items"] = []
+            for item in (self.inventory):
+                if isinstance(item, weapons.WEAPON) or isinstance(item, weapons.RANGE_WEAPON):
+                    fighterDict["Inventory"]["weapons"].append((item.name, self.isEquipped(item)))
+                else:
+                    if isinstance(item,armors.ARMOR):
+                        fighterDict["Inventory"]["armors"].append((item.name, self.isEquipped(item)))
+                    else: 
+                        fighterDict["Inventory"]["weapons"].append(item.name)
+        return fighterDict
+    
+    def saveFighter(self, filename : str):
+        with open(filename) as file:
+            fighterDict = self.getDictInfos()
+            file.write(self.name+"\n")
+            file.write(self.faction+"\n")
+            file.write(str(fighterDict))
 
+    @staticmethod
+    def retrieveFighter(filename : str):
+        with open(filename) as file:
+            NameLine = file.readline()
+            factionLine = file.readline()
+            dictLine = file.readline()
+            if dictLine != None:
+                fighterDictStr = ast.literal_eval(dictLine)
+                if isinstance(fighterDictStr, Dict):
+                    return CHARACTER.instantiate_from_dict(name=NameLine, faction=factionLine, Race=fighterDictStr)
+                else: return None
+            else:
+                return None
+    
     @staticmethod
     def instantiate_from_dict(Race : Dict, name : str, faction : str):
         if faction in FACTIONS:
