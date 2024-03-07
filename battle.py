@@ -35,7 +35,7 @@ class Battle:
             if "Stoical_Defense" == someAction and len(actions) > 1:
                 interaction.throwError("Can not use Stoical_defense and other action in same turn")
                 return False
-            if "Attack" in someAction["name"] and any(someAction["target"] == allyName for allyName in alliesName):
+            if "Attack" in someAction["name"] and any(target == allyName for allyName in alliesName for target in someAction["targets"]):
                 interaction.throwError("Can not attack ally")
                 return False
             if someAction["name"] not in action.Action.ACTIONS_DICT.keys():
@@ -78,7 +78,7 @@ class Battle:
                 actions = fighter.setUpActions(self.fightersNames, self.getEstimatedPowerOfFactions(), [self.getWarriorsOfFaction(faction) for faction in self.factionsWarriors.keys()])
                 for someAction in actions:
                     someAction["name"]+=str(fighter.getStrLevelOfSkill(someAction["name"]))
-                actionValidated = not isinstance(fighter, player.Player) or self.checkValidity(fighter, actions, self.factionsWarriors[fighter.faction])
+                actionValidated = self.checkValidity(fighter, actions, self.factionsWarriors[fighter.faction])
             fighter.actions = actions
     
     def namesToCharacters(self, namesList : List[str]):
@@ -91,6 +91,10 @@ class Battle:
         self.defeatedWarriors.append(fighter)
         self.factionsWarriors[fighter.faction].remove(fighter.name)
         self.fightersNames.pop(fighter.name,None)
+    
+    def killByName(self, name: str):
+        if name in self.fightersNames.keys():
+            self.killWarrior(self.fightersNames[name])
     
     def executeActions(self):
         for fighter in rules.getTurnPriority(self.fighters):
@@ -152,16 +156,17 @@ class Battle:
         for item in loot[0]:
             given = False
             while not given:
-                characterName = interaction.askFor("Who to give "+item.name)
+                characterName = interaction.askFor("Who to give "+item.name+"\n")
                 if characterName not in self.fightersNames.keys():
                     continue
                 self.fightersNames[characterName].put_into_inventory(item)
+                given = True
                 
         while loot[1] != 0:
-            characterName = interaction.askFor("Who to give gold")
+            characterName = interaction.askFor("Who to give gold\n")
             if characterName not in self.fightersNames.keys():
                 continue
-            amountStr = interaction.askFor("Remaining gold: "+loot[1]+", how much to give ?")
+            amountStr = interaction.askFor("Remaining gold: "+str(loot[1])+", how much to give ?")
             if not amountStr.isdigit():
                 interaction.throwError("That is not a number")
                 continue
