@@ -35,6 +35,7 @@ class CHARACTER:
         self.dodgePercent = dodge
         self.dodgeUsual = dodge
         self.actions = []
+        self.isControlledByGM = True
     
     
     def newTurn(self):
@@ -42,9 +43,38 @@ class CHARACTER:
         self.defensePoints = 0
         self.dodgePercent = self.dodgeUsual
         self.actions = []
+        if self.HP < self.MaxHP/2:
+            self.HP -= 1
     
-    def setUpActions(self, fightersNames : List[str], faction):
-        pass
+    def getEstimatedPower(self):
+        return self.HP
+    
+    def setUpActions(self, fightersByName : Dict[str, 'CHARACTER'], teamEstimatedPower : Dict[str:int]):
+        if self.isControlledByGM:
+            self.actions = interaction.getPlayerActions(fightersByName.keys(), self.skills)
+            return self.actions
+        else:
+            actions = []
+            staminaCost = 0
+            if self.HP < self.MaxHP /2:
+                attackProbability = 0.4
+            else: 
+                attackProbability = 0.6
+            while staminaCost < self.stamina:
+                if random.random() <= attackProbability:
+                    action = random.choice([defaultSkills.CA, defaultSkills.QA])
+                else:
+                    action = defaultSkills.CD
+                actions.append(action)
+                staminaCost += defaultSkills.DEFAULT_SKILLS_COST[action]
+            if staminaCost > self.stamina:
+                actions.pop()
+                while staminaCost != self.stamina:
+                    actions.append(defaultSkills.LD)
+                    staminaCost += 1
+            self.actions = actions
+            return actions
+                
     
     def max_weight(self):
         return self.stamina*30

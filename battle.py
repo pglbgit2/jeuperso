@@ -39,13 +39,33 @@ class Battle:
         return True
                 
         
+    def getPowerOfFaction(self, faction : str):
+        power = 0
+        for warriorName in self.factionsWarriors[faction]:
+            warrior = self.fightersNames[warriorName]
+            power += warrior.getEstimatedPower()
+        return power
+    
+    def getWarriorsOfFaction(self, faction : str):
+        warriors = []
+        for warriorName in self.factionsWarriors[faction]:
+            warrior = self.fightersNames[warriorName]
+            warriors.append(warrior)
+        return warriors
 
+    def getEstimatedPowerOfFactions(self):
+        power = {}
+        for faction in self.factionsWarriors.keys():
+            factionPower = self.getPowerOfFaction(faction)
+            power[faction] = factionPower
+        return power
+    
     
     def prepareActions(self):
         for fighter in self.fighters:
             actionValidated = False
             while not actionValidated : 
-                actions = fighter.setUpActions(self.fightersNames)
+                actions = fighter.setUpActions(self.fightersNames, self.getEstimatedPowerOfFactions())
                 for someAction in actions:
                     someAction+=fighter.getStrLevelOfSkill(someAction["name"])
                 actionValidated = not isinstance(fighter, player.Player) or self.checkValidity(fighter, actions, self.factionsWarriors[fighter.faction])

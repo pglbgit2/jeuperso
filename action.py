@@ -1,6 +1,6 @@
 
 from typing import List, Tuple, Dict, Union
-import fighter, armors, weapons
+import fighter, armors, weapons, defaultSkills
 
 class Action:
     ACTIONS_DICT : Dict[str,'Action'] = {}
@@ -44,7 +44,7 @@ class Movement(Action):
 
 class Quick_Movement(Movement):
     Level_Parameters = {
-        1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10, "speed" : 5, "dodge_alteration" : -0.15},
+        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.QM], "UpgradeExpCost" : 10, "speed" : 5, "dodge_alteration" : -0.15},
         2 : {"StaminaCost" : 3, "UpgradeExpCost" : 25, "speed" : 8, "dodge_alteration" : -0.20}
     }
     def __init__(self, level: int):
@@ -52,7 +52,7 @@ class Quick_Movement(Movement):
     
 class Classic_Movement(Movement):
     Level_Parameters = {
-        1 : {"StaminaCost" : 2, "UpgradeExpCost" : 10, "speed" : 3, "dodge_alteration" : 0},
+        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.CM], "UpgradeExpCost" : 10, "speed" : 3, "dodge_alteration" : 0},
         2 : {"StaminaCost" : 2, "UpgradeExpCost" : 20, "speed" : 4, "dodge_alteration" : 0}
     }
     def __init__(self, level: int):
@@ -60,7 +60,7 @@ class Classic_Movement(Movement):
         
 class Slow_Movement(Movement):
     Level_Parameters = {
-        1 : {"StaminaCost" : 1, "UpgradeExpCost" : 10, "speed" : 1, "dodge_alteration" : 0.15},
+        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.SM], "UpgradeExpCost" : 10, "speed" : 1, "dodge_alteration" : 0.15},
         2 : {"StaminaCost" : 1, "UpgradeExpCost" : 20, "speed" : 1, "dodge_alteration" : 0.20}
     }
     def __init__(self, level: int):
@@ -89,7 +89,7 @@ class Attack(Action):
         
 class Brutal_Attack(Attack):
     Level_Parameters = {
-        1 : {"StaminaCost" : 4, "UpgradeExpCost" : 10,  "dodge_alteration" : -1,"damageFactor" : 2.25},
+        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.BA], "UpgradeExpCost" : 10,  "dodge_alteration" : -1,"damageFactor" : 2.25},
         2 : {"StaminaCost" : 4, "UpgradeExpCost" : 20, "dodge_alteration" : -1,"damageFactor" : 2.5}
     }
     def __init__(self, level : int):
@@ -97,7 +97,7 @@ class Brutal_Attack(Attack):
         self.level = level
 class Quick_Attack(Attack):
     Level_Parameters = {
-        1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"damageFactor" : 0.5},
+        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.QA], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"damageFactor" : 0.5},
         2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"damageFactor" : 0.5}
     }
     def __init__(self, level : int):
@@ -105,7 +105,7 @@ class Quick_Attack(Attack):
         self.level = level
 class Classic_Attack(Attack):
     Level_Parameters = {
-        1 : {"StaminaCost" : 2, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"damageFactor" : 1},
+        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.CA], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"damageFactor" : 1},
         2 : {"StaminaCost" : 2, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"damageFactor" : 1}
     }
     def __init__(self, level : int):
@@ -125,7 +125,7 @@ class Defense(Action):
 
 class Light_Defense(Defense):
     Level_Parameters = {
-        1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"defensePoints" : 1},
+        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.LD], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"defensePoints" : 1},
         2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"defensePoints" : 1}
     }
     def __init__(self, level : int):
@@ -133,8 +133,8 @@ class Light_Defense(Defense):
     
 class Stoical_Defense(Defense): # for stoical_Defense, damage is divided by the absolute value of defensePoints in fighter.py but it is the only action authorized for unit
     Level_Parameters = {
-        1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10,  "dodge_alteration" : -1,"defensePoints" : -3},
-        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : -1,"defensePoints" : -5}
+        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.SD], "UpgradeExpCost" : 10,  "dodge_alteration" : -1,"defensePoints" : -3},
+        2 : {"StaminaCost" : 5, "UpgradeExpCost" : 20, "dodge_alteration" : -1,"defensePoints" : -5}
     }
     def __init__(self, level : int):
         super().__init__("Stoical_Defense"+"-lv"+str(level),level=level, **Stoical_Defense.Level_Parameters[level])
@@ -142,7 +142,7 @@ class Stoical_Defense(Defense): # for stoical_Defense, damage is divided by the 
         
 class Classic_Defense(Defense):
     Level_Parameters = {
-        1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"defensePoints" : 4},
+        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.CD], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"defensePoints" : 4},
         2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"defensePoints" : 5}
     }
     def __init__(self, level : int):

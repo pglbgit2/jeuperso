@@ -23,6 +23,6 @@ class Player(fighter.CHARACTER):
     def dodge(self,modification=0):
         return int(interaction.askFor(self.name+", roll 1d100 dice for Dodging, Give result"))+modification
     
-    def setUpActions(self, unitsList : Dict[str,fighter.CHARACTER]):
+    def setUpActions(self, unitsList : Dict[str,fighter.CHARACTER], teamEstimatedPower : Dict[str:int]):
         self.actions = interaction.getPlayerActions(unitsList.keys(), self.skills)
         return self.actions
