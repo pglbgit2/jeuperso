@@ -138,9 +138,10 @@ class Battle:
         self.executeActions()
         if interaction.MOD == interaction.TERMINAL:
             self.manualChanges()
+            
     
     def collectLoot(self):
-        loot : Tuple[List[items.ITEM], int] = ([],0) # (inventory, gold)
+        loot : List[Union[List[items.ITEM], int]] = [[],0] # (inventory, gold)
         for dead in self.defeatedWarriors:
             loot[0].extend(dead.inventory)
             if dead.money > 0:

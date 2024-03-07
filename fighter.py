@@ -1,6 +1,6 @@
 import armors, items, weapons, races, defaultSkills, interaction
 from typing import List, Union, Dict
-import random, copy, ast
+import random, copy, ast, math
 
 FACTIONS = ["Heroes","Bandits"]
 
@@ -144,7 +144,7 @@ class CHARACTER:
             damage = self.protection_damage(damage, damage_type, self.bodyArmor)
         if self.legsArmor != None and damage > 0:
             damage = self.protection_damage(damage, damage_type, self.legsArmor)
-        self.HP -= damage
+        self.HP -= math.floor(damage)
     
     def equipAll(self, loadsOfStuff : List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]]):
         for stuff in loadsOfStuff:
