@@ -4,7 +4,9 @@ import ast, re
 TERMINAL = 1
 MOVEMENT = 0
 MOD = TERMINAL
-
+if MOD == TERMINAL:
+    import readline
+    
 def askFor(something:str, mod=MOD):
     if mod == TERMINAL:
         return input(something)

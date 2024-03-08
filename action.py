@@ -39,7 +39,7 @@ class Movement(Action):
         self.speed = speed
     
     def acts(self, fighter : fighter.CHARACTER, targets : Tuple[int,int], hand="left"):
-        interaction.showInformation(fighter.name+" move to "+targets)
+        interaction.showInformation(fighter.name+" move to "+str(targets))
         super(Movement, self).acts(fighter,targets)
         pass # move fighter at target emplacement if possible
 
@@ -130,7 +130,7 @@ class Defense(Action):
         super(Defense,self).acts(fighter,None)
         fighter.defensePoints += self.defensePoints
         if self.defensePoints > 0:
-            interaction.showInformation("fighter "+fighter.name+" protect itself with "+str(self.defensePoints)+" temporary armor, total temporary armor:"+fighter.defensePoints)
+            interaction.showInformation("fighter "+fighter.name+" protect itself with "+str(self.defensePoints)+" temporary armor, total temporary armor:"+str(fighter.defensePoints))
         else:
             interaction.showInformation("fighter "+fighter.name+" protect itself by dividing damage by "+str(-self.defensePoints))
 

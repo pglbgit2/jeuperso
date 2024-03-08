@@ -116,16 +116,17 @@ class CHARACTER:
                 if stuff.name in armors.LEGS:
                     self.legsArmor = stuff
                     return
-                
-            if stuff.name in weapons.TWO_HAND_WEAPONS:
-                self.leftTool = stuff
-                self.rightTool = stuff
-                return
-            else:
-                if side == "left":
+            if isinstance(stuff, weapons.WEAPON) or isinstance(stuff, weapons.RANGE_WEAPON):
+                if stuff.name in weapons.TWO_HAND_WEAPONS:
                     self.leftTool = stuff
+                    self.rightTool = stuff
                     return
-                self.rightTool = stuff
+                else :
+                    if stuff.name in weapons.ONE_HAND_WEAPONS:
+                        if side == "left":
+                            self.leftTool = stuff
+                            return
+                        self.rightTool = stuff
     
     def protection_damage(self, damage : int, damage_type:str, protection : armors.ARMOR):
         damage = protection.damage_absorption(damage, damage_type)

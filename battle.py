@@ -1,4 +1,4 @@
-import fighter, rules, action, player, interaction, items
+import fighter, rules, action, player, interaction, items, readline
 from typing import List, Dict, Union, Tuple
 
 class Battle:
