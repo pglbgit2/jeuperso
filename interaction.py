@@ -43,7 +43,8 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                     
                     if "Equip" in actionName:
                         objectToEquip = input("Name of Object to equip\n")
-                        Actions.append({"name" : actionName, "target" : playerName, "object" : objectToEquip})
+                        hand = input("hand : left or right or none \n")
+                        Actions.append({"name" : actionName, "target" : playerName, "object" : objectToEquip, "hand":hand})
                         continue
                     if "Movement" in actionName:
                         if MOVEMENT == 1:

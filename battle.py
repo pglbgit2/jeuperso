@@ -42,7 +42,7 @@ class Battle:
                 interaction.throwError("Using an action "+someAction["name"]+" that does not exist")
                 return False
             if someAction["name"] == "Equip":
-                if not any(someAction["object"] == stuff for stuff in fighter.inventory):
+                if not any(someAction["object"] == stuff.name for stuff in fighter.inventory):
                     interaction.throwError("Using an item that player do not possess")
                     return False
         return True
@@ -106,7 +106,7 @@ class Battle:
                         action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["hand"])
                         continue
                     if "Equip" == actionDict["name"]:
-                        action.Action.ACTIONS_DICT["Equip"].acts(fighter, fighter.getItemFromInventoryByName(actionDict["name"]), actionDict["hand"])
+                        action.Action.ACTIONS_DICT["Equip"].acts(fighter, fighter.getItemFromInventoryByName(actionDict["object"]), actionDict["hand"])
                         continue
                     if "Defense" in actionDict["name"]:
                         action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter,None)

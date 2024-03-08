@@ -137,14 +137,22 @@ class CHARACTER:
         if self.defensePoints < 0:
             damage = damage / -self.defensePoints
         else:
-            damage -= self.defensePoints
+            defense = self.defensePoints
+            if defense > 0:
+                oldDamage = damage
+                damage = max(0, damage - self.defensePoints)
+                dif = oldDamage - damage
+                interaction.showInformation("damage reduced by temporary armor by:"+str(dif))
+                self.defensePoints -= dif
         if self.headArmor != None and damage > 0:
             damage = self.protection_damage(damage, damage_type , self.headArmor)
         if self.bodyArmor != None and damage > 0:
             damage = self.protection_damage(damage, damage_type, self.bodyArmor)
         if self.legsArmor != None and damage > 0:
             damage = self.protection_damage(damage, damage_type, self.legsArmor)
-        self.HP -= math.floor(damage)
+        damage = math.floor(damage)
+        interaction.showInformation("fighter "+self.name+" took "+str(damage)+" damage")
+        self.HP -= damage
     
     def equipAll(self, loadsOfStuff : List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]]):
         for stuff in loadsOfStuff:
@@ -166,6 +174,7 @@ class CHARACTER:
             if self.total_weight() <= self.max_weight() and stuff not in self.inventory:
                 self.inventory.append(stuff)
                 self.weight += stuff.weight
+                interaction.showInformation(stuff.name+" added to "+self.name+" inventory")
     
     def lootAll(self, loot: List[items.ITEM]):
         for item in loot:

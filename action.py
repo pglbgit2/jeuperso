@@ -1,6 +1,6 @@
 
 from typing import List, Tuple, Dict, Union
-import fighter, armors, weapons, defaultSkills
+import fighter, armors, weapons, defaultSkills, interaction
 
 class Action:
     ACTIONS_DICT : Dict[str,'Action'] = {}
@@ -39,6 +39,7 @@ class Movement(Action):
         self.speed = speed
     
     def acts(self, fighter : fighter.CHARACTER, targets : Tuple[int,int], hand="left"):
+        interaction.showInformation(fighter.name+" move to "+targets)
         super(Movement, self).acts(fighter,targets)
         pass # move fighter at target emplacement if possible
 
@@ -87,7 +88,10 @@ class Attack(Action):
         
         for target in targets:
             if self.name.startswith("Quick_Attack") or target.dodge() != True:
+                interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
                 target.take_damage(potential_damage, damage_type)
+            else:
+                interaction.showInformation(target.name+" dodged attack")
         fighter.useSkill(self.name)
         
 class Brutal_Attack(Attack):
@@ -124,7 +128,11 @@ class Defense(Action):
         
     def acts(self, fighter : fighter.CHARACTER, hand="left"):
         super(Defense,self).acts(fighter,None)
-        fighter.defensePoints += self.defensePoints 
+        fighter.defensePoints += self.defensePoints
+        if self.defensePoints > 0:
+            interaction.showInformation("fighter "+fighter.name+" protect itself with "+str(self.defensePoints)+" temporary armor, total temporary armor:"+fighter.defensePoints)
+        else:
+            interaction.showInformation("fighter "+fighter.name+" protect itself by dividing damage by "+str(-self.defensePoints))
 
 class Light_Defense(Defense):
     Level_Parameters = {

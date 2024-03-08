@@ -1,4 +1,4 @@
-import items, interaction
+import items, interaction, math
 from typing import Dict
 
 
@@ -78,12 +78,13 @@ class ARMOR(items.ITEM):
             return None
         
     def damage_absorption(self, damage:int, damage_type : str):
-        absorbed = self.absorption[damage_type]*damage
+        absorbed = math.ceil(self.absorption[damage_type]*damage)
         if absorbed > damage:
             absorbed = damage
         if absorbed > self.durability:
             absorbed = self.durability
         self.durability -= absorbed
+        interaction.showInformation(self.name+" has absorbed "+str(absorbed)+" remaining durability:"+str(self.durability))
         return damage - absorbed
         
     
