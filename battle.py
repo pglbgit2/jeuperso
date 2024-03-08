@@ -102,18 +102,20 @@ class Battle:
                 self.killWarrior(fighter)
             else:    
                 for actionDict in fighter.actions:
-                    if "Attack" in actionDict["name"]:
-                        action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["hand"])
-                        continue
-                    if "Equip" == actionDict["name"]:
-                        action.Action.ACTIONS_DICT["Equip"].acts(fighter, fighter.getItemFromInventoryByName(actionDict["object"]), actionDict["hand"])
-                        continue
                     if "Defense" in actionDict["name"]:
                         action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter,None)
                         continue
+                
+                for actionDict in fighter.actions:
                     if "Movement" in actionDict["name"]:
-                        action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, actionDict["target"])
-    
+                            action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, actionDict["target"])
+                    if "Attack" in actionDict["name"]:
+                            action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["hand"])
+                            continue
+                    if "Equip" == actionDict["name"]:
+                            action.Action.ACTIONS_DICT["Equip"].acts(fighter, fighter.getItemFromInventoryByName(actionDict["object"]), actionDict["hand"])
+                            continue
+                        
     def manualChanges(self):
         buf = ""
         while True:
