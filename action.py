@@ -133,7 +133,7 @@ class Shot(Action):
             weapon = fighter.leftTool
         else:
             weapon = fighter.rightTool
-        assert weapon.name in weapons.RANGE_WEAPONS or weapon.name in weapons.THROWABLE
+        assert (weapon != None and weapon.name in weapons.RANGE_WEAPONS) or weapon.name in weapons.THROWABLE
         
         if weapon.name in weapons.RANGE_WEAPONS:
             for target in targets:
