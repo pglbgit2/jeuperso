@@ -53,13 +53,15 @@ SPEAR = {"damage" : SPEAR_DAMAGE,"weight" :  SPEAR_WEIGHT,"cost" : SPEAR_COST, "
 ARROW_DAMAGE = 5
 ARROW_WEIGHT = 0.2
 ARROW_COST = 0.3
-ARROW = {"damage" : ARROW_DAMAGE, "weight" : ARROW_WEIGHT,"cost" : ARROW_COST, "type" : "pierce"}
+ARROW_SPEED = 20
+ARROW = {"damage" : ARROW_DAMAGE, "weight" : ARROW_WEIGHT,"cost" : ARROW_COST, "type" : "pierce", "speed" : ARROW_SPEED}
 
 ## ROCK ##
 ROCK_DAMAGE = 3
 ROCK_WEIGHT = 0.7
 ROCK_COST = 0
-ROCK = {"damage" : ROCK_DAMAGE, "weight" : ROCK_WEIGHT, "cost" : ROCK_COST, "type" : "impact"}
+ROCK_SPEED = 10
+ROCK = {"damage" : ROCK_DAMAGE, "weight" : ROCK_WEIGHT, "cost" : ROCK_COST, "type" : "impact", "speed" : ROCK_SPEED}
 
 ######################
 ## RANGE WEAPONS ##

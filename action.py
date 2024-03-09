@@ -1,6 +1,6 @@
 
 from typing import List, Tuple, Dict, Union
-import fighter, armors, weapons, defaultSkills, interaction
+import fighter, armors, weapons, defaultSkills, interaction, random
 
 class Action:
     ACTIONS_DICT : Dict[str,'Action'] = {}
@@ -22,6 +22,8 @@ class Action:
             
     def acts(self, fighter : fighter.CHARACTER, targets : Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]], hand="left"):
         fighter.dodgePercent += fighter.dodgePercent * self.dodge_alteration
+        fighter.useSkill(self.name)
+
     
     
 class Equip(Action): 
@@ -118,8 +120,48 @@ class Classic_Attack(Attack):
     def __init__(self, level : int):
         super().__init__("Classic_Attack"+"-lv"+str(level),level=level, **Classic_Attack.Level_Parameters[level])
         self.level = level
+        
+class Shot(Action):
+    
+    def __init__(self, action_name: str, StaminaCost: int, UpgradeExpCost: int, level : int, accuracy : int, dodge_alteration : int):
+        super().__init__(action_name, StaminaCost, UpgradeExpCost, level, dodge_alteration)
+        self.accuracy = accuracy
        
-       
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], hand="left"):
+        super(Shot,self).acts(fighter,None)
+        if hand == "left":
+            weapon = fighter.leftTool
+        else:
+            weapon = fighter.rightTool
+        assert weapon.name in weapons.RANGE_WEAPONS or weapon.name in weapons.THROWABLE
+        
+        if weapon.name in weapons.RANGE_WEAPONS:
+            for target in targets:
+                munition : weapons.WEAPON = fighter.removeItemFromInventoryByName(getattr(weapons,weapon.name,None))
+                potential_damage = 0
+                if munition != None:
+                    potential_damage += munition.damage
+                    damage_type = munition.damageType
+                    if fighter.shot(self.accuracy):
+                        interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
+                        target.take_damage(potential_damage, damage_type)
+                    else:
+                        interaction.showInformation(target.name+" dodged attack")
+                else:
+                    interaction.showInformation("no munition left")
+        
+        if weapon.name in weapons.THROWABLE:
+            fighter.removeItemFromInventoryByName(weapon.name)
+            assert len(target) == 1
+            potential_damage = weapon.damage
+            damage_type = weapon.damage
+            if fighter.shot(self.accuracy):
+                interaction.showInformation(fighter.name+" attack "+targets[0].name+" with "+str(potential_damage)+" damage")
+                targets[0].take_damage(potential_damage, damage_type)
+            else:
+                interaction.showInformation(target.name+" dodged attack")   
+        
+            
         
 class Defense(Action):
     def __init__(self, action_name: str, StaminaCost: int, UpgradeExpCost: int, defensePoints : int, level:int, dodge_alteration : int):

@@ -36,6 +36,7 @@ class CHARACTER:
         self.dodgeUsual = dodge
         self.actions = []
         self.isControlledByGM = True
+        self.shotBonus = 0
         
     
     
@@ -103,6 +104,7 @@ class CHARACTER:
             if item.name == name:
                 return item
         return None
+      
         
     def equip(self, stuff : Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], side="left"):
         if stuff in self.inventory:
@@ -210,7 +212,30 @@ class CHARACTER:
     
     def isEquipped(self, item : Union[weapons.WEAPON, weapons.RANGE_WEAPON, armors.ARMOR]):
         return item == self.bodyArmor or item == self.leftTool or item == self.legsArmor or item == self.headArmor or item == self.rightTool
-    
+        
+    def removeItemFromInventoryByName(self, itemName: str):
+        for item in self.inventory:
+            if item.name == itemName:
+                self.inventory.pop(item)
+                if self.isEquipped(self, item):
+                    match item.name:
+                        case self.bodyArmor:
+                            self.bodyArmor = None
+                        case self.leftTool:
+                            self.leftTool = None
+                        case self.rightTool:
+                            self.rightTool = None
+                        case self.legsArmor:
+                            self.legsArmor = None
+                        case self.headArmor:
+                            self.headArmor = None
+                return item
+        return None
+        
+    def shot(self, accuracy : int):
+        return random.random() <= accuracy + self.shotBonus
+        
+        
     def getDictInfos(self):
         fighterDict = { 
             "HP" : self.HP,
