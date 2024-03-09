@@ -15,5 +15,5 @@ def getTurnPriority(units: List[fighter.CHARACTER], mod=PRIORITY):
     if mod == PRIORITY_BY_INITIATIVE:
         return sorted(units, key= lambda x: x.getInitiative(), reverse=True)
     
-    return []
+    return units
 

@@ -31,6 +31,7 @@ class Battle:
         
     
     def checkValidity(self, fighter : fighter.CHARACTER, actions : List[Dict[str,Union[str,Tuple[int,int]]]], alliesName : List[str]):
+        cost = 0
         for someAction in actions:
             if "Stoical_Defense" == someAction and len(actions) > 1:
                 interaction.throwError("Can not use Stoical_defense and other action in same turn")
@@ -46,12 +47,16 @@ class Battle:
                     interaction.throwError("Using an item that player do not possess")
                     return False
             if "Shot" in someAction["name"]:
-                if fighter.leftTool.name not in weapons.RANGE_WEAPONS and fighter.rightTool not in weapons.RANGE_WEAPONS and fighter.leftTool not in weapons.THROWABLE and fighter.rightTool not in weapons.THROWABLE:
+                if (fighter.leftTool != None and fighter.leftTool.name not in weapons.RANGE_WEAPONS or fighter.leftTool not in weapons.THROWABLE) and (fighter.rightTool != None and fighter.rightTool.name not in weapons.RANGE_WEAPONS and fighter.rightTool not in weapons.THROWABLE):
                     interaction.throwError("Can not shot without range or throwable weapon")
                     return False
                 if  (fighter.leftTool in weapons.THROWABLE or fighter.rightTool in weapons.THROWABLE) and len(someAction["targets"] > 1):
                     interaction.throwError("Can not shot multi targets with throwable weapon")
                     return False
+            cost += action.Action.ACTIONS_DICT[someAction["name"]].staminaCost
+        if cost > fighter.stamina:
+            interaction.throwError("Using too much stamina")
+            return False
         return True
                 
         
