@@ -42,6 +42,7 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                         break
                     if actionName not in valid_actions:
                         raise Exception("given actionName is not valid")
+                                            
                     
                     if "Equip" in actionName:
                         objectToEquip = input("Name of Object to equip\n")
@@ -61,7 +62,7 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                     if "Defense" in actionName:
                         Actions.append({"name" : actionName, "target" : playerName})
                         continue
-                    if "Attack" in actionName:
+                    if "Attack" in actionName or "Shot" in actionName:
                         print("All potential targets:"+str(units_name)+"\n")
                         target = input("Targets Name\n")
                         if ", " in target:

@@ -1,4 +1,4 @@
-import fighter, rules, action, player, interaction, items, readline
+import fighter, rules, action, player, interaction, items, readline, weapons
 from typing import List, Dict, Union, Tuple
 
 class Battle:
@@ -44,6 +44,13 @@ class Battle:
             if someAction["name"] == "Equip":
                 if not any(someAction["object"] == stuff.name for stuff in fighter.inventory):
                     interaction.throwError("Using an item that player do not possess")
+                    return False
+            if "Shot" in someAction["name"]:
+                if fighter.leftTool.name not in weapons.RANGE_WEAPONS and fighter.rightTool not in weapons.RANGE_WEAPONS and fighter.leftTool not in weapons.THROWABLE and fighter.rightTool not in weapons.THROWABLE:
+                    interaction.throwError("Can not shot without range or throwable weapon")
+                    return False
+                if  (fighter.leftTool in weapons.THROWABLE or fighter.rightTool in weapons.THROWABLE) and len(someAction["targets"] > 1):
+                    interaction.throwError("Can not shot multi targets with throwable weapon")
                     return False
         return True
                 

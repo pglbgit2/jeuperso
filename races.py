@@ -37,6 +37,16 @@ CITY_GARD = {
     "Inventory" : {"weapons" : [("SWORD",True)], "armors" : [("CHAIN_MAIL",True)], "items" : []}
 }
 
+FOOTPAD = {
+    "HP" : 22,
+    "MaxHP" : 22,
+    "magic" : 0,
+    "gold" : 5,
+    "stamina_regeneration" : 5,
+    "dodge" : 0.25,
+    "Inventory" : {"weapons" : [("SLINGSHOT",True)], "armors" : [], "items" : ["ROCK" for _ in range(20)]}
+}
+
 ### ALL RACES & CLASSES LISTED BELOW ###
 
-RACES = ["HUMAN", "THIEF", "CITY_GARD"]
+RACES = ["HUMAN", "THIEF", "CITY_GARD", "FOOTPAD"]

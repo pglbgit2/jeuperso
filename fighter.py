@@ -6,7 +6,7 @@ FACTIONS = ["Heroes","Bandits"]
 
 
 class CHARACTER:
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = copy.copy(defaultSkills.DEFAULT_SKILLS), dodge : float = 0.15, skillsLevel : Dict[str,int] = {}):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = copy.copy(defaultSkills.DEFAULT_SKILLS), dodge : float = 0.15, skillsLevel : Dict[str,int] = {}, shotBonus : float = 0):
         self.HP = HP
         self.MaxHP = MaxHP
         self.stamina = Stamina
@@ -36,7 +36,7 @@ class CHARACTER:
         self.dodgeUsual = dodge
         self.actions = []
         self.isControlledByGM = True
-        self.shotBonus = 0
+        self.shotBonus = shotBonus
         
     
     

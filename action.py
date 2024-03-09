@@ -150,7 +150,7 @@ class Shot(Action):
                 else:
                     interaction.showInformation("no munition left")
         
-        if weapon.name in weapons.THROWABLE:
+        elif weapon.name in weapons.THROWABLE:
             fighter.removeItemFromInventoryByName(weapon.name)
             assert len(target) == 1
             potential_damage = weapon.damage
@@ -175,7 +175,7 @@ class Precise_Shot(Shot):
 class Quick_Shot(Shot):
     Level_Parameters = {
         1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.QS], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.2},
-        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.65}
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.25}
     }
     def __init__(self, level : int):
         super().__init__("Quick_Shot"+"-lv"+str(level),level=level, **Quick_Shot.Level_Parameters[level])
@@ -184,7 +184,7 @@ class Quick_Shot(Shot):
 class Classic_Shot(Shot):
     Level_Parameters = {
         1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.PS], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.4},
-        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.65}
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.45}
     }
     def __init__(self, level : int):
         super().__init__("Classic_Shot"+"-lv"+str(level),level=level, **Classic_Shot.Level_Parameters[level])
@@ -249,7 +249,7 @@ def setupActions():
                 else:
                     obj()
 
-ABSTRACT = [Action, Attack, Defense, Movement]
+ABSTRACT = [Action, Attack, Defense, Movement, Shot]
 
                 
 if __name__ == '__main__':
