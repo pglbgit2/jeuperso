@@ -10,9 +10,9 @@ CD = "Classic_Defense"
 E = "Equip"
 PS = "Precise_Shot"
 QS = "Quick_Shot"
+CS = "Classic_Shot"
 
-
-DEFAULT_SKILLS = [QM, CM, SM, BA, QA, CA, LD, SD, CD, E, PS, QS]
+DEFAULT_SKILLS = [QM, CM, SM, BA, QA, CA, LD, SD, CD, E, PS, QS, CS]
 NOT_UPGRADABLE = [E]
 
 DEFAULT_SKILLS_COST = { 
@@ -26,5 +26,6 @@ DEFAULT_SKILLS_COST = {
     CD : 2,
     BA : 4,
     PS : 4,
-    QS : 2
+    QS : 2,
+    CS : 3
 }
