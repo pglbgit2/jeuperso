@@ -74,6 +74,16 @@ BOW_COST = 30
 BOW_MUNITION = "ARROW"
 BOW =  {"accuracy" : BOW_ACCURACY, "weight" : BOW_WEIGHT, "cost" : BOW_COST, "munition" : BOW_MUNITION}
 
+## SLINGSHOT ##
+
+SLINGSHOT_ACCURACY = 0.10
+SLINGSHOT_WEIGHT = 9
+SLINGSHOT_COST = 15
+SLINGSHOT_MUNITION = "ROCK"
+SLINGSHOT =  {"accuracy" : SLINGSHOT_ACCURACY, "weight" : SLINGSHOT_WEIGHT, "cost" : SLINGSHOT_COST, "munition" : SLINGSHOT_MUNITION}
+
+
+
 ######################
 
 

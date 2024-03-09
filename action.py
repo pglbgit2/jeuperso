@@ -142,7 +142,7 @@ class Shot(Action):
                 if munition != None:
                     potential_damage += munition.damage
                     damage_type = munition.damageType
-                    if fighter.shot(self.accuracy):
+                    if fighter.shot(self.accuracy+weapon.accuracy):
                         interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
                         target.take_damage(potential_damage, damage_type)
                     else:
@@ -161,7 +161,36 @@ class Shot(Action):
             else:
                 interaction.showInformation(target.name+" dodged attack")   
         
-            
+
+class Precise_Shot(Shot):
+    Level_Parameters = {
+        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.PS], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.6},
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.65}
+    }
+    def __init__(self, level : int):
+        super().__init__("Precise_Shot"+"-lv"+str(level),level=level, **Precise_Shot.Level_Parameters[level])
+        self.level = level
+        
+
+class Quick_Shot(Shot):
+    Level_Parameters = {
+        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.QS], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.2},
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.65}
+    }
+    def __init__(self, level : int):
+        super().__init__("Quick_Shot"+"-lv"+str(level),level=level, **Quick_Shot.Level_Parameters[level])
+        self.level = level
+
+class Classic_Shot(Shot):
+    Level_Parameters = {
+        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.PS], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.4},
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.65}
+    }
+    def __init__(self, level : int):
+        super().__init__("Classic_Shot"+"-lv"+str(level),level=level, **Classic_Shot.Level_Parameters[level])
+        self.level = level
+
+
         
 class Defense(Action):
     def __init__(self, action_name: str, StaminaCost: int, UpgradeExpCost: int, defensePoints : int, level:int, dodge_alteration : int):
