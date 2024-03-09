@@ -137,7 +137,7 @@ class Shot(Action):
         
         if weapon.name in weapons.RANGE_WEAPONS:
             for target in targets:
-                munition : weapons.WEAPON = fighter.removeItemFromInventoryByName(getattr(weapons,weapon.name,None))
+                munition : weapons.WEAPON = fighter.removeItemFromInventoryByName(getattr(weapons,weapon.name,None)["munition"])
                 potential_damage = 0
                 if munition != None:
                     potential_damage += munition.damage

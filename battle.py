@@ -122,6 +122,8 @@ class Battle:
                     if "Equip" == actionDict["name"]:
                             action.Action.ACTIONS_DICT["Equip"].acts(fighter, fighter.getItemFromInventoryByName(actionDict["object"]), actionDict["hand"])
                             continue
+                    if "Shot" in actionDict["name"]:
+                        action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["hand"])
                         
     def manualChanges(self):
         buf = ""

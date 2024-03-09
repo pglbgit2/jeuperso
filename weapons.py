@@ -120,12 +120,22 @@ class WEAPON(items.ITEM):
         else:
             interaction.throwError("No Weapon with such name")
             return None
+        
+    @staticmethod
+    def get_munition_weapon(weapon_name):
+     
+        if weapon_name in globals().keys() and weapon_name in RANGE_PROJECTILE:
+            weapon = globals()[weapon_name]
+            return WEAPON(name=weapon_name, **weapon)
+        else:
+            interaction.throwError("No Weapon with such name")
+            return None
     
 class RANGE_WEAPON(items.ITEM):
-    def __init__(self, name, _cost : int, _accuracy : int, _weight : int, _munition : str):      
-        super().__init__(name,_cost,_weight)
-        self.accuracy = _accuracy
-        self.munition = _munition
+    def __init__(self, name, cost : int, accuracy : int, weight : int, munition : str):      
+        super().__init__(name,cost,weight)
+        self.accuracy = accuracy
+        self.munition = munition
         
     @staticmethod
     def get_range_weapon(weapon_name):

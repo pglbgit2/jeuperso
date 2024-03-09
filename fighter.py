@@ -216,8 +216,8 @@ class CHARACTER:
     def removeItemFromInventoryByName(self, itemName: str):
         for item in self.inventory:
             if item.name == itemName:
-                self.inventory.pop(item)
-                if self.isEquipped(self, item):
+                self.inventory.remove(item)
+                if isinstance(item, Union[weapons.WEAPON, weapons.RANGE_WEAPON, armors.ARMOR]) and self.isEquipped(item):
                     match item.name:
                         case self.bodyArmor:
                             self.bodyArmor = None
@@ -257,7 +257,7 @@ class CHARACTER:
                     if isinstance(item,armors.ARMOR):
                         fighterDict["Inventory"]["armors"].append((item.name, self.isEquipped(item)))
                     else: 
-                        fighterDict["Inventory"]["weapons"].append(item.name)
+                        fighterDict["Inventory"]["items"].append(item.name)
         return fighterDict
     
     def saveFighter(self, filename : str):
@@ -313,16 +313,27 @@ class CHARACTER:
                                     if toEquip:
                                         Race["Equipment"].append(weapon)
                                     
-                            elif weapon[0] in weapons.RANGE_WEAPONS:
-                                toEquip = weapon[1]
-                                weapon = weapons.RANGE_WEAPON.get_range_weapon(weapon[0])
-                                if weapon != None:
-                                    Inventory.append(weapon)
-                                    if toEquip:
-                                        Race["Equipment"].append(weapon)
+                            else :
+                                if weapon[0] in weapons.RANGE_WEAPONS:
+                                    toEquip = weapon[1]
+                                    weapon = weapons.RANGE_WEAPON.get_range_weapon(weapon[0])
+                                    if weapon != None:
+                                        Inventory.append(weapon)
+                                        if toEquip:
+                                            Race["Equipment"].append(weapon)
+                            
+                                elif weapon[0] in weapons.RANGE_PROJECTILE:
+                                    if len(weapon) == 3:
+                                        number = weapon[2]
+                                    else:
+                                        number = 1
+                                    weapon = weapons.WEAPON.get_munition_weapon(weapon[0])
+                                    if weapon != None:
+                                        for _ in range(number):
+                                            Inventory.append(copy.copy(weapon))
+                                    
                     if "armors" in Race["Inventory"].keys():
                         for armor in Race["Inventory"]["armors"]:
-                            print(armor)
                             toEquip = armor[1]
                             armor = armors.ARMOR.get_armor(armor[0])
                             if armor != None:

@@ -24,7 +24,7 @@ THIEF = {
     "gold" : 5,
     "stamina_regeneration" : 5,
     "dodge" : 0.20,
-    "Inventory" : {"weapons" : [("KNIFE",True)], "armors" : [], "items" : []} # Tuple is (Object, toEquip)
+    "Inventory" : {"weapons" : [["KNIFE",True]], "armors" : [], "items" : []} # Tuple is [Object, toEquip]
 }
 
 CITY_GARD = {
@@ -34,7 +34,7 @@ CITY_GARD = {
     "gold" : 5,
     "stamina_regeneration" : 5,
     "dodge" : 0.15,
-    "Inventory" : {"weapons" : [("SWORD",True)], "armors" : [("CHAIN_MAIL",True)], "items" : []}
+    "Inventory" : {"weapons" : [["SWORD",True]], "armors" : [["CHAIN_MAIL",True]], "items" : []}
 }
 
 FOOTPAD = {
@@ -44,9 +44,20 @@ FOOTPAD = {
     "gold" : 5,
     "stamina_regeneration" : 5,
     "dodge" : 0.25,
-    "Inventory" : {"weapons" : [("SLINGSHOT",True)], "armors" : [], "items" : ["ROCK" for _ in range(20)]}
+    "Inventory" : {"weapons" : [["SLINGSHOT",True], ["ROCK", False,20]], "armors" : [], "items" : []}
 }
+
+ARCHER = {
+    "HP" : 22,
+    "MaxHP" : 22,
+    "magic" : 0,
+    "gold" : 5,
+    "stamina_regeneration" : 5,
+    "dodge" : 0.25,
+    "Inventory" : {"weapons" : [["BOW",True], ["ARROW",False,20]], "armors" : [], "items" : []}
+}
+
 
 ### ALL RACES & CLASSES LISTED BELOW ###
 
-RACES = ["HUMAN", "THIEF", "CITY_GARD", "FOOTPAD"]
+RACES = ["HUMAN", "THIEF", "CITY_GARD", "FOOTPAD", "ARCHER"]
