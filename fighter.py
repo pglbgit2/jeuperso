@@ -19,7 +19,7 @@ class CHARACTER:
         self.leftTool = None
         self.rightTool = None
         self.headArmor = None
-        self.equipAll(Equipment)
+        self.equipAll(Equipment, begin=True)
         self.race = race
         self.name = name
         self.money = gold
@@ -114,7 +114,7 @@ class CHARACTER:
         return None
       
         
-    def equip(self, stuff : Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], side="left"):
+    def equip(self, stuff : Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], side="left", beginningEquipping = False):
         if stuff in self.inventory:
             if isinstance(stuff, armors.ARMOR):
                 if stuff.name in armors.BODY:
@@ -134,9 +134,12 @@ class CHARACTER:
                 else :
                     if stuff.name in weapons.ONE_HAND_WEAPONS:
                         if side == "left":
-                            self.leftTool = stuff
-                            return
+                            if self.leftTool == None or not beginningEquipping:
+                                self.leftTool = stuff
+                                return
                         self.rightTool = stuff
+                    else:
+                        interaction.throwError("weapon neither in one hand weapon or two hand weapon")
     
     def protection_damage(self, damage : int, damage_type:str, protection : armors.ARMOR):
         damage = protection.damage_absorption(damage, damage_type)
@@ -165,10 +168,10 @@ class CHARACTER:
         interaction.showInformation("fighter "+self.name+" took "+str(damage)+" damage")
         self.HP -= damage
     
-    def equipAll(self, loadsOfStuff : List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]]):
+    def equipAll(self, loadsOfStuff : List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]], begin=False):
         for stuff in loadsOfStuff:
             if stuff != None:
-                self.equip(stuff)
+                self.equip(stuff,beginningEquipping=begin)
             
             
     def total_weight(self):
@@ -293,7 +296,6 @@ class CHARACTER:
                     fighterDictStr = ast.literal_eval(dictLine)
                     if isinstance(fighterDictStr, Dict):
                         file.close()
-                        print(factionLine)
                         return CHARACTER.instantiate_from_dict(name=NameLine, faction=factionLine, Race=fighterDictStr)
                     else:
                         file.close() 

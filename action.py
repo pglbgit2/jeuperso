@@ -184,7 +184,7 @@ class Quick_Shot(Shot):
 
 class Classic_Shot(Shot):
     Level_Parameters = {
-        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.PS], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.4},
+        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.CS], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.4},
         2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.45}
     }
     def __init__(self, level : int):

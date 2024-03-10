@@ -44,7 +44,7 @@ FOOTPAD = {
     "gold" : 5,
     "stamina_regeneration" : 5,
     "dodge" : 0.25,
-    "Inventory" : {"weapons" : [["SLINGSHOT",True], ["ROCK", False,20]], "armors" : [], "items" : []}
+    "Inventory" : {"weapons" : [["SLINGSHOT",True], ["ROCK", False,20], ["SPIKED_CLUB",True]], "armors" : [], "items" : []}
 }
 
 ARCHER = {
@@ -54,7 +54,7 @@ ARCHER = {
     "gold" : 5,
     "stamina_regeneration" : 5,
     "dodge" : 0.25,
-    "Inventory" : {"weapons" : [["BOW",True], ["ARROW",False,20]], "armors" : [], "items" : []}
+    "Inventory" : {"weapons" : [["BOW",True], ["ARROW",False,20],["KNIFE",True]], "armors" : [], "items" : []}
 }
 
 
