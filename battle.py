@@ -27,7 +27,8 @@ class Battle:
     
     def beginTurn(self):
         self.actualizeHP()
-        map(lambda x: x.newTurn(),self.fighters)    
+        for fighter in self.fighters:
+            fighter.newTurn()    
         
     
     def checkValidity(self, fighter : fighter.CHARACTER, actions : List[Dict[str,Union[str,Tuple[int,int]]]], alliesName : List[str]):
@@ -183,6 +184,9 @@ class Battle:
         self.executeActions()
         if interaction.MOD == interaction.TERMINAL:
             self.manualChanges()
+        for fighter in self.fighters:
+            if fighter.HP <= 0:
+                self.killWarrior(fighter)
             
     
     def collectLoot(self):
