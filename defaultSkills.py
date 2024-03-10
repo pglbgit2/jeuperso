@@ -29,3 +29,5 @@ DEFAULT_SKILLS_COST = {
     QS : 2,
     CS : 3
 }
+
+BA_EXP_UPGRADE_BY_LV = 0.3

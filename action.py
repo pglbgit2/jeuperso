@@ -1,6 +1,6 @@
 
 from typing import List, Tuple, Dict, Union
-import fighter, armors, weapons, defaultSkills, interaction, random
+import fighter, armors, weapons, defaultSkills, interaction, random, math
 
 class Action:
     ACTIONS_DICT : Dict[str,'Action'] = {}
@@ -23,6 +23,7 @@ class Action:
     def acts(self, fighter : fighter.CHARACTER, targets : Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]], hand="left"):
         fighter.dodgePercent += fighter.dodgePercent * self.dodge_alteration
         fighter.useSkill(self.name)
+        interaction.showInformation("fighter "+fighter.name+" uses "+self.name)
 
     
     
@@ -99,7 +100,7 @@ class Attack(Action):
 class Brutal_Attack(Attack):
     Level_Parameters = {
         1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.BA], "UpgradeExpCost" : 10,  "dodge_alteration" : -1,"damageFactor" : 2.25},
-        2 : {"StaminaCost" : 4, "UpgradeExpCost" : 20, "dodge_alteration" : -1,"damageFactor" : 2.5}
+        2 : {"StaminaCost" : math.floor(defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.BA]+defaultSkills.BA_EXP_UPGRADE_BY_LV), "UpgradeExpCost" : 20, "dodge_alteration" : -1,"damageFactor" : 2.5}
     }
     def __init__(self, level : int):
         super().__init__("Brutal_Attack"+"-lv"+str(level),level=level, **Brutal_Attack.Level_Parameters[level])

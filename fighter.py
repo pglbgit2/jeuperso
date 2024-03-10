@@ -65,33 +65,41 @@ class CHARACTER:
                 
             if all(teamEstimatedPower[self.faction] <= teamEstimatedPower[enemy] for enemy in teamEstimatedPower.keys()):
                 attackProbability -= 0.2
-                
+            leftHandUsed = self.leftTool == None
+            rightHandUsed = self.rightTool == None
             while staminaCost < self.stamina:
                 action = {}
-                leftHandUsed = False
-                rightHandUsed = False
-                
-                if random.random() <= attackProbability:
-                    action["name"] = random.choice([defaultSkills.CA, defaultSkills.QA])
-                    action["targets"] = [random.choice(random.choice([team for team in teamEstimatedPower.keys() if team != self.faction]))]
+               
+                if not (leftHandUsed and rightHandUsed) and random.random() <= attackProbability:
+                    action["targets"] = [random.choice(fightersByFaction[random.choice([team for team in teamEstimatedPower.keys() if team != self.faction])]).name]
                     if not leftHandUsed: 
                         action["hand"] = "left"
+                        leftHandUsed = True
+                        tool = self.leftTool
                     else:
-                        if not rightHandUsed:
-                            action["hand"] = "right"
+                        action["hand"] = "right"
+                        rightHandUsed = True
+                        tool = self.rightTool
+                    
+                    if tool.name in weapons.MELEE_WEAPONS:
+                            action["name"] = random.choice([defaultSkills.CA, defaultSkills.QA])
+                    else:
+                        if tool.name in weapons.RANGE_WEAPONS:
+                            action["name"] = random.choice([defaultSkills.QS, defaultSkills.CS, defaultSkills.PS])
                         else:
-                            action = None
+                            interaction.throwError("Problem in game logic")
                 else:
                     action["name"] = defaultSkills.CD
                     action["target"] = self.name
                 if action != None:
                     actions.append(action)
-                    staminaCost += defaultSkills.DEFAULT_SKILLS_COST[action]
-            if staminaCost > self.stamina:
-                actions.pop()
-                while staminaCost != self.stamina:
-                    actions.append({"name" : defaultSkills.LD, "target" : self.name})
-                    staminaCost += 1
+                    staminaCost += defaultSkills.DEFAULT_SKILLS_COST[action["name"]]
+            while staminaCost > self.stamina:
+                removed = actions.pop()
+                staminaCost -= defaultSkills.DEFAULT_SKILLS_COST[removed["name"]]
+            while staminaCost != self.stamina:
+                actions.append({"name" : defaultSkills.LD, "target" : self.name})
+                staminaCost += 1
             self.actions = actions
             return actions
                 

@@ -36,9 +36,30 @@ class Battle:
             if "Stoical_Defense" == someAction and len(actions) > 1:
                 interaction.throwError("Can not use Stoical_defense and other action in same turn")
                 return False
-            if "Attack" in someAction["name"] and any(target == allyName for allyName in alliesName for target in someAction["targets"]):
-                interaction.throwError("Can not attack ally")
-                return False
+            if ("Attack" in someAction["name"] or "Shot" in someAction["name"]):
+                if "hand" not in someAction.keys():
+                    interaction.throwError("error in game logic")
+                    return False
+                if someAction["hand"] == None:
+                    interaction.throwError("Can not attack without weapon")
+                    return False
+                if someAction["hand"] == "left":
+                    tool = fighter.leftTool
+                    if tool == None:
+                        interaction.throwError("no tool")
+                        return False
+                if someAction["hand"] == "right":
+                    tool = fighter.rightTool
+                
+                if any(target == allyName for allyName in alliesName for target in someAction["targets"]):
+                    interaction.throwError("Can not attack ally")
+                    return False
+                
+            if "Attack" in someAction["name"]:
+                if tool.name not in weapons.MELEE_WEAPONS:
+                    interaction.throwError("Can not attack frontally with non melee weapon")
+                    return False
+
             if someAction["name"] not in action.Action.ACTIONS_DICT.keys():
                 interaction.throwError("Using an action "+someAction["name"]+" that does not exist")
                 return False
@@ -47,12 +68,13 @@ class Battle:
                     interaction.throwError("Using an item that player do not possess")
                     return False
             if "Shot" in someAction["name"]:
-                if (fighter.leftTool != None and fighter.leftTool.name not in weapons.RANGE_WEAPONS or fighter.leftTool not in weapons.THROWABLE) and (fighter.rightTool != None and fighter.rightTool.name not in weapons.RANGE_WEAPONS and fighter.rightTool not in weapons.THROWABLE):
+                if tool.name not in weapons.RANGE_WEAPONS and tool.name not in weapons.THROWABLE:
                     interaction.throwError("Can not shot without range or throwable weapon")
                     return False
-                if  (fighter.leftTool in weapons.THROWABLE or fighter.rightTool in weapons.THROWABLE) and len(someAction["targets"] > 1):
+                if tool.name in weapons.THROWABLE and len(someAction["targets"] > 1):
                     interaction.throwError("Can not shot multi targets with throwable weapon")
                     return False
+                
             cost += action.Action.ACTIONS_DICT[someAction["name"]].staminaCost
         if cost > fighter.stamina:
             interaction.throwError("Using too much stamina")
@@ -87,7 +109,7 @@ class Battle:
             actionValidated = False
             while not actionValidated :
                 interaction.showInformation("Turn of "+fighter.name+"\n")
-                actions = fighter.setUpActions(self.fightersNames, self.getEstimatedPowerOfFactions(), [self.getWarriorsOfFaction(faction) for faction in self.factionsWarriors.keys()])
+                actions = fighter.setUpActions(self.fightersNames, self.getEstimatedPowerOfFactions(), {faction : self.getWarriorsOfFaction(faction) for faction in self.factionsWarriors.keys()})
                 for someAction in actions:
                     someAction["name"]+=str(fighter.getStrLevelOfSkill(someAction["name"]))
                 actionValidated = self.checkValidity(fighter, actions, self.factionsWarriors[fighter.faction])
@@ -96,10 +118,12 @@ class Battle:
     def namesToCharacters(self, namesList : List[str]):
         fighters = []
         for name in namesList:
-            fighters.append(self.fightersNames[name])
+            if not any(name == dead.name for dead in self.defeatedWarriors):
+                fighters.append(self.fightersNames[name])
         return fighters
     
     def killWarrior(self, fighter : fighter.CHARACTER):
+        interaction.showInformation("Fighter "+fighter.name+" died")
         self.defeatedWarriors.append(fighter)
         self.factionsWarriors[fighter.faction].remove(fighter.name)
         self.fightersNames.pop(fighter.name,None)
@@ -109,7 +133,7 @@ class Battle:
             self.killWarrior(self.fightersNames[name])
     
     def executeActions(self):
-        for fighter in rules.getTurnPriority(self.fighters):
+        for fighter in self.fighters:
             if fighter.HP <= 0:
                 self.killWarrior(fighter)
             else:    
@@ -117,7 +141,8 @@ class Battle:
                     if "Defense" in actionDict["name"]:
                         action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter,None)
                         continue
-                
+        
+        for fighter in rules.getTurnPriority(self.fighters):
                 for actionDict in fighter.actions:
                     if "Movement" in actionDict["name"]:
                             action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, actionDict["target"])
