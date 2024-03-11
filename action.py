@@ -47,26 +47,17 @@ class Movement(Action):
         pass # move fighter at target emplacement if possible
 
 class Quick_Movement(Movement):
-    Level_Parameters = {
-        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.QM], "UpgradeExpCost" : 10, "speed" : 5, "dodge_alteration" : -0.15},
-        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 25, "speed" : 8, "dodge_alteration" : -0.20}
-    }
+    Level_Parameters = defaultSkills.DEFAULT_SKILLS[defaultSkills.QM]
     def __init__(self, level: int):
         super().__init__("Quick_Movement"+"-lv"+str(level), level=level, **Quick_Movement.Level_Parameters[level])
     
 class Classic_Movement(Movement):
-    Level_Parameters = {
-        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.CM], "UpgradeExpCost" : 10, "speed" : 3, "dodge_alteration" : 0},
-        2 : {"StaminaCost" : 2, "UpgradeExpCost" : 20, "speed" : 4, "dodge_alteration" : 0}
-    }
+    Level_Parameters = defaultSkills.DEFAULT_SKILLS[defaultSkills.CM]
     def __init__(self, level: int):
         super().__init__("Classic_Movement"+"-lv"+str(level), level=level, **Classic_Movement.Level_Parameters[level])
         
 class Slow_Movement(Movement):
-    Level_Parameters = {
-        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.SM], "UpgradeExpCost" : 10, "speed" : 1, "dodge_alteration" : 0.15},
-        2 : {"StaminaCost" : 1, "UpgradeExpCost" : 20, "speed" : 1, "dodge_alteration" : 0.20}
-    }
+    Level_Parameters = defaultSkills.DEFAULT_SKILLS[defaultSkills.SM]
     def __init__(self, level: int):
         super().__init__("Slow_Movement"+"-lv"+str(level), level=level, **Slow_Movement.Level_Parameters[level])
 
@@ -98,26 +89,17 @@ class Attack(Action):
         fighter.useSkill(self.name)
         
 class Brutal_Attack(Attack):
-    Level_Parameters = {
-        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.BA], "UpgradeExpCost" : 10,  "dodge_alteration" : -1,"damageFactor" : 2.25},
-        2 : {"StaminaCost" : math.floor(defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.BA]+defaultSkills.BA_EXP_UPGRADE_BY_LV), "UpgradeExpCost" : 20, "dodge_alteration" : -1,"damageFactor" : 2.5}
-    }
+    Level_Parameters = defaultSkills.DEFAULT_SKILLS[defaultSkills.BA]
     def __init__(self, level : int):
         super().__init__("Brutal_Attack"+"-lv"+str(level),level=level, **Brutal_Attack.Level_Parameters[level])
         self.level = level
 class Quick_Attack(Attack):
-    Level_Parameters = {
-        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.QA], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"damageFactor" : 0.5},
-        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"damageFactor" : 0.5}
-    }
+    Level_Parameters = defaultSkills.DEFAULT_SKILLS[defaultSkills.QA]
     def __init__(self, level : int):
         super().__init__("Quick_Attack"+"-lv"+str(level),level=level, **Quick_Attack.Level_Parameters[level])
         self.level = level
 class Classic_Attack(Attack):
-    Level_Parameters = {
-        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.CA], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"damageFactor" : 1},
-        2 : {"StaminaCost" : 2, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"damageFactor" : 1}
-    }
+    Level_Parameters = defaultSkills.DEFAULT_SKILLS[defaultSkills.CA]
     def __init__(self, level : int):
         super().__init__("Classic_Attack"+"-lv"+str(level),level=level, **Classic_Attack.Level_Parameters[level])
         self.level = level
@@ -164,29 +146,20 @@ class Shot(Action):
         
 
 class Precise_Shot(Shot):
-    Level_Parameters = {
-        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.PS], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.6},
-        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.65}
-    }
+    Level_Parameters = defaultSkills.DEFAULT_SKILLS[defaultSkills.PS]
     def __init__(self, level : int):
         super().__init__("Precise_Shot"+"-lv"+str(level),level=level, **Precise_Shot.Level_Parameters[level])
         self.level = level
         
 
 class Quick_Shot(Shot):
-    Level_Parameters = {
-        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.QS], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.2},
-        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.25}
-    }
+    Level_Parameters = defaultSkills.DEFAULT_SKILLS[defaultSkills.QS]
     def __init__(self, level : int):
         super().__init__("Quick_Shot"+"-lv"+str(level),level=level, **Quick_Shot.Level_Parameters[level])
         self.level = level
 
 class Classic_Shot(Shot):
-    Level_Parameters = {
-        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.CS], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.4},
-        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.45}
-    }
+    Level_Parameters = defaultSkills.DEFAULT_SKILLS[defaultSkills.CS]
     def __init__(self, level : int):
         super().__init__("Classic_Shot"+"-lv"+str(level),level=level, **Classic_Shot.Level_Parameters[level])
         self.level = level
@@ -207,27 +180,18 @@ class Defense(Action):
             interaction.showInformation("fighter "+fighter.name+" protect itself by dividing damage by "+str(-self.defensePoints))
 
 class Light_Defense(Defense):
-    Level_Parameters = {
-        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.LD], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"defensePoints" : 1},
-        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"defensePoints" : 1}
-    }
+    Level_Parameters = defaultSkills.DEFAULT_SKILLS[defaultSkills.LD]
     def __init__(self, level : int):
         super().__init__("Light_Defense"+"-lv"+str(level),level=level, **Light_Defense.Level_Parameters[level])
     
 class Stoical_Defense(Defense): # for stoical_Defense, damage is divided by the absolute value of defensePoints in fighter.py but it is the only action authorized for unit
-    Level_Parameters = {
-        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.SD], "UpgradeExpCost" : 10,  "dodge_alteration" : -1,"defensePoints" : -3},
-        2 : {"StaminaCost" : 5, "UpgradeExpCost" : 20, "dodge_alteration" : -1,"defensePoints" : -5}
-    }
+    Level_Parameters = defaultSkills.DEFAULT_SKILLS[defaultSkills.SD]
     def __init__(self, level : int):
         super().__init__("Stoical_Defense"+"-lv"+str(level),level=level, **Stoical_Defense.Level_Parameters[level])
    
         
 class Classic_Defense(Defense):
-    Level_Parameters = {
-        1 : {"StaminaCost" : defaultSkills.DEFAULT_SKILLS_COST[defaultSkills.CD], "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"defensePoints" : 4},
-        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"defensePoints" : 5}
-    }
+    Level_Parameters = defaultSkills.DEFAULT_SKILLS[defaultSkills.CD]
     def __init__(self, level : int):
         super().__init__("Classic_Defense"+"-lv"+str(level),level=level, **Classic_Defense.Level_Parameters[level])
     

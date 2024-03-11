@@ -6,7 +6,7 @@ FACTIONS = ["Heroes","Bandits"]
 
 
 class CHARACTER:
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = copy.copy(defaultSkills.DEFAULT_SKILLS), dodge : float = 0.15, skillsLevel : Dict[str,int] = {}, shotBonus : float = 0):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = defaultSkills.DEFAULT_SKILLS.keys(), dodge : float = 0.15, skillsLevel : Dict[str,int] = {}, shotBonus : float = 0):
         self.HP = HP
         self.MaxHP = MaxHP
         self.stamina = Stamina
@@ -28,7 +28,7 @@ class CHARACTER:
         self.skills = skills
         self.basicSkillsLevel = {}
         for skill in skills:
-            if skill not in defaultSkills.NOT_UPGRADABLE and skill in defaultSkills.DEFAULT_SKILLS :
+            if skill not in defaultSkills.NOT_UPGRADABLE and skill in defaultSkills.DEFAULT_SKILLS.keys() :
                 self.basicSkillsLevel[skill] = 1
         self.basicSkillsLevel = {**self.basicSkillsLevel, **skillsLevel}
         self.defensePoints = 0
@@ -93,10 +93,10 @@ class CHARACTER:
                     action["target"] = self.name
                 if action != None:
                     actions.append(action)
-                    staminaCost += defaultSkills.DEFAULT_SKILLS_COST[action["name"]]
+                    staminaCost += defaultSkills.DEFAULT_SKILLS[action["name"]][self.basicSkillsLevel[action["name"]]]["StaminaCost"]
             while staminaCost > self.stamina:
                 removed = actions.pop()
-                staminaCost -= defaultSkills.DEFAULT_SKILLS_COST[removed["name"]]
+                staminaCost -= defaultSkills.DEFAULT_SKILLS[removed["name"]][self.basicSkillsLevel[action["name"]]]["StaminaCost"]
             while staminaCost != self.stamina:
                 actions.append({"name" : defaultSkills.LD, "target" : self.name})
                 staminaCost += 1

@@ -12,22 +12,56 @@ PS = "Precise_Shot"
 QS = "Quick_Shot"
 CS = "Classic_Shot"
 
-DEFAULT_SKILLS = [QM, CM, SM, BA, QA, CA, LD, SD, CD, E, PS, QS, CS]
 NOT_UPGRADABLE = [E]
 
-DEFAULT_SKILLS_COST = { 
-    QM : 3,
-    CM : 2,
-    SM : 1,
-    QA : 3,
-    CA : 2,
-    LD : 1,
-    SD : 5,
-    CD : 2,
-    BA : 4,
-    PS : 4,
-    QS : 2,
-    CS : 3
+DEFAULT_SKILLS = { 
+    QM : {
+        1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10, "speed" : 5, "dodge_alteration" : -0.15},
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 25, "speed" : 8, "dodge_alteration" : -0.20}
+    },
+    CM : {
+        1 : {"StaminaCost" : 2, "UpgradeExpCost" : 10, "speed" : 3, "dodge_alteration" : 0},
+        2 : {"StaminaCost" : 2, "UpgradeExpCost" : 20, "speed" : 4, "dodge_alteration" : 0}
+    },
+    SM : {
+        1 : {"StaminaCost" : 1, "UpgradeExpCost" : 10, "speed" : 1, "dodge_alteration" : 0.15},
+        2 : {"StaminaCost" : 1, "UpgradeExpCost" : 20, "speed" : 1, "dodge_alteration" : 0.20}
+    },
+    QA : {
+        1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"damageFactor" : 0.5},
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"damageFactor" : 0.5}
+    },
+    CA : {
+        1 : {"StaminaCost" : 2, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"damageFactor" : 1},
+        2 : {"StaminaCost" : 2, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"damageFactor" : 1}
+    },
+    LD : {
+        1 : {"StaminaCost" : 1, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"defensePoints" : 1},
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"defensePoints" : 1}
+    },
+    SD : {
+        1 : {"StaminaCost" : 5, "UpgradeExpCost" : 10,  "dodge_alteration" : -1,"defensePoints" : -3},
+        2 : {"StaminaCost" : 5, "UpgradeExpCost" : 20, "dodge_alteration" : -1,"defensePoints" : -5}
+    },
+    CD : {
+        1 : {"StaminaCost" : 2, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"defensePoints" : 4},
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"defensePoints" : 5}
+    },
+    BA : {
+        1 : {"StaminaCost" : 4, "UpgradeExpCost" : 10,  "dodge_alteration" : -1,"damageFactor" : 2.25},
+        2 : {"StaminaCost" : 4, "UpgradeExpCost" : 20, "dodge_alteration" : -1,"damageFactor" : 2.5}
+    },
+    PS : {
+        1 : {"StaminaCost" : 4, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.6},
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.65}
+    },
+    QS : {
+        1 : {"StaminaCost" : 2, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.2},
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.25}
+    },
+    CS : {
+        1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.4},
+        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.45}
+    }
 }
 
-BA_EXP_UPGRADE_BY_LV = 0.3
