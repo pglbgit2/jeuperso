@@ -6,7 +6,7 @@ FACTIONS = ["Heroes","Bandits"]
 
 
 class CHARACTER:
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = defaultSkills.DEFAULT_SKILLS.keys(), dodge : float = 0.15, skillsLevel : Dict[str,int] = {}, shotBonus : float = 0):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = defaultSkills.DEFAULT_SKILLS.keys(), dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0):
         self.HP = HP
         self.MaxHP = MaxHP
         self.stamina = Stamina
@@ -26,11 +26,15 @@ class CHARACTER:
         self.faction = faction
         self.weight = 0
         self.skills = skills
+        if not isinstance(self.skills, List):
+            self.skills = list(self.skills)
         self.basicSkillsLevel = {}
         for skill in skills:
             if skill not in defaultSkills.NOT_UPGRADABLE and skill in defaultSkills.DEFAULT_SKILLS.keys() :
                 self.basicSkillsLevel[skill] = 1
-        self.basicSkillsLevel = {**self.basicSkillsLevel, **skillsLevel}
+        if isinstance(skillsLevel,str):
+            skillsLevel = ast.literal_eval(skillsLevel)
+        self.basicSkillsLevel.update(skillsLevel)
         self.defensePoints = 0
         self.dodgePercent = dodge
         self.dodgeUsual = dodge
@@ -254,7 +258,10 @@ class CHARACTER:
             "magic" : self.magic,
             "gold" : self.money,
             "stamina_regeneration" : self.stamina_regeneration,
-            "dodge" : self.dodgeUsual
+            "dodge" : self.dodgeUsual,
+            "shotBonus" : self.shotBonus,
+            "skills" : self.skills,
+            "skillsLevel" : str(self.basicSkillsLevel)
         }
         if self.inventory != []:
             fighterDict["Inventory"] = {}
@@ -305,7 +312,7 @@ class CHARACTER:
                     return None
         except Exception as e:
             print(e.args)
-            interaction.throwError("file "+filename+" do not exist")
+            interaction.throwError("file "+filename+" do not exist or has not correct format")
     
     @staticmethod
     def instantiate_from_dict(Race : Dict, name : str, faction : str):
