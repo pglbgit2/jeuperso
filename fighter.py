@@ -375,22 +375,26 @@ class CHARACTER:
                     Race["Inventory"] = Inventory
     
     @staticmethod
-    def instantiate_from_dict(Race : Dict, name : str, faction : str):
+    def instantiate_from_dict(classAttributes : Dict, name : str, faction : str, race:str):
         if faction in FACTIONS:
-            CHARACTER.instantiateInventoryEquipment(Race)
-            return CHARACTER(name = name, faction = faction, **Race)
+            if race in races.RACES:
+                CHARACTER.instantiateInventoryEquipment(classAttributes)
+                Race = getattr(races, race)
+                return CHARACTER(name = name, faction = faction, race=race, raceResistance=Race["raceResistance"], **classAttributes)
+            else: 
+                interaction.throwError("Race do not exist, create it and add it to race array")
         else: 
             interaction.throwError("faction do not exist")
             return None
 
 
     @staticmethod
-    def instantiate_from_race(race:str, name:str, faction: str):
-        if race in races.RACES :
-            Race = copy.copy(getattr(races, race))
-            return CHARACTER.instantiate_from_dict(Race, name, faction)
+    def instantiate_from_class(characterClass:str, name:str, faction: str, race:str):
+        if characterClass in races.CLASSES:
+            classAttributes = copy.copy(getattr(races, characterClass))
+            return CHARACTER.instantiate_from_dict(classAttributes, name, faction,race)
         else : 
-            interaction.throwError("Race do not exist, create it and add it to race & class array")
+            interaction.throwError("Class do not exist, create it and add it to class array")
             return None
             
         

@@ -10,7 +10,8 @@ HUMAN  = {
     "magic" : 0,
     "stamina_regeneration"  : 5, 
     "race"  :  "Human",
-    "dodge" : 0.15
+    "dodge" : 0.15,
+    "raceResistance" : {}
 }
 
 
@@ -60,7 +61,10 @@ ARCHER = {
 
 ### ALL RACES & CLASSES LISTED BELOW ###
 
-RACES = ["HUMAN", "THIEF", "CITY_GARD", "FOOTPAD", "ARCHER"]
+
+
+RACES = ["HUMAN"]
+CLASSES = ["THIEF", "CITY_GARD", "FOOTPAD", "ARCHER"]
 
 
 DEFAULT_RESISTANCE = {
