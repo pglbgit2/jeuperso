@@ -140,8 +140,12 @@ class CHARACTER:
                         if side == "left":
                             if self.leftTool == None or not beginningEquipping:
                                 self.leftTool = stuff
+                                if self.rightTool in weapons.TWO_HAND_WEAPONS:
+                                    self.rightTool = None
                                 return
                         self.rightTool = stuff
+                        if self.leftTool in weapons.TWO_HAND_WEAPONS:
+                            self.leftTool = None
                     else:
                         interaction.throwError("weapon neither in one hand weapon or two hand weapon")
     
@@ -256,6 +260,7 @@ class CHARACTER:
             "HP" : self.HP,
             "MaxHP" : self.MaxHP,
             "magic" : self.magic,
+            "race" : self.race,
             "gold" : self.money,
             "stamina_regeneration" : self.stamina_regeneration,
             "dodge" : self.dodgeUsual,
@@ -301,11 +306,10 @@ class CHARACTER:
                 dictLine = file.readline()[:-1]
                 if dictLine != None:
                     fighterDictStr = ast.literal_eval(dictLine)
+                    file.close()
                     if isinstance(fighterDictStr, Dict):
-                        file.close()
                         return CHARACTER.instantiate_from_dict(name=NameLine, faction=factionLine, Race=fighterDictStr)
                     else:
-                        file.close() 
                         return None
                 else:
                     file.close()
@@ -314,10 +318,11 @@ class CHARACTER:
             print(e.args)
             interaction.throwError("file "+filename+" do not exist or has not correct format")
     
+    
+    
     @staticmethod
-    def instantiate_from_dict(Race : Dict, name : str, faction : str):
-        if faction in FACTIONS:
-            if "Inventory" in Race.keys():
+    def instantiateInventoryEquipment(Race):
+        if "Inventory" in Race.keys():
                     Race["Equipment"] = []
                     Inventory = []
                     if "weapons" in Race["Inventory"].keys():
@@ -363,6 +368,11 @@ class CHARACTER:
                             if item != None:
                                 Inventory.append(item)
                     Race["Inventory"] = Inventory
+    
+    @staticmethod
+    def instantiate_from_dict(Race : Dict, name : str, faction : str):
+        if faction in FACTIONS:
+            CHARACTER.instantiateInventoryEquipment(Race)
             return CHARACTER(name = name, faction = faction, **Race)
         else: 
             interaction.throwError("faction do not exist")
