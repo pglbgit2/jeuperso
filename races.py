@@ -61,3 +61,13 @@ ARCHER = {
 ### ALL RACES & CLASSES LISTED BELOW ###
 
 RACES = ["HUMAN", "THIEF", "CITY_GARD", "FOOTPAD", "ARCHER"]
+
+
+DEFAULT_RESISTANCE = {
+    "blade" : 0,
+    "pierce" : 0,
+    "impact" : 0,
+    "fire" : 0,
+    "cold" : 0,
+    "arcane" : 0
+}

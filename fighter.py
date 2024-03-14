@@ -6,7 +6,7 @@ FACTIONS = ["Heroes","Bandits"]
 
 
 class CHARACTER:
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = defaultSkills.DEFAULT_SKILLS.keys(), dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = defaultSkills.DEFAULT_SKILLS.keys(), dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = races.DEFAULT_RESISTANCE):
         self.HP = HP
         self.MaxHP = MaxHP
         self.stamina = Stamina
@@ -35,6 +35,9 @@ class CHARACTER:
         if isinstance(skillsLevel,str):
             skillsLevel = ast.literal_eval(skillsLevel)
         self.basicSkillsLevel.update(skillsLevel)
+        self.resistance = races.DEFAULT_RESISTANCE
+        if raceResistance != races.DEFAULT_RESISTANCE:
+            self.resistance.update(raceResistance)
         self.defensePoints = 0
         self.dodgePercent = dodge
         self.dodgeUsual = dodge
@@ -156,25 +159,27 @@ class CHARACTER:
         return damage
     
     def take_damage(self, damage : int, damage_type : str):
-        if self.defensePoints < 0:
-            damage = damage / -self.defensePoints
-        else:
-            defense = self.defensePoints
-            if defense > 0:
-                oldDamage = damage
-                damage = max(0, damage - self.defensePoints)
-                dif = oldDamage - damage
-                interaction.showInformation("damage reduced by temporary armor by:"+str(dif))
-                self.defensePoints -= dif
-        if self.headArmor != None and damage > 0:
-            damage = self.protection_damage(damage, damage_type , self.headArmor)
-        if self.bodyArmor != None and damage > 0:
-            damage = self.protection_damage(damage, damage_type, self.bodyArmor)
-        if self.legsArmor != None and damage > 0:
-            damage = self.protection_damage(damage, damage_type, self.legsArmor)
-        damage = math.floor(damage)
-        interaction.showInformation("fighter "+self.name+" took "+str(damage)+" damage")
-        self.HP -= damage
+        damage -= damage*self.resistance[damage_type]
+        if damage > 0:
+            if self.defensePoints < 0:
+                damage = damage / -self.defensePoints
+            else:
+                defense = self.defensePoints
+                if defense > 0:
+                    oldDamage = damage
+                    damage = max(0, damage - self.defensePoints)
+                    dif = oldDamage - damage
+                    interaction.showInformation("damage reduced by temporary armor by:"+str(dif))
+                    self.defensePoints -= dif
+            if self.headArmor != None and damage > 0:
+                damage = self.protection_damage(damage, damage_type , self.headArmor)
+            if self.bodyArmor != None and damage > 0:
+                damage = self.protection_damage(damage, damage_type, self.bodyArmor)
+            if self.legsArmor != None and damage > 0:
+                damage = self.protection_damage(damage, damage_type, self.legsArmor)
+            damage = math.floor(damage)
+            interaction.showInformation("fighter "+self.name+" took "+str(damage)+" damage")
+            self.HP -= damage
     
     def equipAll(self, loadsOfStuff : List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]], begin=False):
         for stuff in loadsOfStuff:
