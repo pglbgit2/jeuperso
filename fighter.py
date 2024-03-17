@@ -265,7 +265,6 @@ class CHARACTER:
             "HP" : self.HP,
             "MaxHP" : self.MaxHP,
             "magic" : self.magic,
-            "race" : self.race,
             "gold" : self.money,
             "stamina_regeneration" : self.stamina_regeneration,
             "dodge" : self.dodgeUsual,
@@ -295,11 +294,15 @@ class CHARACTER:
                 fighterDict = self.getDictInfos()
                 file.write(self.name+"\n")
                 file.write(self.faction+"\n")
+                file.write(self.race+"\n")
                 file.write(str(fighterDict)+"\n")
                 file.close()
         except Exception as e:
             print(e.args)
             interaction.throwError("problem while saving "+self.name)
+    
+    def checkForUpgrades(self):
+        pass
 
     @staticmethod
     def retrieveFighter(filename : str):
@@ -308,12 +311,13 @@ class CHARACTER:
             with open(path, "r") as file:
                 NameLine = file.readline()[:-1]
                 factionLine = file.readline()[:-1]
+                raceLine = file.readline()[:-1]
                 dictLine = file.readline()[:-1]
                 if dictLine != None:
                     fighterDictStr = ast.literal_eval(dictLine)
                     file.close()
                     if isinstance(fighterDictStr, Dict):
-                        return CHARACTER.instantiate_from_dict(name=NameLine, faction=factionLine, Race=fighterDictStr)
+                        return CHARACTER.instantiate_from_dict(name=NameLine, faction=factionLine, classAttributes=fighterDictStr, race=raceLine)
                     else:
                         return None
                 else:
@@ -398,7 +402,7 @@ class CHARACTER:
             return None
             
         
-# billy = CHARACTER.instantiate_from_race("CITY_GARD", "billy", "Heroes")
+# billy = CHARACTER.instantiate_from_class("CITY_GARD", "billy", "Heroes", "HUMAN")
 # billy.saveFighter("billy.sav")
 # billy2 = CHARACTER.retrieveFighter("billy.sav")
 # print(billy2.inventory)

@@ -177,16 +177,19 @@ class Battle:
                 return False
         assert count != 0 # means everyone died
         return True
-                
+
+    def checkForDeath(self, warriors: List[fighter.CHARACTER]):
+        for fighter in warriors:
+            if fighter.HP <= 0:
+                self.killWarrior(fighter)
+    
     def turn(self):
         self.beginTurn()
         self.prepareActions()
         self.executeActions()
         if interaction.MOD == interaction.TERMINAL:
             self.manualChanges()
-        for fighter in self.fighters:
-            if fighter.HP <= 0:
-                self.killWarrior(fighter)
+        self.checkForDeath(self.fighters)
             
     
     def collectLoot(self):
@@ -228,4 +231,7 @@ class Battle:
             self.turn()
         loot = self.collectLoot()
         self.shareLoot(loot)
+        
+        for fighter in self.fighters:
+            fighter.checkForUpgrades()
         
