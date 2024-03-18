@@ -1,4 +1,4 @@
-import fighter, rules, action, player, interaction, items, readline, weapons
+import fighter, rules, action, player, interaction, items, readline, weapons, defaultSkills
 from typing import List, Dict, Union, Tuple
 
 class Battle:
@@ -227,11 +227,27 @@ class Battle:
                 
     
     def battle(self):
+        self.checkForDeath(self.fighters)
         while not self.hasBattleEnded():
             self.turn()
-        loot = self.collectLoot()
-        self.shareLoot(loot)
+        # loot = self.collectLoot()
+        # self.shareLoot(loot)
         
+        
+        ## checking for upgrades ##
         for fighter in self.fighters:
-            fighter.checkForUpgrades()
-        
+            if isinstance(fighter, player.Player):
+                for skill in fighter.actionCounter.keys():
+                    lvSkill = defaultSkills.DEFAULT_SKILLS[skill][fighter.basicSkillsLevel[skill]]
+                    while fighter.actionCounter[skill] > lvSkill["UpgradeExpCost"] and action.Action.ACTIONS_DICT[skill+fighter.getStrLevelOfSkill(skill)].upgrades != []:
+                        upgradable = action.Action.ACTIONS_DICT[skill+fighter.getStrLevelOfSkill(skill)]
+                        for upgradeSkill in upgradable.upgrades:
+                            print(upgradeSkill.name)
+                            print(skill)
+                            if not upgradeSkill.name.startswith(skill):
+                                fighter.skills.append(upgradeSkill.name)
+                            else:
+                                fighter.upgradeSkill(skill)
+
+                                                
+            

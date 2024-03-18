@@ -49,7 +49,8 @@ DEFAULT_SKILLS = {
     },
     BA : {
         1 : {"StaminaCost" : 4, "UpgradeExpCost" : 10,  "dodge_alteration" : -1,"damageFactor" : 2.25},
-        2 : {"StaminaCost" : 4, "UpgradeExpCost" : 20, "dodge_alteration" : -1,"damageFactor" : 2.5}
+        2 : {"StaminaCost" : 4, "UpgradeExpCost" : 20, "dodge_alteration" : -1,"damageFactor" : 2.5},
+        3 : {"StaminaCost" : 4, "UpgradeExpCost" : 30, "dodge_alteration" : -1, "damageFactor" : 2.75} 
     },
     PS : {
         1 : {"StaminaCost" : 4, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.6},

@@ -30,10 +30,7 @@ class Player(fighter.CHARACTER):
     def getDictInfos(self):
         dictInfo = super().getDictInfos()
         dictInfo["counter"] = str(self.actionCounter)
-        return dictInfo
-    
-    def checkForUpgrades(self):
-        pass
+        return dictInfo       
     
     @staticmethod
     def instantiate_from_dict(classAttributes : Dict, name : str, faction : str, race: str):

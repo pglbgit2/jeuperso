@@ -110,6 +110,9 @@ class CHARACTER:
             self.actions = actions
             return actions
                 
+
+    def upgradeSkill(self, skill):
+        self.basicSkillsLevel[skill] += 1
     
     def max_weight(self):
         return self.stamina*30
