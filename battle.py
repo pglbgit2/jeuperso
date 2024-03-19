@@ -128,6 +128,7 @@ class Battle:
         self.defeatedWarriors.append(fighter)
         self.factionsWarriors[fighter.faction].remove(fighter.name)
         self.fightersNames.pop(fighter.name,None)
+        self.fighters.remove(fighter)
     
     def killByName(self, name: str):
         if name in self.fightersNames.keys():
@@ -230,8 +231,8 @@ class Battle:
         self.checkForDeath(self.fighters)
         while not self.hasBattleEnded():
             self.turn()
-        # loot = self.collectLoot()
-        # self.shareLoot(loot)
+        loot = self.collectLoot()
+        self.shareLoot(loot)
         
         
         ## checking for upgrades ##
@@ -245,7 +246,7 @@ class Battle:
                             print(upgradeSkill.name)
                             print(skill)
                             if not upgradeSkill.name.startswith(skill):
-                                fighter.skills.append(upgradeSkill.name)
+                                fighter.addSkill(upgradeSkill)
                             else:
                                 fighter.upgradeSkill(skill)
 

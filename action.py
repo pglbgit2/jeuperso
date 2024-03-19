@@ -22,7 +22,10 @@ class Action:
             
     def acts(self, fighter : fighter.CHARACTER, targets : Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]], hand="left"):
         fighter.dodgePercent += fighter.dodgePercent * self.dodge_alteration
-        fighter.useSkill(self.name)
+        actionName = self.name
+        if "-lv" in actionName:
+            actionName = actionName.split("-lv")[0]
+        fighter.useSkill(actionName)
         interaction.showInformation("fighter "+fighter.name+" uses "+self.name)
 
     
@@ -86,7 +89,6 @@ class Attack(Action):
                 target.take_damage(potential_damage, damage_type)
             else:
                 interaction.showInformation(target.name+" dodged attack")
-        fighter.useSkill(self.name)
         
 class Brutal_Attack(Attack):
     Level_Parameters = defaultSkills.DEFAULT_SKILLS[defaultSkills.BA]

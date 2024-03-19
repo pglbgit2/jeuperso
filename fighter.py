@@ -12,6 +12,7 @@ class CHARACTER:
         self.stamina = Stamina
         self.MaxStamina = Stamina
         self.magic = magic
+        self.MaxMagic = magic
         self.stamina_regeneration = stamina_regeneration
         self.inventory = Inventory
         self.bodyArmor = None
@@ -89,7 +90,7 @@ class CHARACTER:
                         tool = self.rightTool
                     
                     if tool.name in weapons.MELEE_WEAPONS:
-                            action["name"] = random.choice([defaultSkills.CA, defaultSkills.QA])
+                            action["name"] = random.choice([defaultSkills.CA, defaultSkills.QA, defaultSkills.BA])
                     else:
                         if tool.name in weapons.RANGE_WEAPONS:
                             action["name"] = random.choice([defaultSkills.QS, defaultSkills.CS, defaultSkills.PS])
@@ -162,6 +163,7 @@ class CHARACTER:
         return damage
     
     def take_damage(self, damage : int, damage_type : str):
+        damage = math.floor(damage)
         damage -= damage*self.resistance[damage_type]
         if damage > 0:
             if self.defensePoints < 0:
@@ -230,9 +232,9 @@ class CHARACTER:
         else:
             return ""
     
-    def dodge(self):
+    def dodge(self,modification=0):
         if self.dodgePercent > 0:
-            return random.randint(0,100) <= self.dodgePercent
+            return random.randint(0,100) <= self.dodgePercent + modification
         else:
             return False
     

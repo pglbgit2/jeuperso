@@ -13,7 +13,8 @@ CHAIN_MAIL_ABSORPTION = {
     "impact" : 0.05,
     "fire" : 0,
     "cold" : 0,
-    "arcane" : 0
+    "arcane" : 0,
+    "necrotic" : 0
 }
 CHAIN_MAIL = {"weight" : CHAIN_MAIL_WEIGHT, "durability" : CHAIN_MAIL_DURABILITY, "cost" : CHAIN_MAIL_COST, "absorption" : CHAIN_MAIL_ABSORPTION}
 
@@ -29,7 +30,8 @@ LEATHER_HELMET_ABSORPTION = {
     "impact" : 0.05,
     "fire" : 0,
     "cold" : 0,
-    "arcane" : 0
+    "arcane" : 0,
+    "necrotic" : 0
 }
 LEATHER_HELMET = {"weight" : LEATHER_HELMET_WEIGHT, "durability" : LEATHER_HELMET_DURABILITY, "cost" : LEATHER_HELMET_COST, "absorption" : LEATHER_HELMET_ABSORPTION}
 
@@ -45,7 +47,8 @@ LEATHER_LP_ABSORPTION = {
     "impact" : 0.05,
     "fire" : 0,
     "cold" : 0,
-    "arcane" : 0
+    "arcane" : 0,
+    "necrotic" : 0
 }
 LEATHER_LP = {"weight" : LEATHER_LP_WEIGHT, "durability" : LEATHER_LP_DURABILITY, "cost" : LEATHER_LP_COST, "absorption" : LEATHER_LP_ABSORPTION}
 

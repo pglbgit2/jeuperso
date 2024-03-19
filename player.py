@@ -10,8 +10,10 @@ class Player(fighter.CHARACTER):
         self.actionCounter.update(counter)
     
     def getInitiative(self):
-        return interaction.askFor(self.name+", roll 1d100 dice for Initiative, Give result")
-        
+        result = "nope"
+        while not result.isdigit():
+            result = interaction.askFor(self.name+", roll 1d100 dice for Initiative, Give result")
+        return int(result)
    
     def addSkill(self, skill:str):
         if super(fighter.CHARACTER,self).addSkill(skill):
@@ -21,7 +23,11 @@ class Player(fighter.CHARACTER):
         self.actionCounter[skill] += 1
         
     def dodge(self,modification=0):
-        return int(interaction.askFor(self.name+", roll 1d100 dice for Dodging, Give result"))+modification
+        result = "nope"
+        while not result.isdigit():
+            result = interaction.askFor(self.name+", roll 1d100 dice for Dodging, Give result")
+        print(self.dodgePercent)
+        return int(result)/100 <= (self.dodgePercent + modification)
     
     def setUpActions(self, fightersByName : Dict[str, fighter.CHARACTER], teamEstimatedPower : Dict[str,int], fightersByFaction : Dict[str,List[fighter.CHARACTER]]):
         self.actions = interaction.getPlayerActions(self.name, fightersByName.keys(), self.skills)
