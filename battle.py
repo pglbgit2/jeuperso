@@ -243,8 +243,6 @@ class Battle:
                     while fighter.actionCounter[skill] > lvSkill["UpgradeExpCost"] and action.Action.ACTIONS_DICT[skill+fighter.getStrLevelOfSkill(skill)].upgrades != []:
                         upgradable = action.Action.ACTIONS_DICT[skill+fighter.getStrLevelOfSkill(skill)]
                         for upgradeSkill in upgradable.upgrades:
-                            print(upgradeSkill.name)
-                            print(skill)
                             if not upgradeSkill.name.startswith(skill):
                                 fighter.addSkill(upgradeSkill)
                             else:

@@ -40,17 +40,17 @@ DEFAULT_SKILLS = {
         2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"defensePoints" : 1}
     },
     SD : {
-        1 : {"StaminaCost" : 5, "UpgradeExpCost" : 10,  "dodge_alteration" : -1,"defensePoints" : -3},
-        2 : {"StaminaCost" : 5, "UpgradeExpCost" : 20, "dodge_alteration" : -1,"defensePoints" : -5}
+        1 : {"StaminaCost" : 5, "UpgradeExpCost" : 10,  "dodge_alteration" : -100,"defensePoints" : -3},
+        2 : {"StaminaCost" : 5, "UpgradeExpCost" : 20, "dodge_alteration" : -100,"defensePoints" : -5}
     },
     CD : {
         1 : {"StaminaCost" : 2, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"defensePoints" : 4},
         2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"defensePoints" : 5}
     },
     BA : {
-        1 : {"StaminaCost" : 4, "UpgradeExpCost" : 10,  "dodge_alteration" : -1,"damageFactor" : 2.25},
-        2 : {"StaminaCost" : 4, "UpgradeExpCost" : 20, "dodge_alteration" : -1,"damageFactor" : 2.5},
-        3 : {"StaminaCost" : 4, "UpgradeExpCost" : 30, "dodge_alteration" : -1, "damageFactor" : 2.75} 
+        1 : {"StaminaCost" : 4, "UpgradeExpCost" : 10,  "dodge_alteration" : -100,"damageFactor" : 2.25},
+        2 : {"StaminaCost" : 4, "UpgradeExpCost" : 20, "dodge_alteration" : -100,"damageFactor" : 2.5},
+        3 : {"StaminaCost" : 4, "UpgradeExpCost" : 30, "dodge_alteration" : -100, "damageFactor" : 2.75} 
     },
     PS : {
         1 : {"StaminaCost" : 4, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.6},

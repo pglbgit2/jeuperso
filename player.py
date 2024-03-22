@@ -15,6 +15,19 @@ class Player(fighter.CHARACTER):
             result = interaction.askFor(self.name+", roll 1d100 dice for Initiative, Give result")
         return int(result)
    
+    def shot(self, accuracy : int):
+        result = "nope"
+        while not result.isdigit():
+            result = interaction.askFor(self.name+", roll 1d100 dice for Initiative, Give result")
+        return int(result)/100 <= (accuracy + self.shotBonus)
+    
+    def rollInRange(self,a:int,b:int):
+        result = "nope"
+        while not result.isdigit():
+            result = interaction.askFor(self.name+", roll between "+str(a)+" and "+str(b)+", Give result")
+        return result
+        
+   
     def addSkill(self, skill:str):
         if super(fighter.CHARACTER,self).addSkill(skill):
             self.actionCounter[skill] = 0

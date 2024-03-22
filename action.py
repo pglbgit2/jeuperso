@@ -28,8 +28,7 @@ class Action:
         fighter.useSkill(actionName)
         interaction.showInformation("fighter "+fighter.name+" uses "+self.name)
 
-    
-    
+
 class Equip(Action): 
     def __init__(self):
         super().__init__("Equip", 1, 0, 1, 0)
@@ -137,14 +136,15 @@ class Shot(Action):
         
         elif weapon.name in weapons.THROWABLE:
             fighter.removeItemFromInventoryByName(weapon.name)
-            assert len(target) == 1
+            assert len(targets) == 1
             potential_damage = weapon.damage
             damage_type = weapon.damage
             if fighter.shot(self.accuracy):
                 interaction.showInformation(fighter.name+" attack "+targets[0].name+" with "+str(potential_damage)+" damage")
                 targets[0].take_damage(potential_damage, damage_type)
             else:
-                interaction.showInformation(target.name+" dodged attack")   
+                interaction.showInformation(targets[0].name+" dodged attack")
+            targets[0].inventory.append(weapon)
         
 
 class Precise_Shot(Shot):

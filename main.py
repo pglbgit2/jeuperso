@@ -14,5 +14,4 @@ if __name__ == '__main__':
     gard2.isControlledByGM = False
     battle1 = battle.Battle([bandit, billy, footpad])
     battle1.battle()
-    print(billy.basicSkillsLevel["Brutal_Attack"])
         

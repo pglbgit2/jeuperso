@@ -1,4 +1,4 @@
-import armors, items, weapons, races, defaultSkills, interaction
+import armors, items, weapons, races, defaultSkills, interaction, consumable
 from typing import List, Union, Dict
 import random, copy, ast, math
 
@@ -55,6 +55,40 @@ class CHARACTER:
         self.actions = []
         if self.HP < self.MaxHP/2:
             self.HP -= 1
+            
+    
+    def canHealItself(self):
+        for item in self.inventory:
+            if isinstance(item,consumable.Consumable):
+                if item.canHeal():
+                    return True
+        return False
+    
+    def itemToHealItself(self):
+        for item in self.inventory:
+            if isinstance(item,consumable.Consumable):
+                if item.canHeal():
+                    return item
+        return None
+    
+    
+    def rollInRange(self,a:int,b:int):
+        return random.randint(min([a,b]), max([a,b]))    
+    
+    def useConsumable(self, consumableName):
+        for item in self.inventory:
+            if item.name == consumableName:
+                if "Health" in item.effect.keys():
+                    (minHp, maxHP) = item.effect["Health"]
+                    recovery = self.rollInRange(minHp,maxHP)
+                    self.HP += recovery
+                    if recovery > 0:
+                        interaction.showInformation(self.name+" healed by "+str(recovery)+" HP using "+item.name)
+                    else:
+                        interaction.showInformation(self.name+" injured by "+str(recovery)+" HP using "+item.name)                        
+                
+                self.inventory.remove(item)
+                return
     
     def getEstimatedPower(self):
         return self.HP
@@ -66,6 +100,11 @@ class CHARACTER:
         else:
             actions = []
             staminaCost = 0
+            if self.HP < self.MaxHP /2:
+                item = self.itemToHealItself()
+                if item != None:
+                    self.useConsumable(item.name)
+
             if self.HP < self.MaxHP /2:
                 attackProbability = 0.4
             else: 
@@ -114,6 +153,7 @@ class CHARACTER:
 
     def upgradeSkill(self, skill):
         self.basicSkillsLevel[skill] += 1
+        interaction.showInformation("skill "+skill+" upgraded to level "+self.basicSkillsLevel[skill])
     
     def max_weight(self):
         return self.stamina*30
@@ -207,6 +247,8 @@ class CHARACTER:
                 self.inventory.append(stuff)
                 self.weight += stuff.weight
                 interaction.showInformation(stuff.name+" added to "+self.name+" inventory")
+            else:
+                interaction.showInformation("Too much weight")
     
     def lootAll(self, loot: List[items.ITEM]):
         for item in loot:
@@ -218,6 +260,7 @@ class CHARACTER:
     def addSkill(self, skill:str, Upgradable = False):
         if skill not in self.skills:
             self.skills.append(skill)
+            interaction.showInformation("learned new skill: "+skill)
             if Upgradable:
                 self.basicSkillsLevel[skill] = 1
             return True
@@ -288,7 +331,7 @@ class CHARACTER:
                 else:
                     if isinstance(item,armors.ARMOR):
                         fighterDict["Inventory"]["armors"].append((item.name, self.isEquipped(item)))
-                    else: 
+                    else:
                         fighterDict["Inventory"]["items"].append(item.name)
         return fighterDict
     
@@ -378,7 +421,10 @@ class CHARACTER:
                                     Race["Equipment"].append(armor)
                     if "items" in Race["Inventory"].keys():            
                         for item in Race["Inventory"]["items"]:
-                            item = items.ITEM.get_item(item)
+                            if item in consumable.CONSUMABLE:
+                                item = consumable.Consumable.get_consumable(item)
+                            else:
+                                item = items.ITEM.get_item(item)
                             if item != None:
                                 Inventory.append(item)
                     Race["Inventory"] = Inventory
@@ -406,8 +452,14 @@ class CHARACTER:
             interaction.throwError("Class do not exist, create it and add it to class array")
             return None
             
-        
+            
 # billy = CHARACTER.instantiate_from_class("CITY_GARD", "billy", "Heroes", "HUMAN")
+# billy.inventory.append(consumable.Consumable.get_consumable("HEALTH_POTION"))
+# billy.inventory.append(consumable.Consumable.get_consumable("HEALTH_POTION"))
+# print(billy.inventory)
+# billy.HP=3
+# billy.useConsumable("HEALTH_POTION")
+# print(billy.HP)
 # billy.saveFighter("billy.sav")
 # billy2 = CHARACTER.retrieveFighter("billy.sav")
 # print(billy2.inventory)
