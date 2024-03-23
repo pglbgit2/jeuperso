@@ -9,8 +9,33 @@ HUMAN  = {
     "Stamina" : 5,
     "magic" : 0,
     "stamina_regeneration"  : 5, 
-    "race"  :  "Human",
+    "race"  :  "HUMAN",
     "dodge" : 0.15,
+    "raceResistance" : {}
+}
+
+
+## ORCS ##
+ORC  = {
+    "HP" : 22,
+    "MaxHP" : 22,
+    "Stamina" : 7,
+    "magic" : 0,
+    "stamina_regeneration"  : 7, 
+    "race"  :  "ORC",
+    "dodge" : 0.10,
+    "raceResistance" : {"blade":0.1}
+}
+
+## GOBLINS ##
+GOBLIN  = {
+    "HP" : 15,
+    "MaxHP" : 15,
+    "Stamina" : 5,
+    "magic" : 0,
+    "stamina_regeneration" : 5, 
+    "race"  :  "ORC",
+    "dodge" : 0.25,
     "raceResistance" : {}
 }
 
@@ -25,7 +50,7 @@ THIEF = {
     "gold" : 5,
     "stamina_regeneration" : 5,
     "dodge" : 0.20,
-    "Inventory" : {"weapons" : [["KNIFE",True]], "armors" : [], "items" : []} # Tuple is [Object, toEquip]
+    "Inventory" : {"weapons" : [["KNIFE",True]], "armors" : [["PADDED_ARMOR",True]], "items" : []} # Tuple is [Object, toEquip]
 }
 
 CITY_GARD = {
@@ -45,7 +70,7 @@ FOOTPAD = {
     "gold" : 5,
     "stamina_regeneration" : 5,
     "dodge" : 0.25,
-    "Inventory" : {"weapons" : [["SLINGSHOT",True], ["ROCK", False,20], ["SPIKED_CLUB",True]], "armors" : [], "items" : []}
+    "Inventory" : {"weapons" : [["SLINGSHOT",True], ["ROCK", False,20], ["SPIKED_CLUB",True]], "armors" : [["PADDED_ARMOR",True]], "items" : []}
 }
 
 ARCHER = {
@@ -63,15 +88,17 @@ ARCHER = {
 
 
 
-RACES = ["HUMAN"]
+RACES = ["HUMAN","ORC","GOBLIN"]
 CLASSES = ["THIEF", "CITY_GARD", "FOOTPAD", "ARCHER"]
 
 
 DEFAULT_RESISTANCE = {
-    "blade" : 0,
-    "pierce" : 0,
     "impact" : 0,
+    "pierce" : 0,
+    "blade" : 0,
     "fire" : 0,
     "cold" : 0,
-    "arcane" : 0
+    "arcane" : 0,
+    "necrotic" : 0,
+    "lightning" : 0
 }

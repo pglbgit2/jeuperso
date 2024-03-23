@@ -2,7 +2,7 @@ import defaultSkills, fighter, interaction, armors, items, weapons, ast, races, 
 from typing import List, Union, Dict
 
 class Player(fighter.CHARACTER):
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = defaultSkills.DEFAULT_SKILLS, dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, counter : Union[Dict[str,int],str]= {}, raceResistance : Dict[str,float] = races.DEFAULT_RESISTANCE):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = defaultSkills.DEFAULT_SKILLS, dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, counter : Union[Dict[str,int],str]= {}, raceResistance : Dict[str,float] = copy.copy(races.DEFAULT_RESISTANCE)):
         super().__init__(name,faction,gold,HP,MaxHP,Stamina, magic,  stamina_regeneration, race, Equipment, Inventory, skills,dodge, skillsLevel,shotBonus, raceResistance)
         self.actionCounter = {skillName : 0 for skillName in skills}
         if isinstance(counter,str):

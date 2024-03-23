@@ -6,7 +6,7 @@ FACTIONS = ["Heroes","Bandits"]
 
 
 class CHARACTER:
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = defaultSkills.DEFAULT_SKILLS.keys(), dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = races.DEFAULT_RESISTANCE):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = defaultSkills.DEFAULT_SKILLS.keys(), dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = copy.copy(races.DEFAULT_RESISTANCE)):
         self.HP = HP
         self.MaxHP = MaxHP
         self.stamina = Stamina
@@ -40,8 +40,8 @@ class CHARACTER:
         if raceResistance != races.DEFAULT_RESISTANCE:
             self.resistance.update(raceResistance)
         self.defensePoints = 0
-        self.dodgePercent = dodge
-        self.dodgeUsual = dodge
+        self.dodgePercent = max(getattr(races, race)["dodge"], dodge)
+        self.dodgeUsual = self.dodgePercent
         self.actions = []
         self.isControlledByGM = True
         self.shotBonus = shotBonus
@@ -75,18 +75,22 @@ class CHARACTER:
     def rollInRange(self,a:int,b:int):
         return random.randint(min([a,b]), max([a,b]))    
     
+    
+    def consumeConsumable(self, item: consumable.Consumable):
+        if "Health" in item.effect.keys():
+            (minHp, maxHP) = item.effect["Health"]
+            recovery = self.rollInRange(minHp,maxHP)
+            self.HP += recovery
+            if recovery > 0:
+                interaction.showInformation(self.name+" healed by "+str(recovery)+" HP using "+item.name)
+            else:
+                interaction.showInformation(self.name+" injured by "+str(recovery)+" HP using "+item.name) 
+    
+    
     def useConsumable(self, consumableName):
         for item in self.inventory:
             if item.name == consumableName:
-                if "Health" in item.effect.keys():
-                    (minHp, maxHP) = item.effect["Health"]
-                    recovery = self.rollInRange(minHp,maxHP)
-                    self.HP += recovery
-                    if recovery > 0:
-                        interaction.showInformation(self.name+" healed by "+str(recovery)+" HP using "+item.name)
-                    else:
-                        interaction.showInformation(self.name+" injured by "+str(recovery)+" HP using "+item.name)                        
-                
+                self.consumeConsumable(item)
                 self.inventory.remove(item)
                 return
     
@@ -156,7 +160,7 @@ class CHARACTER:
         interaction.showInformation("skill "+skill+" upgraded to level "+self.basicSkillsLevel[skill])
     
     def max_weight(self):
-        return self.stamina*30
+        return self.stamina*50
     
     def getItemFromInventoryByName(self, name : str):
         for item in self.inventory:
@@ -460,6 +464,7 @@ class CHARACTER:
 # billy.HP=3
 # billy.useConsumable("HEALTH_POTION")
 # print(billy.HP)
+# print(billy.dodge)
 # billy.saveFighter("billy.sav")
 # billy2 = CHARACTER.retrieveFighter("billy.sav")
 # print(billy2.inventory)
