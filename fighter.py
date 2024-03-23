@@ -208,7 +208,9 @@ class CHARACTER:
     
     def take_damage(self, damage : int, damage_type : str):
         damage = math.floor(damage)
-        damage -= damage*self.resistance[damage_type]
+        race_reduction = damage*self.resistance[damage_type]
+        damage -= race_reduction
+        interaction.showInformation("damage reduced by "+str(self.resistance[damage_type]*100)+" percent because is "+self.race)
         if damage > 0:
             if self.defensePoints < 0:
                 damage = damage / -self.defensePoints
@@ -388,24 +390,29 @@ class CHARACTER:
                     Inventory = []
                     if "weapons" in Race["Inventory"].keys():
                         for weapon in Race["Inventory"]["weapons"]:
+                            if weapon[0] == "random":
+                                weapon_name = random.choice(weapon[2])
+                                #print(weapon_name)
+                            else: weapon_name = weapon[0]
+                                
                             toEquip = weapon[1]
-                            if weapon[0] in weapons.MELEE_WEAPONS:
-                                weapon = weapons.WEAPON.get_melee_weapon(weapon[0])
+                            if weapon_name in weapons.MELEE_WEAPONS:
+                                weapon = weapons.WEAPON.get_melee_weapon(weapon_name)
                                 if weapon != None:
                                     Inventory.append(weapon)
                                     if toEquip:
                                         Race["Equipment"].append(weapon)
                                     
                             else :
-                                if weapon[0] in weapons.RANGE_WEAPONS:
+                                if weapon_name in weapons.RANGE_WEAPONS:
                                     toEquip = weapon[1]
-                                    weapon = weapons.RANGE_WEAPON.get_range_weapon(weapon[0])
+                                    weapon = weapons.RANGE_WEAPON.get_range_weapon(weapon_name)
                                     if weapon != None:
                                         Inventory.append(weapon)
                                         if toEquip:
                                             Race["Equipment"].append(weapon)
                             
-                                elif weapon[0] in weapons.RANGE_PROJECTILE:
+                                elif weapon_name in weapons.RANGE_PROJECTILE:
                                     if len(weapon) == 3:
                                         number = weapon[2]
                                     else:
@@ -457,14 +464,15 @@ class CHARACTER:
             return None
             
             
-# billy = CHARACTER.instantiate_from_class("CITY_GARD", "billy", "Heroes", "HUMAN")
+# billy = CHARACTER.instantiate_from_class("WARRIOR", "billy", "Heroes", "HUMAN")
 # billy.inventory.append(consumable.Consumable.get_consumable("HEALTH_POTION"))
 # billy.inventory.append(consumable.Consumable.get_consumable("HEALTH_POTION"))
 # print(billy.inventory)
 # billy.HP=3
 # billy.useConsumable("HEALTH_POTION")
 # print(billy.HP)
-# print(billy.dodge)
+# print(billy.dodgePercent)
+# print(billy.inventory)
 # billy.saveFighter("billy.sav")
 # billy2 = CHARACTER.retrieveFighter("billy.sav")
 # print(billy2.inventory)

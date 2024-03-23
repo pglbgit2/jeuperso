@@ -248,5 +248,10 @@ class Battle:
                             else:
                                 fighter.upgradeSkill(skill)
 
-                                                
-            
+    @staticmethod             
+    def instantiate_from_infos(players:List[player.Player], npc_fighters : List[Dict[str,str]]):
+        warriors = [player for player in players]
+        for npc_fighter in npc_fighters:
+            warriors.append(fighter.CHARACTER.instantiate_from_class(**npc_fighter))
+        return Battle(warriors)
+    

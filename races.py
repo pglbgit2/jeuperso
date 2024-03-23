@@ -39,6 +39,17 @@ GOBLIN  = {
     "raceResistance" : {}
 }
 
+## UNDEAD ##
+UNDEAD  = {
+    "HP" : 20,
+    "MaxHP" : 20,
+    "Stamina" : 5,
+    "magic" : 0,
+    "stamina_regeneration" : 5, 
+    "race"  :  "UNDEAD",
+    "dodge" : 0.10,
+    "raceResistance" : {"blade" : 0.3, "pierce" : 0.4, "impact" : -0.2, "arcane" : -0.5}
+}
 
 ### CHARACTER CLASSES ###
 
@@ -79,17 +90,26 @@ ARCHER = {
     "magic" : 0,
     "gold" : 5,
     "stamina_regeneration" : 5,
-    "dodge" : 0.25,
+    "dodge" : 0.15,
     "Inventory" : {"weapons" : [["BOW",True], ["ARROW",False,20],["KNIFE",True]], "armors" : [], "items" : []}
 }
 
+WARRIOR = {
+    "HP" : 25,
+    "MaxHP" : 25,
+    "magic" : 0,
+    "gold" : 5,
+    "stamina_regeneration" : 6,
+    "dodge" : 0.15,
+    "Inventory" : {"weapons" : [["random",True,["SPIKED_CLUB", "SWORD"]]], "armors" : [], "items" : []}
+}
 
 ### ALL RACES & CLASSES LISTED BELOW ###
 
 
 
-RACES = ["HUMAN","ORC","GOBLIN"]
-CLASSES = ["THIEF", "CITY_GARD", "FOOTPAD", "ARCHER"]
+RACES = ["HUMAN","ORC","GOBLIN", "UNDEAD"]
+CLASSES = ["THIEF", "CITY_GARD", "FOOTPAD", "ARCHER", "WARRIOR"]
 
 
 DEFAULT_RESISTANCE = {

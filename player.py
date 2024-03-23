@@ -39,7 +39,7 @@ class Player(fighter.CHARACTER):
         result = "nope"
         while not result.isdigit():
             result = interaction.askFor(self.name+", roll 1d100 dice for Dodging, Give result")
-        print(self.dodgePercent)
+        #print(self.dodgePercent)
         return int(result)/100 <= (self.dodgePercent + modification)
     
     def setUpActions(self, fightersByName : Dict[str, fighter.CHARACTER], teamEstimatedPower : Dict[str,int], fightersByFaction : Dict[str,List[fighter.CHARACTER]]):
@@ -98,7 +98,7 @@ class Player(fighter.CHARACTER):
             print(e.args)
             interaction.throwError("file "+filename+" do not exist or has not correct format")
         
-# billy = Player.instantiate_from_class("CITY_GARD", "billy", "Heroes", "HUMAN")
+# billy = Player.instantiate_from_class("WARRIOR", "billy", "Heroes", "HUMAN")
 # billy.actionCounter["Classic_Movement"] = 1
 # billy.saveFighter("billy.sav")
 # billy2 = Player.retrieveFighter("billy.sav")
