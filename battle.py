@@ -34,9 +34,13 @@ class Battle:
     def checkValidity(self, fighter : fighter.CHARACTER, actions : List[Dict[str,Union[str,Tuple[int,int]]]], alliesName : List[str]):
         cost = 0
         for someAction in actions:
-            if "Stoical_Defense" == someAction and len(actions) > 1:
+            if "Stoical_Defense" == someAction["name"] and len(actions) > 1:
                 interaction.throwError("Can not use Stoical_defense and other action in same turn")
                 return False
+            if "useConsumable" == someAction["name"]:
+                if fighter.getItemFromInventoryByName(someAction["target"]) == None:
+                    interaction.throwError("Can not use item that fighter do not possess")
+                    return False
             if ("Attack" in someAction["name"] or "Shot" in someAction["name"]):
                 if "hand" not in someAction.keys():
                     interaction.throwError("error in game logic")
@@ -156,6 +160,9 @@ class Battle:
                             continue
                     if "Shot" in actionDict["name"]:
                         action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["hand"])
+                    if "useConsumable" == actionDict["name"]:
+                        action.Action.ACTIONS_DICT["useConsumable"].acts(fighter, actionDict["target"])
+                        
                         
     def manualChanges(self):
         buf = ""

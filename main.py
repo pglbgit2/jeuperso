@@ -1,10 +1,11 @@
-import battle, player, fighter, action
+import battle, player, fighter, action, consumable
 
 
 if __name__ == '__main__':
     action.setupActions()
     
     billy = player.Player.retrieveFighter("billy.sav")
+    billy.inventory.append(consumable.Consumable.get_consumable("HEALTH_POTION"))
     battle2 = battle.Battle.instantiate_from_infos([billy],[{"characterClass":"WARRIOR", "name":"war1", "faction":"Bandits", "race":"UNDEAD"}])
     battle2.battle()
     # gard1 = fighter.CHARACTER.instantiate_from_class("CITY_GARD", "gard1", "Heroes","HUMAN")

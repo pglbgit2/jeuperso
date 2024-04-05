@@ -43,8 +43,11 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                     if actionName not in valid_actions:
                         raise Exception("given actionName is not valid")
                                             
+                    if "useConsumable" == actionName:
+                        consumable = input("Name of consumable")
+                        Actions.append({"name":actionName, "target" : consumable})
                     
-                    if "Equip" in actionName:
+                    if "Equip" == actionName:
                         objectToEquip = input("Name of Object to equip\n")
                         hand = input("hand : left or right or none \n")
                         Actions.append({"name" : actionName, "target" : playerName, "object" : objectToEquip, "hand":hand})
