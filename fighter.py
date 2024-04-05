@@ -6,7 +6,7 @@ FACTIONS = ["Heroes","Bandits"]
 
 
 class CHARACTER:
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = defaultSkills.DEFAULT_SKILLS.keys(), dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = copy.copy(races.DEFAULT_RESISTANCE)):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = list(defaultSkills.DEFAULT_SKILLS.keys())+defaultSkills.NOT_UPGRADABLE, dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = None):
         self.HP = HP
         self.MaxHP = MaxHP
         self.stamina = Stamina
@@ -29,6 +29,7 @@ class CHARACTER:
         self.skills = skills
         if not isinstance(self.skills, List):
             self.skills = list(self.skills)
+        
         self.basicSkillsLevel = {}
         for skill in skills:
             if skill not in defaultSkills.NOT_UPGRADABLE and skill in defaultSkills.DEFAULT_SKILLS.keys() :
@@ -36,8 +37,8 @@ class CHARACTER:
         if isinstance(skillsLevel,str):
             skillsLevel = ast.literal_eval(skillsLevel)
         self.basicSkillsLevel.update(skillsLevel)
-        self.resistance = races.DEFAULT_RESISTANCE
-        if raceResistance != races.DEFAULT_RESISTANCE:
+        self.resistance = copy.copy(races.DEFAULT_RESISTANCE)
+        if raceResistance != None:
             self.resistance.update(raceResistance)
         self.defensePoints = 0
         self.dodgePercent = max(getattr(races, race)["dodge"], dodge)
@@ -107,6 +108,7 @@ class CHARACTER:
             if self.HP < self.MaxHP /2:
                 item = self.itemToHealItself()
                 if item != None:
+                    # must change this by adding action and cost
                     self.useConsumable(item.name)
 
             if self.HP < self.MaxHP /2:
@@ -210,7 +212,7 @@ class CHARACTER:
         damage = math.floor(damage)
         race_reduction = damage*self.resistance[damage_type]
         damage -= race_reduction
-        interaction.showInformation("damage reduced by "+str(self.resistance[damage_type]*100)+" percent because is "+self.race)
+        interaction.showInformation("damage of type "+damage_type+" reduced by "+str(self.resistance[damage_type]*100)+" percent because is "+self.race)
         if damage > 0:
             if self.defensePoints < 0:
                 damage = damage / -self.defensePoints

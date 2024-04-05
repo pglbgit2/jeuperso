@@ -34,7 +34,7 @@ GOBLIN  = {
     "Stamina" : 5,
     "magic" : 0,
     "stamina_regeneration" : 5, 
-    "race"  :  "ORC",
+    "race"  :  "GOBLIN",
     "dodge" : 0.25,
     "raceResistance" : {}
 }

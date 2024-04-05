@@ -11,8 +11,9 @@ E = "Equip"
 PS = "Precise_Shot"
 QS = "Quick_Shot"
 CS = "Classic_Shot"
+uC = "useConsumable"
 
-NOT_UPGRADABLE = [E]
+NOT_UPGRADABLE = [E, uC]
 
 DEFAULT_SKILLS = { 
     QM : {

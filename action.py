@@ -1,6 +1,6 @@
 
 from typing import List, Tuple, Dict, Union
-import fighter, armors, weapons, defaultSkills, interaction, random, math
+import fighter, armors, weapons, defaultSkills, interaction, random, math, consumable
 
 class Action:
     ACTIONS_DICT : Dict[str,'Action'] = {}
@@ -20,7 +20,7 @@ class Action:
         if upgrade not in self.upgrades:
             self.upgrades.append(upgrade)
             
-    def acts(self, fighter : fighter.CHARACTER, targets : Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]], hand="left"):
+    def acts(self, fighter : fighter.CHARACTER, targets : Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable], hand="left"):
         fighter.dodgePercent += fighter.dodgePercent * self.dodge_alteration
         actionName = self.name
         if "-lv" in actionName:
@@ -29,13 +29,20 @@ class Action:
         interaction.showInformation("fighter "+fighter.name+" uses "+self.name)
 
 
+class useConsumable(Action):
+    def __init__(self):
+        super().__init__("useConsumable",1,0,1,0)
+
+    def acts(self, fighter : fighter.CHARACTER, targets:consumable.Consumable, hand="left"):
+        fighter.useConsumable(targets)
+
+
 class Equip(Action): 
     def __init__(self):
         super().__init__("Equip", 1, 0, 1, 0)
     
     def acts(self, fighter : fighter.CHARACTER, targets : Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], hand="left"):
         fighter.equip(targets,hand)
-    
     
 
 class Movement(Action):
