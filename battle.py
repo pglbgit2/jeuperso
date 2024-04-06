@@ -260,6 +260,7 @@ class Battle:
                                 fighter.addSkill(upgradeSkill)
                             else:
                                 fighter.upgradeSkill(skill)
+                fighter.saveFighter(fighter.name+".sav")
 
     @staticmethod             
     def instantiate_from_infos(players:List[player.Player], npc_fighters : List[Dict[str,str]]):

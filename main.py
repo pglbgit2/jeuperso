@@ -4,8 +4,16 @@ import battle, player, fighter, action, consumable
 if __name__ == '__main__':
     action.setupActions()
     
-    billy = player.Player.retrieveFighter("billy.sav")
-    billy.inventory.append(consumable.Consumable.get_consumable("HEALTH_POTION"))
+    ## CREATE NEW PLAYER
+    # newPlayer = player.Player(**player.Player.getCharacterInfos())
+    # newPlayer.saveFighter(newPlayer.name+".sav")
+    
+    pluton = player.Player.retrieveFighter("Pluton.sav")
+    #pluton.printPlayerSheet()
+    pluton.saveFighter("Pluton.sav")
+    
+    # billy = player.Player.retrieveFighter("billy.sav")
+    # billy.inventory.append(consumable.Consumable.get_consumable("HEALTH_POTION"))
     
     
     ## TEST 1 ##
@@ -26,6 +34,6 @@ if __name__ == '__main__':
     # battle1.battle()
     
      ## TEST 1 ##
-    battle2 = battle.Battle.instantiate_from_infos([billy],[{"characterClass":"DEFAULT_CLASS", "name":"spider", "faction":"Bandits", "race":"GIANT_SPIDER"}])
-    battle2.battle()
+    # battle2 = battle.Battle.instantiate_from_infos([billy],[{"characterClass":"DEFAULT_CLASS", "name":"spider", "faction":"Bandits", "race":"GIANT_SPIDER"}])
+    # battle2.battle()
         

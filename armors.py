@@ -149,7 +149,7 @@ HEAD = ["LEATHER_HELMET","IRON_HELMET","STEEL_HELMET"]
 
 #LP stands for LEG PROTECTOR
 LEGS = ["LEATHER_LP","IRON_LP","STEEL_LP"]
-
+ARMORS = BODY+HEAD+LEGS
 
 class ARMOR(items.ITEM):
     def __init__(self,name:str, cost : int, weight : int, durability : int, absorption : Dict[str,int]):

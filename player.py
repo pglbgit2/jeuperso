@@ -1,6 +1,7 @@
 import defaultSkills, fighter, interaction, armors, items, weapons, ast, races, copy
 from typing import List, Union, Dict
 
+
 class Player(fighter.CHARACTER):
     def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = list(defaultSkills.DEFAULT_SKILLS.keys())+defaultSkills.NOT_UPGRADABLE, dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = None, counter : Union[Dict[str,int],str]= {}):
         super().__init__(name,faction,gold,HP,MaxHP,Stamina, magic,  stamina_regeneration, race, Equipment, Inventory, skills,dodge, skillsLevel,shotBonus, raceResistance)
@@ -49,7 +50,24 @@ class Player(fighter.CHARACTER):
     def getDictInfos(self):
         dictInfo = super().getDictInfos()
         dictInfo["counter"] = str(self.actionCounter)
-        return dictInfo       
+        return dictInfo  
+  
+    
+    def printPlayerSheet(self):
+        sheet = "-------------- Character Sheet --------------\n"
+        for info in ["name","HP", "MaxHP", "stamina", "stamina_regeneration", "magic"]:
+            sheet+= info+" : "+str(getattr(self, info))+"\n"
+        
+        sheet+= "\n\n--Skills--\n\n"
+        for skill in self.skills:
+            if skill in self.basicSkillsLevel.keys():
+                sheet += skill+", level : "+str(self.basicSkillsLevel[skill])+", count : "+str(self.actionCounter[skill])+"\n"
+        
+        sheet+= "\n\n--Inventory--\n\n"
+        for item in self.inventory:
+            sheet += " - "+item.name+"\n"
+        interaction.text_to_pdf(sheet,self.name+".pdf")
+    
     
     @staticmethod
     def instantiate_from_dict(classAttributes : Dict, name : str, faction : str, race: str):
@@ -97,6 +115,15 @@ class Player(fighter.CHARACTER):
         except Exception as e:
             print(e.args)
             interaction.throwError("file "+filename+" do not exist or has not correct format")
+            
+    @staticmethod
+    def getCharacterInfos():
+        infos = fighter.CHARACTER.getCharacterInfos()
+        skillsCount = {}
+        for skill in defaultSkills.DEFAULT_SKILLS:
+            skillsCount[skill] = interaction.askForInt(skill+" action count: \n")
+        infos["counter"] = skillsCount
+        return infos
         
 # billy = Player.instantiate_from_class("WARRIOR", "billy", "Heroes", "HUMAN")
 # billy.actionCounter["Classic_Movement"] = 1

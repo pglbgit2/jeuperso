@@ -2,11 +2,11 @@ import armors, items, weapons, races, defaultSkills, interaction, consumable
 from typing import List, Union, Dict
 import random, copy, ast, math
 
-FACTIONS = ["Heroes","Bandits"]
+FACTIONS = ["Players","Enemies"]
 
 
 class CHARACTER:
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = list(defaultSkills.DEFAULT_SKILLS.keys())+defaultSkills.NOT_UPGRADABLE, dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = None, default_damage :int = 2, default_damage_type:int = "impact"):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "HUMAN",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = list(defaultSkills.DEFAULT_SKILLS.keys())+defaultSkills.NOT_UPGRADABLE, dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = None, default_damage :int = 2, default_damage_type:int = "impact"):
         self.HP = HP
         self.MaxHP = MaxHP
         self.stamina = Stamina
@@ -343,7 +343,7 @@ class CHARACTER:
                     fighterDict["Inventory"]["weapons"].append((item.name, self.isEquipped(item)))
                 else:
                     if isinstance(item,armors.ARMOR):
-                        fighterDict["Inventory"]["armors"].append((item.name, self.isEquipped(item)))
+                        fighterDict["Inventory"]["armors"].append((item.name, self.isEquipped(item),item.durability))
                     else:
                         fighterDict["Inventory"]["items"].append(item.name)
         return fighterDict
@@ -430,9 +430,13 @@ class CHARACTER:
                                             Inventory.append(copy.copy(weapon))
                                     
                     if "armors" in Race["Inventory"].keys():
-                        for armor in Race["Inventory"]["armors"]:
-                            toEquip = armor[1]
-                            armor = armors.ARMOR.get_armor(armor[0])
+                        for strArmor in Race["Inventory"]["armors"]:
+                            toEquip = strArmor[1]
+                            
+                            armor = armors.ARMOR.get_armor(strArmor[0])
+                            if len(strArmor) == 3:
+                                durability = strArmor[2]
+                                armor.durability = durability
                             if armor != None:
                                 Inventory.append(armor)
                                 if toEquip and armor != None:
@@ -476,6 +480,92 @@ class CHARACTER:
         else : 
             interaction.throwError("Class do not exist, create it and add it to class array")
             return None
+    
+    
+    @staticmethod
+    def getListOfItemFromStr(stringList, itemType=""):
+        if itemType == "weapons":
+            fighterWeapons = []
+            for weapon_name in stringList:
+                if weapon_name in weapons.MELEE_WEAPONS:
+                    fighterWeapons.append(weapons.WEAPON.get_melee_weapon(weapon_name))
+                else:
+                    if weapon_name in weapons.RANGE_WEAPONS:
+                        fighterWeapons.append(weapons.RANGE_WEAPON.get_range_weapon(weapon_name))
+                    else:
+                        if weapon_name in weapons.RANGE_PROJECTILE:
+                            fighterWeapons.append(weapons.WEAPON.get_munition_weapon(weapon_name))    
+                        else:
+                            interaction.throwError("given weapon do not exist")
+            return fighterWeapons
+                            
+        if itemType == "armors":
+            fighterArmors = []
+            for armor_name in stringList:
+                if armor_name in armors.ARMORS:
+                    fighterArmors.append(armors.ARMOR.get_armor(armor_name))
+                else: interaction.throwError("given armor do not exist")
+            return fighterArmors
+        
+        if itemType == "items":
+            Inventory = []
+            for item_name in stringList:
+                if item_name in consumable.CONSUMABLE:
+                    item = consumable.Consumable.get_consumable(item)
+                else:
+                    item = items.ITEM.get_item(item)
+                if item != None:
+                    Inventory.append(item)
+            return Inventory
+    
+    @staticmethod
+    def getCharacterInfos():
+        
+        infos = {}
+        
+        infos["name"] = input("name:\n")
+        
+        race = "nope"
+        while race not in races.RACES:
+            race = input("race: \n")
+        infos["race"] = race
+        
+        for value in ["gold", "HP", "MaxHP","magic","Stamina", "stamina_regeneration"]:
+            infos[value] = interaction.askForInt(value+":\n")
+                
+        fighterFaction = "nope"
+        while fighterFaction not in FACTIONS:
+            fighterFaction = input("faction: \n")
+        infos["faction"] = fighterFaction
+        
+        inventoryChecked = False
+        fighterInventory = []
+        for itemType in ["weapons", "armors", "items"]:
+            itemList = None
+            itemStrList = []
+            while itemList == None or len(itemList) != len(itemStrList):
+                item = input(itemType+"\n")
+                if item != "" and item != "\n":
+                    if " " in item:
+                        itemStrList = item.split(" ")
+                    else: itemStrList = [item]
+                    itemList = CHARACTER.getListOfItemFromStr(itemStrList, itemType)
+                else:
+                    itemList = []
+            fighterInventory.extend(itemList)
+        infos["Inventory"] = fighterInventory
+        skillsLevel = {}
+        for skill in defaultSkills.DEFAULT_SKILLS:
+            skillsLevel[skill] = interaction.askForInt(skill+" level: \n")
+        infos["skillsLevel"] = skillsLevel
+        return infos
+                
+                
+                
+            
+            
+          
+                
             
             
 # billy = CHARACTER.instantiate_from_class("WARRIOR", "billy", "Heroes", "HUMAN")
