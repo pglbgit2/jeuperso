@@ -167,6 +167,7 @@ class Battle:
                     if "Melee_Combat" == actionDict["name"]:
                         action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, self.namesToCharacters(actionDict["targets"]))
                         continue
+    
                     
     def manualChanges(self):
         buf = ""
@@ -260,6 +261,7 @@ class Battle:
                                 fighter.addSkill(upgradeSkill)
                             else:
                                 fighter.upgradeSkill(skill)
+                                rules.skillLevelUp(fighter,skill)
                 fighter.saveFighter(fighter.name+".sav")
 
     @staticmethod             

@@ -8,9 +8,6 @@ if __name__ == '__main__':
     # newPlayer = player.Player(**player.Player.getCharacterInfos())
     # newPlayer.saveFighter(newPlayer.name+".sav")
     
-    pluton = player.Player.retrieveFighter("Pluton.sav")
-    #pluton.printPlayerSheet()
-    pluton.saveFighter("Pluton.sav")
     
     # billy = player.Player.retrieveFighter("billy.sav")
     # billy.inventory.append(consumable.Consumable.get_consumable("HEALTH_POTION"))
@@ -33,7 +30,7 @@ if __name__ == '__main__':
     # battle1 = battle.Battle([bandit, billy, footpad])
     # battle1.battle()
     
-     ## TEST 1 ##
+     ## TEST 3 ##
     # battle2 = battle.Battle.instantiate_from_infos([billy],[{"characterClass":"DEFAULT_CLASS", "name":"spider", "faction":"Bandits", "race":"GIANT_SPIDER"}])
     # battle2.battle()
         

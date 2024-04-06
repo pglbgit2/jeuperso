@@ -6,7 +6,7 @@ FACTIONS = ["Players","Enemies"]
 
 
 class CHARACTER:
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "HUMAN",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = list(defaultSkills.DEFAULT_SKILLS.keys())+defaultSkills.NOT_UPGRADABLE, dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = None, default_damage :int = 2, default_damage_type:int = "impact"):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "HUMAN",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = list(defaultSkills.DEFAULT_SKILLS.keys())+defaultSkills.NOT_UPGRADABLE, dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = None, default_damage :int = 2, default_damage_type:int = "impact", tempDefByTurn : int =0):
         self.HP = HP
         self.MaxHP = MaxHP
         self.stamina = Stamina
@@ -48,12 +48,14 @@ class CHARACTER:
         self.actions = []
         self.isControlledByGM = True
         self.shotBonus = shotBonus
+        self.defenseByTurn = tempDefByTurn
         
     
     
     def newTurn(self):
         self.stamina = min(self.stamina +self.stamina_regeneration, self.MaxStamina)
-        self.defensePoints = 0
+        self.defensePoints = self.defenseByTurn
+        self.magic = min(self.magic +self.stamina_regeneration, self.MaxMagic)
         self.dodgePercent = self.dodgeUsual
         self.actions = []
         if self.HP < self.MaxHP/2:
@@ -162,7 +164,7 @@ class CHARACTER:
     def upgradeSkill(self, skill):
         self.basicSkillsLevel[skill] += 1
         interaction.showInformation("skill "+skill+" upgraded to level "+self.basicSkillsLevel[skill])
-    
+        
     def max_weight(self):
         return self.stamina*50
     
@@ -290,7 +292,10 @@ class CHARACTER:
     
     def dodge(self,modification=0):
         if self.dodgePercent > 0:
-            return random.randint(0,100) <= self.dodgePercent + modification
+            val = random.randint(0,100) <= self.dodgePercent + modification
+            if val:
+                self.dodgePercent -= 0.1
+            return val
         else:
             return False
     
@@ -331,7 +336,8 @@ class CHARACTER:
             "dodge" : self.dodgeUsual,
             "shotBonus" : self.shotBonus,
             "skills" : self.skills,
-            "skillsLevel" : str(self.basicSkillsLevel)
+            "skillsLevel" : str(self.basicSkillsLevel),
+            "tempDefByTurn" : self.defenseByTurn
         }
         if self.inventory != []:
             fighterDict["Inventory"] = {}
