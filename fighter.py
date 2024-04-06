@@ -6,7 +6,7 @@ FACTIONS = ["Heroes","Bandits"]
 
 
 class CHARACTER:
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = list(defaultSkills.DEFAULT_SKILLS.keys())+defaultSkills.NOT_UPGRADABLE, dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = None):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = list(defaultSkills.DEFAULT_SKILLS.keys())+defaultSkills.NOT_UPGRADABLE, dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = None, default_damage :int = 2, default_damage_type:int = "impact"):
         self.HP = HP
         self.MaxHP = MaxHP
         self.stamina = Stamina
@@ -26,6 +26,8 @@ class CHARACTER:
         self.money = gold
         self.faction = faction
         self.weight = 0
+        self.default_damage = default_damage
+        self.default_damage_type = default_damage_type
         self.skills = skills
         if not isinstance(self.skills, List):
             self.skills = list(self.skills)
@@ -208,9 +210,12 @@ class CHARACTER:
             protection = None
         return damage
     
-    def take_damage(self, damage : int, damage_type : str):
+    def take_damage(self, damage : float, damage_type : str):
         damage = math.floor(damage)
         race_reduction = damage*self.resistance[damage_type]
+        if race_reduction > 0 and race_reduction < 1:
+            race_reduction += 1
+        elif race_reduction < 0 and race_reduction > -1: race_reduction -= 1
         damage -= race_reduction
         interaction.showInformation("damage of type "+damage_type+" reduced by "+str(self.resistance[damage_type]*100)+" percent because is "+self.race)
         if damage > 0:
@@ -447,7 +452,7 @@ class CHARACTER:
         if faction in FACTIONS:
             if race in races.RACES:
                 CHARACTER.instantiateInventoryEquipment(classAttributes)
-                Race = getattr(races, race)
+                Race = copy.copy(getattr(races, race))
                 return CHARACTER(name = name, faction = faction, race=race, raceResistance=Race["raceResistance"], **classAttributes)
             else: 
                 interaction.throwError("Race do not exist, create it and add it to race array")
@@ -455,11 +460,18 @@ class CHARACTER:
             interaction.throwError("faction do not exist")
             return None
 
+    
 
     @staticmethod
     def instantiate_from_class(characterClass:str, name:str, faction: str, race:str):
         if characterClass in races.CLASSES:
-            classAttributes = copy.copy(getattr(races, characterClass))
+            if characterClass != "DEFAULT_CLASS":
+                classAttributes = copy.copy(getattr(races, characterClass))
+            else:
+                classAttributes = copy.copy(getattr(races, race))
+                del classAttributes["race"]
+                del classAttributes["raceResistance"]
+
             return CHARACTER.instantiate_from_dict(classAttributes, name, faction,race)
         else : 
             interaction.throwError("Class do not exist, create it and add it to class array")

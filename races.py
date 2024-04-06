@@ -11,7 +11,22 @@ HUMAN  = {
     "stamina_regeneration"  : 5, 
     "race"  :  "HUMAN",
     "dodge" : 0.15,
-    "raceResistance" : {}
+    "raceResistance" : {},
+    "default_damage" : 2
+}
+
+
+GIANT_SPIDER = {
+    "HP" : 50,
+    "MaxHP" : 50,
+    "Stamina" : 10,
+    "magic" : 0,
+    "stamina_regeneration"  : 10, 
+    "race"  :  "HUMAN",
+    "dodge" : 0.20,
+    "raceResistance" : {"blade" : 0.2, "pierce" : 0.2, "impact" : -0.2,},
+    "default_damage" : 12,
+    "default_damage_type" : "pierce"
 }
 
 
@@ -52,6 +67,8 @@ UNDEAD  = {
 }
 
 ### CHARACTER CLASSES ###
+
+DEFAULT_CLASS = {}
 
 THIEF = {
     "HP" : 22,
@@ -108,9 +125,8 @@ WARRIOR = {
 
 
 
-RACES = ["HUMAN","ORC","GOBLIN", "UNDEAD"]
-CLASSES = ["THIEF", "CITY_GARD", "FOOTPAD", "ARCHER", "WARRIOR"]
-
+RACES = ["HUMAN","ORC","GOBLIN", "UNDEAD", "GIANT_SPIDER"]
+CLASSES = ["THIEF", "CITY_GARD", "FOOTPAD", "ARCHER", "WARRIOR", "DEFAULT_CLASS"]
 
 DEFAULT_RESISTANCE = {
     "impact" : 0,

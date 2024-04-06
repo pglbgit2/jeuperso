@@ -65,7 +65,8 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                     if "Defense" in actionName:
                         Actions.append({"name" : actionName, "target" : playerName})
                         continue
-                    if "Attack" in actionName or "Shot" in actionName:
+                    
+                    if "Attack" in actionName or "Shot" in actionName or "Melee_Combat" == actionName:
                         print("All potential targets:"+str(units_name)+"\n")
                         target = input("Targets Name\n")
                         if ", " in target:
@@ -74,23 +75,25 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                         
                         for fighterName in fightersName:
                             if fighterName not in units_name:
-                                raise Exception("given fighter name"+fighterName+" do not exist")                        
-                        hand = input("Used Hand to attack: left or right\n")
-                        if hand == "left":
-                            if leftHandUsed == False:
-                                leftHandUsed = True
-                                Actions.append({"name" : actionName, "targets" : fightersName, "hand" : hand})
-                                continue
-                            else: raise Exception("Left hand already used")
-                        if hand == "right":
-                            if rightHandUsed == False:
-                                rightHandUsed = True
-                                if not isinstance(fightersName, List):
-                                    fightersName = [fightersName]
-                                Actions.append({"name" : actionName, "targets" : fightersName, "hand" : hand})
-                            else: raise Exception("Right hand already used")
-                        if hand != "left" and hand != "right":
-                            raise Exception("Not correct hand")
+                                raise Exception("given fighter name"+fighterName+" do not exist")   
+                        action = {"name" : actionName, "targets" : fightersName}
+                        if actionName != "Melee_Combat":         
+                            hand = input("Used Hand to attack: left or right\n")
+                            if hand == "left":
+                                if leftHandUsed == False:
+                                    leftHandUsed = True
+                                else: raise Exception("Left hand already used")
+                            if hand == "right":
+                                if rightHandUsed == False:
+                                    rightHandUsed = True
+                                    if not isinstance(fightersName, List):
+                                        fightersName = [fightersName]
+                                else: raise Exception("Right hand already used")
+                            if hand != "left" and hand != "right":
+                                raise Exception("Not correct hand")
+                            action["hand"] = hand
+                        Actions.append(action)
+
                 finished = True                    
             except Exception as e:
                 throwError(e.args[0])

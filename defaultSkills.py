@@ -12,8 +12,9 @@ PS = "Precise_Shot"
 QS = "Quick_Shot"
 CS = "Classic_Shot"
 uC = "useConsumable"
+MC = "Melee_Combat"
 
-NOT_UPGRADABLE = [E, uC]
+NOT_UPGRADABLE = [E, uC, MC]
 
 DEFAULT_SKILLS = { 
     QM : {

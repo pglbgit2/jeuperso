@@ -160,10 +160,14 @@ class Battle:
                             continue
                     if "Shot" in actionDict["name"]:
                         action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["hand"])
+                        continue
                     if "useConsumable" == actionDict["name"]:
                         action.Action.ACTIONS_DICT["useConsumable"].acts(fighter, actionDict["target"])
-                        
-                        
+                        continue
+                    if "Melee_Combat" == actionDict["name"]:
+                        action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, self.namesToCharacters(actionDict["targets"]))
+                        continue
+                    
     def manualChanges(self):
         buf = ""
         while True:
@@ -194,6 +198,8 @@ class Battle:
     def turn(self):
         self.beginTurn()
         self.prepareActions()
+        if interaction.MOD == interaction.TERMINAL:
+            self.manualChanges()
         self.executeActions()
         if interaction.MOD == interaction.TERMINAL:
             self.manualChanges()

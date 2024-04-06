@@ -71,8 +71,22 @@ class Slow_Movement(Movement):
         super().__init__("Slow_Movement"+"-lv"+str(level), level=level, **Slow_Movement.Level_Parameters[level])
 
         
+class Melee_Combat(Action):
+    def __init__(self):
+        super().__init__("Melee_Combat", 3, 0, 1, 0)
+    
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], hand="left"):
+        potential_damage = fighter.default_damage
+        damage_type = fighter.default_damage_type
         
-        
+        for target in targets:
+            if target.dodge() != True:
+                interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
+                target.take_damage(potential_damage, damage_type)
+            else:
+                interaction.showInformation(target.name+" dodged attack")      
+                
+                
 class Attack(Action):
     def __init__(self, action_name: str, StaminaCost: int, UpgradeExpCost: int, damageFactor : int, level : int, dodge_alteration : int):
         super().__init__(action_name, StaminaCost, UpgradeExpCost, level, dodge_alteration)
