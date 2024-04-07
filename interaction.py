@@ -61,6 +61,25 @@ def text_to_pdf(text, filename):
 
     pdf.output(filename, 'F')   
 
+
+def getStrInList(strList:List[str],subject):
+    result = None
+    possibilities = ""
+    for element in strList:
+        possibilities += element+", "
+    possibilities = possibilities[:-2]
+    while not result in strList:
+        print("Please enter "+subject+" in "+possibilities+"\n")
+        result = input("> ")
+        for element in strList:
+            if element.startswith(result):
+                print(element, end="")
+                val =  input("\n confirm ? (y or n)")
+                if val == "y":
+                    return element
+                else: continue
+    return result
+
 def getPlayerActions(playerName : str, units_name : List[str], valid_actions : List[str], mod=MOD):
     if mod == TERMINAL:
         finished = False
@@ -73,7 +92,8 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                 rightHandUsed = False
                 while not allActionsInserted:
                     print("Actions input of "+playerName+"\n")
-                    actionName = input("Action Name among+"+str(valid_actions)+" or end to stop\n")
+                    actionName = getStrInList(list(valid_actions)+["end"], "Action Name")
+                    #actionName = input("Action Name among+"+str(valid_actions)+" or end to stop\n")
                     if actionName == "end":
                         allActionsInserted = True
                         break

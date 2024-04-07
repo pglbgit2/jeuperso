@@ -9,8 +9,8 @@ if __name__ == '__main__':
     # newPlayer.saveFighter(newPlayer.name+".sav")
     
     
-    # billy = player.Player.retrieveFighter("billy.sav")
-    # billy.inventory.append(consumable.Consumable.get_consumable("HEALTH_POTION"))
+    billy = player.Player.retrieveFighter("billy.sav")
+    billy.inventory.append(consumable.Consumable.get_consumable("HEALTH_POTION"))
     
     
     ## TEST 1 ##
@@ -21,14 +21,14 @@ if __name__ == '__main__':
     
     # gard1 = fighter.CHARACTER.instantiate_from_class("CITY_GARD", "gard1", "Heroes","HUMAN")
     # gard2 = fighter.CHARACTER.instantiate_from_class("ARCHER", "gard2", "Heroes","HUMAN")
-    # bandit = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory","Bandits","HUMAN")
-    # footpad = fighter.CHARACTER.instantiate_from_class("FOOTPAD", "Red", "Bandits","HUMAN")
-    # bandit.isControlledByGM = False
-    # footpad.isControlledByGM = False
+    bandit = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory","Enemies","HUMAN")
+    footpad = fighter.CHARACTER.instantiate_from_class("FOOTPAD", "Red", "Enemies","HUMAN")
+    bandit.isControlledByGM = False
+    footpad.isControlledByGM = False
     # gard1.isControlledByGM = False
     # gard2.isControlledByGM = False
-    # battle1 = battle.Battle([bandit, billy, footpad])
-    # battle1.battle()
+    battle1 = battle.Battle([bandit, billy, footpad])
+    battle1.battle()
     
      ## TEST 3 ##
     # battle2 = battle.Battle.instantiate_from_infos([billy],[{"characterClass":"DEFAULT_CLASS", "name":"spider", "faction":"Bandits", "race":"GIANT_SPIDER"}])
