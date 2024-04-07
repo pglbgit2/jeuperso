@@ -3,9 +3,9 @@ from typing import List, Union, Dict
 
 
 class Player(fighter.CHARACTER):
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = list(defaultSkills.DEFAULT_SKILLS.keys())+defaultSkills.NOT_UPGRADABLE, dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = None, tempDefByTurn: int = 0, counter : Union[Dict[str,int],str]= {}):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = list(defaultSkills.DEFAULT_SKILLS), dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = None, tempDefByTurn: int = 0, counter : Union[Dict[str,int],str]= {}):
         super().__init__(name,faction,gold,HP,MaxHP,Stamina, magic,  stamina_regeneration, race, Equipment, Inventory, skills,dodge, skillsLevel,shotBonus, raceResistance, tempDefByTurn=tempDefByTurn)
-        self.actionCounter = {skillName : 0 for skillName in skills}
+        self.actionCounter = {skillName : 0 for skillName in self.skills}
         if isinstance(counter,str):
             counter = ast.literal_eval(counter)
         self.actionCounter.update(counter)
@@ -120,14 +120,13 @@ class Player(fighter.CHARACTER):
     def getCharacterInfos():
         infos = fighter.CHARACTER.getCharacterInfos()
         skillsCount = {}
-        for skill in defaultSkills.DEFAULT_SKILLS:
+        for skill in defaultSkills.UPGRADABLE:
             skillsCount[skill] = interaction.askForInt(skill+" action count: \n")
         infos["counter"] = skillsCount
         return infos
         
-# billy = Player.instantiate_from_class("WARRIOR", "billy", "Heroes", "HUMAN")
+# billy = Player.instantiate_from_class("MAGE", "billy", "Players", "HUMAN")
 # billy.actionCounter["Classic_Movement"] = 1
 # billy.saveFighter("billy.sav")
 # billy2 = Player.retrieveFighter("billy.sav")
-# print(billy2.inventory)
-# print(billy2.actionCounter)
+

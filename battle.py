@@ -23,7 +23,7 @@ class Battle:
         if interaction.MOD == interaction.TERMINAL:
             for name in self.fightersNames.keys():
                 someFighter = self.fightersNames[name]
-                print(someFighter.name+" HP:"+str(someFighter.HP))
+                print(someFighter.name+" HP:"+str(someFighter.HP)+" Magic:"+str(someFighter.magic))
     
     def beginTurn(self):
         self.actualizeHP()
@@ -33,15 +33,17 @@ class Battle:
     
     def checkValidity(self, fighter : fighter.CHARACTER, actions : List[Dict[str,Union[str,Tuple[int,int]]]], alliesName : List[str]):
         cost = 0
+        manaCost = 0
         for someAction in actions:
-            if "Stoical_Defense" == someAction["name"] and len(actions) > 1:
+            actionName = someAction["name"]
+            if "Stoical_Defense" == actionName and len(actions) > 1:
                 interaction.throwError("Can not use Stoical_defense and other action in same turn")
                 return False
-            if "useConsumable" == someAction["name"]:
+            if "useConsumable" == actionName:
                 if fighter.getItemFromInventoryByName(someAction["target"]) == None:
                     interaction.throwError("Can not use item that fighter do not possess")
                     return False
-            if ("Attack" in someAction["name"] or "Shot" in someAction["name"]):
+            if ("Attack" in actionName or "Shot" in actionName):
                 if "hand" not in someAction.keys():
                     interaction.throwError("error in game logic")
                     return False
@@ -56,33 +58,45 @@ class Battle:
                 if someAction["hand"] == "right":
                     tool = fighter.rightTool
                 
+            if ("Attack" in actionName or "Shot" in actionName):
                 if any(target == allyName for allyName in alliesName for target in someAction["targets"]):
                     interaction.throwError("Can not attack ally")
                     return False
                 
-            if "Attack" in someAction["name"]:
+            if "Attack" in actionName:
                 if tool.name not in weapons.MELEE_WEAPONS:
                     interaction.throwError("Can not attack frontally with non melee weapon")
                     return False
 
-            if someAction["name"] not in action.Action.ACTIONS_DICT.keys():
-                interaction.throwError("Using an action "+someAction["name"]+" that does not exist")
+            if actionName not in action.Action.ACTIONS_DICT.keys():
+                interaction.throwError("Using an action "+actionName+" that does not exist")
                 return False
-            if someAction["name"] == "Equip":
+            if actionName == "Equip":
                 if not any(someAction["object"] == stuff.name for stuff in fighter.inventory):
                     interaction.throwError("Using an item that player do not possess")
                     return False
-            if "Shot" in someAction["name"]:
+            if "Shot" in actionName:
                 if tool.name not in weapons.RANGE_WEAPONS and tool.name not in weapons.THROWABLE:
                     interaction.throwError("Can not shot without range or throwable weapon")
                     return False
                 if tool.name in weapons.THROWABLE and len(someAction["targets"] > 1):
                     interaction.throwError("Can not shot multi targets with throwable weapon")
                     return False
+
+            if actionName.startswith("Protection_Field") or actionName.startswith("Minor_Shield") or actionName.startswith("Minor_Aggressive_Flux") or actionName.startswith("Wrath_Torrent"):
+                manaCost += action.Action.ACTIONS_DICT[actionName].manaCost
                 
-            cost += action.Action.ACTIONS_DICT[someAction["name"]].staminaCost
+            if actionName.startswith("Protection_Field") or actionName.startswith("Minor_Shield"):
+                if not all(any(target == allyName for allyName in alliesName) for target in someAction["targets"]):
+                    interaction.throwError("Can not protect other than ally")
+                    return False
+                
+            cost += action.Action.ACTIONS_DICT[actionName].staminaCost
         if cost > fighter.stamina:
             interaction.throwError("Using too much stamina")
+            return False
+        if manaCost > fighter.magic:
+            interaction.throwError("Using too much mana")
             return False
         return True
                 
@@ -144,28 +158,35 @@ class Battle:
                 self.killWarrior(fighter)
             else:    
                 for actionDict in fighter.actions:
-                    if "Defense" in actionDict["name"]:
-                        action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter,None)
+                    actionName = actionDict["name"]
+                    if "Defense" in actionName:
+                        action.Action.ACTIONS_DICT[actionName].acts(fighter,None)
                         continue
+                    if "Protection_Field" in actionName or "Minor_Shield" in actionName:
+                        action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]))
+                        continue
+                    if "Minor_Aggressive_Flux" in actionName or "Wrath_Torrent" in actionName:
+                        action.Action.ACTIONS_DICT[actionName].acts(fighter)
         
         for fighter in rules.getTurnPriority(self.fighters):
                 for actionDict in fighter.actions:
-                    if "Movement" in actionDict["name"]:
-                            action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, actionDict["target"])
-                    if "Attack" in actionDict["name"]:
-                            action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["hand"])
+                    actionName = actionDict["name"]
+                    if "Movement" in actionName:
+                            action.Action.ACTIONS_DICT[actionName].acts(fighter, actionDict["target"])
+                    if "Attack" in actionName:
+                            action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["hand"])
                             continue
-                    if "Equip" == actionDict["name"]:
+                    if "Equip" == actionName:
                             action.Action.ACTIONS_DICT["Equip"].acts(fighter, fighter.getItemFromInventoryByName(actionDict["object"]), actionDict["hand"])
                             continue
-                    if "Shot" in actionDict["name"]:
-                        action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["hand"])
+                    if "Shot" in actionName:
+                        action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["hand"])
                         continue
-                    if "useConsumable" == actionDict["name"]:
+                    if "useConsumable" == actionName:
                         action.Action.ACTIONS_DICT["useConsumable"].acts(fighter, actionDict["target"])
                         continue
-                    if "Melee_Combat" == actionDict["name"]:
-                        action.Action.ACTIONS_DICT[actionDict["name"]].acts(fighter, self.namesToCharacters(actionDict["targets"]))
+                    if "Melee_Combat" == actionName:
+                        action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]))
                         continue
     
                     
@@ -253,14 +274,16 @@ class Battle:
         for fighter in self.fighters:
             if isinstance(fighter, player.Player):
                 for skill in fighter.actionCounter.keys():
-                    lvSkill = defaultSkills.DEFAULT_SKILLS[skill][fighter.basicSkillsLevel[skill]]
+                    lvSkill = defaultSkills.UPGRADABLE[skill][fighter.basicSkillsLevel[skill]]
                     while fighter.actionCounter[skill] > lvSkill["UpgradeExpCost"] and action.Action.ACTIONS_DICT[skill+fighter.getStrLevelOfSkill(skill)].upgrades != []:
                         upgradable = action.Action.ACTIONS_DICT[skill+fighter.getStrLevelOfSkill(skill)]
                         for upgradeSkill in upgradable.upgrades:
                             if not upgradeSkill.name.startswith(skill):
                                 fighter.addSkill(upgradeSkill)
                             else:
-                                fighter.upgradeSkill(skill)
+                                hasLevelUp = fighter.upgradeSkill(skill)
+                                if not hasLevelUp:
+                                    fighter.actionCounter[skill] = 0 # to avoid leveling up this skill each turn after maxed out
                                 rules.skillLevelUp(fighter,skill)
                 fighter.saveFighter(fighter.name+".sav")
 

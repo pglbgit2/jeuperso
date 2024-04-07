@@ -123,7 +123,10 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                         Actions.append({"name" : actionName, "target" : playerName})
                         continue
                     
-                    if "Attack" in actionName or "Shot" in actionName or "Melee_Combat" == actionName:
+                    if actionName == "Minor_Aggressive_Flux" or actionName == "Wrath_Torrent":
+                        Actions.append({"name": actionName})
+                    
+                    if "Attack" in actionName or "Shot" in actionName or "Melee_Combat" == actionName or actionName == "Protection_Field" or actionName == "Minor_Shield":
                         print("All potential targets:"+str(units_name)+"\n")
                         target = input("Targets Name\n")
                         if ", " in target:
@@ -134,7 +137,7 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                             if fighterName not in units_name:
                                 raise Exception("given fighter name"+fighterName+" do not exist")   
                         action = {"name" : actionName, "targets" : fightersName}
-                        if actionName != "Melee_Combat":         
+                        if actionName != "Melee_Combat" and actionName != "Protection_Field" and actionName != "Minor_Shield":         
                             hand = input("Used Hand to attack: left or right\n")
                             if hand == "left":
                                 if leftHandUsed == False:

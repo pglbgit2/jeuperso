@@ -121,12 +121,24 @@ WARRIOR = {
     "Inventory" : {"weapons" : [["random",True,["SPIKED_CLUB", "SWORD"]]], "armors" : [], "items" : []}
 }
 
+
+MAGE = {
+    "HP" : 20,
+    "MaxHP" : 20,
+    "magic" : 10,
+    "gold" : 10,
+    "stamina_regeneration" : 4,
+    "dodge" : 0.10,
+    "Inventory" : {"weapons" : [], "armors" : [], "items" : []},
+    "skills" : ["Minor_Shield", "Protection_Field", "Minor_Aggressive_Flux", "Wrath_Torrent"]
+}
+
 ### ALL RACES & CLASSES LISTED BELOW ###
 
 
 
 RACES = ["HUMAN","ORC","GOBLIN", "UNDEAD", "GIANT_SPIDER"]
-CLASSES = ["THIEF", "CITY_GARD", "FOOTPAD", "ARCHER", "WARRIOR", "DEFAULT_CLASS"]
+CLASSES = ["THIEF", "CITY_GARD", "FOOTPAD", "ARCHER", "WARRIOR", "DEFAULT_CLASS", "MAGE"]
 
 DEFAULT_RESISTANCE = {
     "impact" : 0,

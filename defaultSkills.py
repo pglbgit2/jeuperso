@@ -13,10 +13,34 @@ QS = "Quick_Shot"
 CS = "Classic_Shot"
 uC = "useConsumable"
 MC = "Melee_Combat"
+MS = "Minor_Shield"
+PF = "Protection_Field"
+MAF = "Minor_Aggressive_Flux"
+WT = "Wrath_Torrent"
 
 NOT_UPGRADABLE = [E, uC, MC]
 
-DEFAULT_SKILLS = { 
+
+DEFAULT_SKILLS = [QM, CM, SM, BA, QA, CA, LD, SD, CD, E, uC, MC, PS, QS, CS ]
+
+UPGRADABLE = { 
+    MS : {
+        1 : {"ManaCost" : 3, "UpgradeExpCost" : 10, "protection" : 3, "dodge_alteration" : 0},
+        2 : {"ManaCost" : 3, "UpgradeExpCost" : 25, "protection" : 5, "dodge_alteration" : 0},
+    },
+    PF:{
+        1 : {"ManaCost" : 6, "UpgradeExpCost" : 10, "protection" : 8, "dodge_alteration" : 0},
+        2 : {"ManaCost" : 6, "UpgradeExpCost" : 25, "protection" : 12, "dodge_alteration" : 0},
+ 
+    },
+    MAF:{
+        1 : {"ManaCost" : 3, "UpgradeExpCost" : 10, "damageBoost" : 2, "dodge_alteration" : 0},
+        2 : {"ManaCost" : 3, "UpgradeExpCost" : 25, "damageBoost" : 4, "dodge_alteration" : 0},
+    },
+    WT:{
+      1 : {"ManaCost" : 6, "UpgradeExpCost" : 10, "damageBoost" : 6, "dodge_alteration" : 0},
+      2 : {"ManaCost" : 6, "UpgradeExpCost" : 25, "damageBoost" : 8, "dodge_alteration" : 0},
+    }, 
     QM : {
         1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10, "speed" : 5, "dodge_alteration" : -0.25},
         2 : {"StaminaCost" : 3, "UpgradeExpCost" : 25, "speed" : 8, "dodge_alteration" : -0.25},

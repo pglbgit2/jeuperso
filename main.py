@@ -14,13 +14,14 @@ if __name__ == '__main__':
     
     
     ## TEST 1 ##
-    # battle2 = battle.Battle.instantiate_from_infos([billy],[{"characterClass":"WARRIOR", "name":"war1", "faction":"Bandits", "race":"UNDEAD"}])
+    # battle2 = battle.Battle.instantiate_from_infos([billy],[{"characterClass":"WARRIOR", "name":"war1", "faction":"Enemies", "race":"UNDEAD"}])
     # battle2.battle()
     
     ## TEST 2 ##
     
-    # gard1 = fighter.CHARACTER.instantiate_from_class("CITY_GARD", "gard1", "Heroes","HUMAN")
-    # gard2 = fighter.CHARACTER.instantiate_from_class("ARCHER", "gard2", "Heroes","HUMAN")
+    # gard1 = fighter.CHARACTER.instantiate_from_class("CITY_GARD", "gard1", "Players","HUMAN")
+    # gard2 = fighter.CHARACTER.instantiate_from_class("ARCHER", "gard2", "Players","HUMAN")
+    
     bandit = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory","Enemies","HUMAN")
     footpad = fighter.CHARACTER.instantiate_from_class("FOOTPAD", "Red", "Enemies","HUMAN")
     bandit.isControlledByGM = False
@@ -31,6 +32,6 @@ if __name__ == '__main__':
     battle1.battle()
     
      ## TEST 3 ##
-    # battle2 = battle.Battle.instantiate_from_infos([billy],[{"characterClass":"DEFAULT_CLASS", "name":"spider", "faction":"Bandits", "race":"GIANT_SPIDER"}])
+    # battle2 = battle.Battle.instantiate_from_infos([billy],[{"characterClass":"DEFAULT_CLASS", "name":"spider", "faction":"Enemies", "race":"GIANT_SPIDER"}])
     # battle2.battle()
         
