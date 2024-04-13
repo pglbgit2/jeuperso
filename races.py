@@ -130,7 +130,7 @@ MAGE = {
     "stamina_regeneration" : 4,
     "dodge" : 0.10,
     "Inventory" : {"weapons" : [], "armors" : [], "items" : []},
-    "skills" : ["Minor_Shield", "Protection_Field", "Minor_Aggressive_Flux", "Wrath_Torrent"]
+    "skills" : ["Minor_Shield", "Protection_Field", "Minor_Aggressive_Flux", "Wrath_Torrent", "Energy_Blade"]
 }
 
 ### ALL RACES & CLASSES LISTED BELOW ###

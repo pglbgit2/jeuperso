@@ -136,6 +136,8 @@ ONE_HAND_WEAPONS = ["SWORD", "KNIFE", "SLINGSHOT", "SPIKED_CLUB"]
 
 TWO_HAND_WEAPONS = ["BOW", "LONG_SWORD", "SPEAR"]
 
+INVOCATION = ["ENERGY_BLADE"]
+
 class WEAPON(items.ITEM):
     def __init__(self, name : str, cost : int, damage : int, weight : int, speed : int, type : str):
         super().__init__(name,cost,weight)

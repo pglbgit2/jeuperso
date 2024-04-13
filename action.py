@@ -38,6 +38,29 @@ class EnergyUsingAction(Action):
         fighter.magic -= self.manaCost
 
 
+
+class Invocation(EnergyUsingAction):
+    def __init__(self, action_name: str, ManaCost: int, UpgradeExpCost: int, dodge_alteration :int, level : int, invocation:str):
+        super().__init__(action_name, ManaCost, UpgradeExpCost,level, dodge_alteration)
+        self.invoke = invocation
+        
+    def acts(self, fighter : fighter.CHARACTER, targets=None):
+        interaction.showInformation(fighter.name+" invoke "+self.invoke)
+        if self.invoke in weapons.INVOCATION:
+            if self.invoke in weapons.MELEE_WEAPONS:
+                item = weapons.WEAPON.get_melee_weapon(self.invoke)
+            fighter.inventory.append(item)
+            if fighter.leftTool == None:
+                fighter.leftTool = item
+            elif fighter.rightTool == None:
+                fighter.rightTool = item
+                
+                
+class Energy_Blade(Invocation):
+    def __init__(self):
+        super().__init__("Energy_Blade", ManaCost=5, UpgradeExpCost=0, level=1, dodge_alteration=0,invocation="ENERGY_BLADE")
+    
+
 class Magic_Armor(EnergyUsingAction):
     def __init__(self, action_name: str, ManaCost: int, UpgradeExpCost: int, protection : int, dodge_alteration :int, level : int):
         super().__init__(action_name, ManaCost, UpgradeExpCost, level, dodge_alteration)
@@ -232,8 +255,8 @@ class Shot(Action):
                 targets[0].take_damage(potential_damage, damage_type)
             else:
                 interaction.showInformation(targets[0].name+" dodged attack")
-            targets[0].inventory.append(weapon)
-        
+            #targets[0].inventory.append(weapon)
+            return weapon
 
 class Precise_Shot(Shot):
     Level_Parameters = defaultSkills.UPGRADABLE[defaultSkills.PS]
@@ -304,7 +327,7 @@ def setupActions():
                 else:
                     obj()
 
-ABSTRACT = [Action, Attack, Defense, Movement, Shot, EnergyUsingAction, Magic_Armor, Energy_Damage_Boost]
+ABSTRACT = [Action, Attack, Defense, Movement, Shot, EnergyUsingAction, Magic_Armor, Energy_Damage_Boost, Invocation]
 
                 
 if __name__ == '__main__':

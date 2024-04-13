@@ -90,16 +90,20 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                 allActionsInserted = False
                 leftHandUsed = False
                 rightHandUsed = False
+                validActions = list(valid_actions)+["end"]
                 while not allActionsInserted:
                     print("Actions input of "+playerName+"\n")
-                    actionName = getStrInList(list(valid_actions)+["end"], "Action Name")
+                    actionName = getStrInList(validActions, "Action Name")
                     #actionName = input("Action Name among+"+str(valid_actions)+" or end to stop\n")
                     if actionName == "end":
                         allActionsInserted = True
                         break
                     if actionName not in valid_actions:
                         raise Exception("given actionName is not valid")
-                                            
+                    
+                    if actionName == "Energy_Blade":
+                        Actions.append({"name":actionName})
+                    
                     if "useConsumable" == actionName:
                         consumable = input("Name of consumable")
                         Actions.append({"name":actionName, "target" : consumable})

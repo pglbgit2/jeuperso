@@ -12,6 +12,7 @@ class Battle:
         self.fightersNames : Dict[str, fighter.CHARACTER] = {}
         self.factionsWarriors : Dict[str,List[str]] = {}
         self.defeatedWarriors : List[fighter.CHARACTER] = []
+        self.ground = []
         for warrior in fighters:
             self.fightersNames[warrior.name] = warrior
             if warrior.faction not in self.factionsWarriors.keys():
@@ -83,7 +84,7 @@ class Battle:
                     interaction.throwError("Can not shot multi targets with throwable weapon")
                     return False
 
-            if actionName.startswith("Protection_Field") or actionName.startswith("Minor_Shield") or actionName.startswith("Minor_Aggressive_Flux") or actionName.startswith("Wrath_Torrent"):
+            if actionName.startswith("Protection_Field") or actionName.startswith("Minor_Shield") or actionName.startswith("Minor_Aggressive_Flux") or actionName.startswith("Wrath_Torrent") or actionName == "Energy_Blade":
                 manaCost += action.Action.ACTIONS_DICT[actionName].manaCost
                 
             if actionName.startswith("Protection_Field") or actionName.startswith("Minor_Shield"):
@@ -141,12 +142,13 @@ class Battle:
                 fighters.append(self.fightersNames[name])
         return fighters
     
-    def killWarrior(self, fighter : fighter.CHARACTER):
-        interaction.showInformation("Fighter "+fighter.name+" died")
-        self.defeatedWarriors.append(fighter)
-        self.factionsWarriors[fighter.faction].remove(fighter.name)
-        self.fightersNames.pop(fighter.name,None)
-        self.fighters.remove(fighter)
+    def killWarrior(self, warrior : fighter.CHARACTER):
+        interaction.showInformation("Fighter "+warrior.name+" died")
+        if not isinstance(warrior, player.Player):
+            self.defeatedWarriors.append(warrior)
+        self.factionsWarriors[warrior.faction].remove(warrior.name)
+        self.fightersNames.pop(warrior.name,None)
+        self.fighters.remove(warrior)
     
     def killByName(self, name: str):
         if name in self.fightersNames.keys():
@@ -180,7 +182,9 @@ class Battle:
                             action.Action.ACTIONS_DICT["Equip"].acts(fighter, fighter.getItemFromInventoryByName(actionDict["object"]), actionDict["hand"])
                             continue
                     if "Shot" in actionName:
-                        action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["hand"])
+                        throw = action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["hand"])
+                        if throw != None:
+                            self.ground.append(throw)
                         continue
                     if "useConsumable" == actionName:
                         action.Action.ACTIONS_DICT["useConsumable"].acts(fighter, actionDict["target"])
@@ -188,6 +192,8 @@ class Battle:
                     if "Melee_Combat" == actionName:
                         action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]))
                         continue
+                    if "Energy_Blade" == actionName:
+                        action.Action.ACTIONS_DICT[actionName].acts(fighter)
     
                     
     def manualChanges(self):
