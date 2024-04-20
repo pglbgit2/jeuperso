@@ -17,6 +17,8 @@ MS = "Minor_Shield"
 PF = "Protection_Field"
 MAF = "Minor_Aggressive_Flux"
 WT = "Wrath_Torrent"
+EO = "EnergyOrb"
+ER = "EnergyRay"
 
 NOT_UPGRADABLE = [E, uC, MC]
 
@@ -27,19 +29,34 @@ UPGRADABLE = {
     MS : {
         1 : {"ManaCost" : 3, "UpgradeExpCost" : 10, "protection" : 3, "dodge_alteration" : 0},
         2 : {"ManaCost" : 3, "UpgradeExpCost" : 25, "protection" : 5, "dodge_alteration" : 0},
+        3 : {"ManaCost" : 3, "UpgradeExpCost" : 25, "protection" : 8, "dodge_alteration" : 0},
+
     },
     PF:{
         1 : {"ManaCost" : 6, "UpgradeExpCost" : 10, "protection" : 8, "dodge_alteration" : 0},
         2 : {"ManaCost" : 6, "UpgradeExpCost" : 25, "protection" : 12, "dodge_alteration" : 0},
- 
+        3 : {"ManaCost" : 6, "UpgradeExpCost" : 30, "protection" : 15, "dodge_alteration" : 0},
+    },
+    EO : {
+         1 : {"ManaCost" : 8, "UpgradeExpCost" : 10, "damage" : 10, "dodge_alteration" : 0, "damageType" : "impact"},
+        2 : {"ManaCost" : 9, "UpgradeExpCost" : 25, "damage" : 14, "dodge_alteration" : 0, "damageType" : "impact"},
+        3 : {"ManaCost" : 10, "UpgradeExpCost" : 30, "damage" : 19, "dodge_alteration" : 0, "damageType" : "impact"},
+    },
+    ER : {
+        1 : {"ManaCost" : 6, "UpgradeExpCost" : 10, "damage" : 4, "dodge_alteration" : 0, "damageType" : "arcane"},
+        2 : {"ManaCost" : 6, "UpgradeExpCost" : 25, "damage" : 6, "dodge_alteration" : 0, "damageType" : "arcane"},
+        3 : {"ManaCost" : 7, "UpgradeExpCost" : 30, "damage" : 8, "dodge_alteration" : 0, "damageType" : "arcane"},
     },
     MAF:{
         1 : {"ManaCost" : 3, "UpgradeExpCost" : 10, "damageBoost" : 2, "dodge_alteration" : 0},
         2 : {"ManaCost" : 3, "UpgradeExpCost" : 25, "damageBoost" : 4, "dodge_alteration" : 0},
+        3 : {"ManaCost" : 4, "UpgradeExpCost" : 40, "damageBoost" : 6, "dodge_alteration" : 0},
+
     },
     WT:{
       1 : {"ManaCost" : 6, "UpgradeExpCost" : 10, "damageBoost" : 6, "dodge_alteration" : 0},
       2 : {"ManaCost" : 6, "UpgradeExpCost" : 25, "damageBoost" : 8, "dodge_alteration" : 0},
+      3 : {"ManaCost" : 6, "UpgradeExpCost" : 40, "damageBoost" : 10, "dodge_alteration" : 0},
     }, 
     QM : {
         1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10, "speed" : 5, "dodge_alteration" : -0.25},
@@ -129,6 +146,8 @@ UPGRADABLE = {
         3 : {"StaminaCost" : 3, "UpgradeExpCost" : 30, "dodge_alteration" : 0,"accuracy" : 0.5},
         4 : {"StaminaCost" : 3, "UpgradeExpCost" : 45, "dodge_alteration" : 0,"accuracy" : 0.55},
         5 : {"StaminaCost" : 3, "UpgradeExpCost" : 60, "dodge_alteration" : 0,"accuracy" : 0.6},
-    }
+    }, 
+   
+    
 }
 

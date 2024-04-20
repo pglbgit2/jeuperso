@@ -8,7 +8,7 @@ PRIORITY = PRIORITY_BY_INITIATIVE
 
 
 def skillLevelUp(fighter : fighter.CHARACTER, skill : str):
-    MaxHPBonus = 0.5
+    MaxHPBonus = 0.25
     staminaBonus = 0.25
     stamina_regenerationBonus = 0.1
     MaxMagicBonus = 0.05
@@ -19,9 +19,9 @@ def skillLevelUp(fighter : fighter.CHARACTER, skill : str):
     if defaultSkills.QM == skill:
         staminaBonus += 0.25
     if defaultSkills.SM == skill:
-        pass
+        MaxHPBonus += 0.25
     if defaultSkills.BA == skill:
-        pass
+        staminaBonus += 0.25
     if defaultSkills.QA == skill:
         staminaBonus += 0.25
     if defaultSkills.CA == skill:
@@ -32,7 +32,6 @@ def skillLevelUp(fighter : fighter.CHARACTER, skill : str):
         defenseByTurnBonus = 1
     if defaultSkills.CD == skill:
         stamina_regenerationBonus += 0.2
-        defenseByTurnBonus = 1
     if defaultSkills.PS == skill:
         shotBonus += 0.05
     if defaultSkills.QS == skill:

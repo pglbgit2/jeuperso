@@ -126,12 +126,12 @@ WARRIOR = {
 MAGE = {
     "HP" : 20,
     "MaxHP" : 20,
-    "magic" : 10,
+    "magic" : 15,
     "gold" : 10,
     "stamina_regeneration" : 4,
     "dodge" : 0.10,
     "Inventory" : {"weapons" : [], "armors" : [], "items" : []},
-    "skills" : ["Minor_Shield", "Protection_Field", "Minor_Aggressive_Flux", "Wrath_Torrent", "Energy_Blade"]
+    "skills" : ["Minor_Shield", "Protection_Field", "Minor_Aggressive_Flux", "Wrath_Torrent", "Energy_Blade", "EnergyRay", "EnergyOrb"]
 }
 
 ### ALL RACES & CLASSES LISTED BELOW ###

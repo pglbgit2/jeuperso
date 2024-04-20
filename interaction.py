@@ -96,8 +96,12 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                     actionName = getStrInList(validActions, "Action Name")
                     #actionName = input("Action Name among+"+str(valid_actions)+" or end to stop\n")
                     if actionName == "end":
-                        allActionsInserted = True
-                        break
+                        print(str(Actions))
+                        result = input("confirm turn actions ? y or n")
+                        if result == "y":
+                            allActionsInserted = True
+                            break
+                        continue
                     if actionName not in valid_actions:
                         raise Exception("given actionName is not valid")
                     
@@ -130,7 +134,7 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                     if actionName == "Minor_Aggressive_Flux" or actionName == "Wrath_Torrent":
                         Actions.append({"name": actionName})
                     
-                    if "Attack" in actionName or "Shot" in actionName or "Melee_Combat" == actionName or actionName == "Protection_Field" or actionName == "Minor_Shield":
+                    if "Attack" in actionName or "Shot" in actionName or "Melee_Combat" == actionName or actionName == "Protection_Field" or actionName == "Minor_Shield" or "EnergyRay" == actionName or "EnergyOrb" == actionName:
                         print("All potential targets:"+str(units_name)+"\n")
                         target = input("Targets Name\n")
                         if ", " in target:
@@ -141,7 +145,7 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                             if fighterName not in units_name:
                                 raise Exception("given fighter name"+fighterName+" do not exist")   
                         action = {"name" : actionName, "targets" : fightersName}
-                        if actionName != "Melee_Combat" and actionName != "Protection_Field" and actionName != "Minor_Shield":         
+                        if actionName != "Melee_Combat" and actionName != "Protection_Field" and actionName != "Minor_Shield" and "EnergyRay" != actionName and "EnergyOrb" != actionName:         
                             hand = input("Used Hand to attack: left or right\n")
                             if hand == "left":
                                 if leftHandUsed == False:

@@ -1,4 +1,4 @@
-import battle, player, fighter, action, consumable
+import battle, player, fighter, action, weapons, armors, consumable, defaultSkills
 
 
 if __name__ == '__main__':
@@ -9,12 +9,20 @@ if __name__ == '__main__':
     # newPlayer.saveFighter(newPlayer.name+".sav")
     
     
-    # billy = player.Player.retrieveFighter("billy.sav")
-    # billy.inventory.append(consumable.Consumable.get_consumable("HEALTH_POTION"))
+    ## CREATE NEW FIGHTER
+    # newFighter = fighter.CHARACTER(**fighter.CHARACTER.getCharacterInfos())
+    # newFighter.saveFighter(newFighter.name+".sav")
     
-    pluton = player.Player.retrieveFighter("Pluton.sav")
-    #pluton.printPlayerSheet()
-    fabien = player.Player.retrieveFighter("Fabien.sav")
+    
+    billy = player.Player.retrieveFighter("billy.sav")
+    billy.inventory.append(consumable.Consumable.get_consumable("HEALTH_POTION"))
+    
+    
+    #eloi = player.Player.retrieveFighter("Eloi.sav")
+    
+    # pluton = player.Player.retrieveFighter("Pluton.sav")
+    # pluton.printPlayerSheet()
+    # fabien = player.Player.retrieveFighter("Fabien.sav")
     #fabien.printPlayerSheet()
     
     # bandit1 = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory","Enemies","HUMAN")
@@ -25,13 +33,13 @@ if __name__ == '__main__':
 
     # battle1 = battle.Battle([bandit1, bandit2, bandit3,bandit4,bandit5, pluton, fabien])
     # battle1.battle()
-    battle2 = battle.Battle.instantiate_from_infos([pluton, fabien],[{"characterClass":"DEFAULT_CLASS", "name":"spider", "faction":"Enemies", "race":"GIANT_SPIDER"}])
-    battle2.battle()
+    # battle2 = battle.Battle.instantiate_from_infos([pluton, fabien],[{"characterClass":"DEFAULT_CLASS", "name":"spider", "faction":"Enemies", "race":"GIANT_SPIDER"}])
+    # battle2.battle()
         
     
     ## TEST 1 ##
-    # battle2 = battle.Battle.instantiate_from_infos([billy],[{"characterClass":"WARRIOR", "name":"war1", "faction":"Enemies", "race":"UNDEAD"}])
-    # battle2.battle()
+    battle2 = battle.Battle.instantiate_from_infos([billy],[{"characterClass":"WARRIOR", "name":"war1", "faction":"Enemies", "race":"UNDEAD"}])
+    battle2.battle()
     
     ## TEST 2 ##
     

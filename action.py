@@ -38,7 +38,34 @@ class EnergyUsingAction(Action):
         fighter.magic -= self.manaCost
 
 
+class MagicAggression(EnergyUsingAction):
+    def __init__(self, action_name : str, ManaCost: int, UpgradeExpCost : int, level:int, dodge_alteration : int, damage : int, damageType : str):
+        super().__init__(action_name, ManaCost, UpgradeExpCost, level, dodge_alteration)
+        self.damage = damage
+        self.damageType = damageType
+    
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER]):
+        super(MagicAggression, self).acts(fighter,targets)
+        potential_damage = self.damage
+        potential_damage += fighter.damageBonus
+        for target in targets:
+            if target.dodge() != True:
+                interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
+                target.take_damage(potential_damage, self.damageType)
+            else:
+                interaction.showInformation(target.name+" dodged attack")
+ 
+class EnergyRay(MagicAggression):
+    Level_Parameters = defaultSkills.UPGRADABLE[defaultSkills.ER]
+    def __init__(self, level: int):
+        super().__init__("EnergyRay"+"-lv"+str(level), level=level, **EnergyRay.Level_Parameters[level])
+    
 
+class EnergyOrb(MagicAggression):
+    Level_Parameters = defaultSkills.UPGRADABLE[defaultSkills.EO]
+    def __init__(self, level: int):
+        super().__init__("EnergyOrb"+"-lv"+str(level), level=level, **EnergyOrb.Level_Parameters[level])
+    
 class Invocation(EnergyUsingAction):
     def __init__(self, action_name: str, ManaCost: int, UpgradeExpCost: int, dodge_alteration :int, level : int, invocation:str):
         super().__init__(action_name, ManaCost, UpgradeExpCost,level, dodge_alteration)
@@ -75,6 +102,8 @@ class Magic_Armor(EnergyUsingAction):
         for target in targets:
             target.defensePoints += protection
             interaction.showInformation(fighter.name+" protect "+target.name+" for "+str(protection))
+            
+            
 
 class Minor_Shield(Magic_Armor):
     Level_Parameters = defaultSkills.UPGRADABLE[defaultSkills.MS]
@@ -327,7 +356,7 @@ def setupActions():
                 else:
                     obj()
 
-ABSTRACT = [Action, Attack, Defense, Movement, Shot, EnergyUsingAction, Magic_Armor, Energy_Damage_Boost, Invocation]
+ABSTRACT = [Action, Attack, Defense, Movement, Shot, EnergyUsingAction, Magic_Armor, Energy_Damage_Boost, Invocation, MagicAggression]
 
                 
 if __name__ == '__main__':
