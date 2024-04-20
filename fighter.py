@@ -7,13 +7,13 @@ FACTIONS = ["Players","Enemies"]
 
 class CHARACTER:
     def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "HUMAN",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = list(defaultSkills.DEFAULT_SKILLS), dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = None, default_damage :int = 2, default_damage_type:int = "impact", tempDefByTurn : int =0):
-        self.HP = HP
-        self.MaxHP = MaxHP
-        self.stamina = Stamina
-        self.MaxStamina = Stamina
-        self.magic = magic
-        self.MaxMagic = magic
-        self.stamina_regeneration = stamina_regeneration
+        self.HP = float(HP)
+        self.MaxHP = float(MaxHP)
+        self.stamina = float(Stamina)
+        self.MaxStamina = float(Stamina)
+        self.magic = float(magic)
+        self.MaxMagic = float(magic)
+        self.stamina_regeneration = float(stamina_regeneration)
         self.inventory = Inventory
         self.bodyArmor = None
         self.legsArmor = None
@@ -26,7 +26,7 @@ class CHARACTER:
         self.money = gold
         self.faction = faction
         self.weight = 0
-        self.default_damage = default_damage
+        self.default_damage = float(default_damage)
         self.default_damage_type = default_damage_type
         if not isinstance(skills, List):
             skills = list(skills)
@@ -41,10 +41,11 @@ class CHARACTER:
                 self.basicSkillsLevel[skill] = 1
         if isinstance(skillsLevel,str):
             skillsLevel = ast.literal_eval(skillsLevel)
-        self.basicSkillsLevel.update(skillsLevel)
+        if skillsLevel != None:
+            self.basicSkillsLevel.update(self.turnStrValDictToInt(skillsLevel))
         self.resistance = copy.copy(races.DEFAULT_RESISTANCE)
         if raceResistance != None:
-            self.resistance.update(raceResistance)
+            self.resistance.update(self.turnStrValDictToFloat(raceResistance))
         self.defensePoints = 0
         self.dodgePercent = max(getattr(races, race)["dodge"], dodge)
         self.dodgeUsual = self.dodgePercent
@@ -54,7 +55,15 @@ class CHARACTER:
         self.defenseByTurn = tempDefByTurn
         self.damageBonus = 0
         
+    def turnStrValDictToInt(self, someDict:Dict[str,int]):
+        for key in someDict.keys():
+            someDict[key] = int(someDict[key])
+        return someDict
     
+    def turnStrValDictToFloat(self, someDict:Dict[str,int]):
+        for key in someDict.keys():
+            someDict[key] = float(someDict[key])
+        return someDict
     
     def newTurn(self):
         self.stamina = min(self.stamina +self.stamina_regeneration, self.MaxStamina)
@@ -343,6 +352,7 @@ class CHARACTER:
             "MaxHP" : self.MaxHP,
             "magic" : self.magic,
             "gold" : self.money,
+            "Stamina" : self.stamina,
             "stamina_regeneration" : self.stamina_regeneration,
             "dodge" : self.dodgeUsual,
             "shotBonus" : self.shotBonus,

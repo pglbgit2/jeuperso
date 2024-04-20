@@ -8,7 +8,7 @@ class Player(fighter.CHARACTER):
         self.actionCounter = {skillName : 0 for skillName in self.skills}
         if isinstance(counter,str):
             counter = ast.literal_eval(counter)
-        self.actionCounter.update(counter)
+        self.actionCounter.update(self.turnStrValDictToInt(counter))
     
     def getInitiative(self):
         result = "nope"

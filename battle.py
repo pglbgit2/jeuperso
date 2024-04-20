@@ -146,6 +146,7 @@ class Battle:
         interaction.showInformation("Fighter "+warrior.name+" died")
         if not isinstance(warrior, player.Player):
             self.defeatedWarriors.append(warrior)
+        else: fighter.saveFighter(fighter.name+".sav")
         self.factionsWarriors[warrior.faction].remove(warrior.name)
         self.fightersNames.pop(warrior.name,None)
         self.fighters.remove(warrior)
@@ -220,6 +221,7 @@ class Battle:
 
     def checkForDeath(self, warriors: List[fighter.CHARACTER]):
         for fighter in warriors:
+            print(fighter.name)
             if fighter.HP <= 0:
                 self.killWarrior(fighter)
     

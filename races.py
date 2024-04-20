@@ -26,7 +26,8 @@ GIANT_SPIDER = {
     "dodge" : 0.20,
     "raceResistance" : {"blade" : 0.2, "pierce" : 0.2, "impact" : -0.2,},
     "default_damage" : 12,
-    "default_damage_type" : "pierce"
+    "default_damage_type" : "pierce",
+    "tempDefByTurn" : 5
 }
 
 
