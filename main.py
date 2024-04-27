@@ -28,31 +28,34 @@ if __name__ == '__main__':
     #fabien.saveFighter("Fabien.sav")
     #fabien.printPlayerSheet()
     
-    gothi = fighter.CHARACTER.retrieveFighter("Gothi.sav")
-    elowen = fighter.CHARACTER.retrieveFighter("Elowen.sav")
-    Wa_En = fighter.CHARACTER.retrieveFighter("Wa_Hen.sav")
-    Eloi = player.Player.retrieveFighter("Eloi.sav")
-    Efraim = player.Player.retrieveFighter("Efraim.sav")    
-    bandit1 = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory","Enemies","HUMAN")
-    #bandit1.isControlledByGM = False
-    bandit2 = fighter.CHARACTER.instantiate_from_class("FOOTPAD","Mallory2","Enemies","HUMAN")
-    #bandit2.isControlledByGM = False
-
-    bandit3 = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory3","Enemies","HUMAN")
-    #bandit3.isControlledByGM = False
-
-    bandit4 = fighter.CHARACTER.instantiate_from_class("FOOTPAD","Mallory4","Enemies","HUMAN")
-    #bandit4.isControlledByGM = False
-
-    bandit5 = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory5","Enemies","HUMAN")
-    #bandit5.isControlledByGM = False
-
-    StreetsWatcher1 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher1","Enemies","HUMAN")
-    StreetsWatcher2 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher2","Enemies","HUMAN")
-    StreetsWatcher3 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher3","Enemies","HUMAN")
-
-    battle1 = battle.Battle([bandit1, bandit2, bandit3,bandit4,bandit5, pluton, fabien, gothi, Wa_En, StreetsWatcher1, StreetsWatcher2, StreetsWatcher3])
+    Sdrakeide = fighter.CHARACTER.retrieveFighter("Dorokaen.sav")
+    battle1 = battle.Battle([pluton, fabien, Sdrakeide])
     battle1.battle()
+    # gothi = fighter.CHARACTER.retrieveFighter("Gothi.sav")
+    # elowen = fighter.CHARACTER.retrieveFighter("Elowen.sav")
+    # Wa_En = fighter.CHARACTER.retrieveFighter("Wa_Hen.sav")
+    # Eloi = player.Player.retrieveFighter("Eloi.sav")
+    # Efraim = player.Player.retrieveFighter("Efraim.sav")    
+    # bandit1 = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory","Enemies","HUMAN")
+    # #bandit1.isControlledByGM = False
+    # bandit2 = fighter.CHARACTER.instantiate_from_class("FOOTPAD","Mallory2","Enemies","HUMAN")
+    # #bandit2.isControlledByGM = False
+
+    # bandit3 = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory3","Enemies","HUMAN")
+    # #bandit3.isControlledByGM = False
+
+    # bandit4 = fighter.CHARACTER.instantiate_from_class("FOOTPAD","Mallory4","Enemies","HUMAN")
+    # #bandit4.isControlledByGM = False
+
+    # bandit5 = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory5","Enemies","HUMAN")
+    # #bandit5.isControlledByGM = False
+
+    # StreetsWatcher1 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher1","Enemies","HUMAN")
+    # StreetsWatcher2 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher2","Enemies","HUMAN")
+    # StreetsWatcher3 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher3","Enemies","HUMAN")
+    # Stilvor = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher3","Enemies","HUMAN")
+    # battle1 = battle.Battle([bandit1, bandit2, bandit3,bandit4,bandit5, pluton, fabien, gothi, Wa_En, StreetsWatcher1, StreetsWatcher2, StreetsWatcher3, Stilvor])
+    # battle1.battle()
     
     
     

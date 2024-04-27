@@ -59,7 +59,7 @@ class Battle:
                 if someAction["hand"] == "right":
                     tool = fighter.rightTool
                 
-            if ("Attack" in actionName or "Shot" in actionName or "EnergyRay" in actionName or "EnergyOrb" in actionName):
+            if ("Attack" in actionName or "Shot" in actionName or "EnergyRay" in actionName or "EnergyOrb" in actionName or "FireBreath" in actionName):
                 if any(target == allyName for allyName in alliesName for target in someAction["targets"]):
                     interaction.throwError("Can not attack ally")
                     return False
@@ -84,7 +84,7 @@ class Battle:
                     interaction.throwError("Can not shot multi targets with throwable weapon")
                     return False
 
-            if actionName.startswith("Protection_Field") or actionName.startswith("Minor_Shield") or actionName.startswith("Minor_Aggressive_Flux") or actionName.startswith("Wrath_Torrent") or actionName == "Energy_Blade" or "EnergyRay" in actionName or "EnergyOrb" in actionName:
+            if actionName.startswith("Protection_Field") or actionName.startswith("Minor_Shield") or actionName.startswith("Minor_Aggressive_Flux") or actionName.startswith("Wrath_Torrent") or actionName == "Energy_Blade" or "EnergyRay" in actionName or "EnergyOrb" in actionName or "FireBreath" in actionName:
                 manaCost += action.Action.ACTIONS_DICT[actionName].manaCost
                 
             if actionName.startswith("Protection_Field") or actionName.startswith("Minor_Shield"):
@@ -199,7 +199,7 @@ class Battle:
                         continue
                     if "Energy_Blade" == actionName:
                         action.Action.ACTIONS_DICT[actionName].acts(fighter)
-                    if "EnergyOrb" in actionName or "EnergyRay" in actionName:
+                    if "EnergyOrb" in actionName or "EnergyRay" in actionName or "FireBreath" in actionName:
                         action.Action.ACTIONS_DICT[actionName].acts(fighter,self.namesToCharacters(actionDict["targets"]))
     
                     

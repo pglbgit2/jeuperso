@@ -296,7 +296,7 @@ class CHARACTER:
         if skill not in self.skills:
             self.skills.append(skill)
             interaction.showInformation("learned new skill: "+skill)
-            if Upgradable:
+            if Upgradable or skill in defaultSkills.UPGRADABLE.keys():
                 self.basicSkillsLevel[skill] = 1
             return True
         return False

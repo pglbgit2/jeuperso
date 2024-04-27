@@ -65,6 +65,11 @@ class EnergyOrb(MagicAggression):
     Level_Parameters = defaultSkills.UPGRADABLE[defaultSkills.EO]
     def __init__(self, level: int):
         super().__init__("EnergyOrb"+"-lv"+str(level), level=level, **EnergyOrb.Level_Parameters[level])
+        
+class FireBreath(MagicAggression):
+    Level_Parameters = defaultSkills.UPGRADABLE[defaultSkills.FB]
+    def __init__(self, level: int):
+        super().__init__("FireBreath"+"-lv"+str(level), level=level, **FireBreath.Level_Parameters[level])
     
 class Invocation(EnergyUsingAction):
     def __init__(self, action_name: str, ManaCost: int, UpgradeExpCost: int, dodge_alteration :int, level : int, invocation:str):
