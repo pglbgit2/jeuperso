@@ -15,7 +15,7 @@ HUMAN  = {
     "default_damage" : 2
 }
 
-
+## GIANT_SPIDER ##
 GIANT_SPIDER = {
     "HP" : 50,
     "MaxHP" : 50,
@@ -31,6 +31,22 @@ GIANT_SPIDER = {
 }
 
 
+## SRAVAL ##
+SRAVAL = {
+    "HP" : 30,
+    "MaxHP" : 30,
+    "Stamina" : 9,
+    "magic" : 3,
+    "stamina_regeneration"  : 8, 
+    "race"  :  "SRAVAL",
+    "dodge" : 0.25,
+    "raceResistance" : {"blade" : 0.2, "pierce" : 0.2, "impact" : 0.2, "fire" : -0.5},
+    "default_damage" : 8,
+    "default_damage_type" : "impact",
+    "tempDefByTurn" : 5
+}
+
+
 ## ORCS ##
 ORC  = {
     "HP" : 22,
@@ -40,7 +56,7 @@ ORC  = {
     "stamina_regeneration"  : 7, 
     "race"  :  "ORC",
     "dodge" : 0.10,
-    "raceResistance" : {"blade":0.1}
+    "raceResistance" : {"blade":0.1, "impact" : 0.1, "fire" : -0.1}
 }
 
 ## GOBLINS ##
@@ -134,11 +150,12 @@ MAGE = {
     "skills" : ["Minor_Shield", "Protection_Field", "Minor_Aggressive_Flux", "Wrath_Torrent", "Energy_Blade", "EnergyRay", "EnergyOrb"]
 }
 
+
 ### ALL RACES & CLASSES LISTED BELOW ###
 
 
 
-RACES = ["HUMAN","ORC","GOBLIN", "UNDEAD", "GIANT_SPIDER"]
+RACES = ["HUMAN","ORC","GOBLIN", "UNDEAD", "GIANT_SPIDER", "SRAVAL"]
 CLASSES = ["THIEF", "CITY_GARD", "FOOTPAD", "ARCHER", "WARRIOR", "DEFAULT_CLASS", "MAGE"]
 
 DEFAULT_RESISTANCE = {

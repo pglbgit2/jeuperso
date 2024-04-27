@@ -113,10 +113,10 @@ UPGRADABLE = {
     CD : {
         1 : {"StaminaCost" : 2, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"defensePoints" : 4},
         2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"defensePoints" : 6},
-        3 : {"StaminaCost" : 3, "UpgradeExpCost" : 30, "dodge_alteration" : 0.1,"defensePoints" : 8},
-        4 : {"StaminaCost" : 3, "UpgradeExpCost" : 45, "dodge_alteration" : 0.15,"defensePoints" : 9},
-        5 : {"StaminaCost" : 3, "UpgradeExpCost" : 60, "dodge_alteration" : 0.20,"defensePoints" : 10},
-        6 : {"StaminaCost" : 3, "UpgradeExpCost" : 75, "dodge_alteration" : 0.25,"defensePoints" : 11}
+        3 : {"StaminaCost" : 3, "UpgradeExpCost" : 30, "dodge_alteration" : 0,"defensePoints" : 8},
+        4 : {"StaminaCost" : 3, "UpgradeExpCost" : 45, "dodge_alteration" : 0.05,"defensePoints" : 9},
+        5 : {"StaminaCost" : 3, "UpgradeExpCost" : 60, "dodge_alteration" : 0.10,"defensePoints" : 10},
+        6 : {"StaminaCost" : 3, "UpgradeExpCost" : 75, "dodge_alteration" : 0.15,"defensePoints" : 11}
     },
     BA : {
         1 : {"StaminaCost" : 4, "UpgradeExpCost" : 10,  "dodge_alteration" : -100,"damageFactor" : 2.25},

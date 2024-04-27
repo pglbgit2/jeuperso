@@ -315,7 +315,10 @@ class Defense(Action):
         
     def acts(self, fighter : fighter.CHARACTER, hand="left"):
         super(Defense,self).acts(fighter,None)
-        fighter.defensePoints += self.defensePoints
+        if self.defensePoints > 0:
+            fighter.defensePoints += self.defensePoints
+        if self.defensePoints < 0:
+            fighter.DamageDivisor = -self.defensePoints
         if self.defensePoints > 0:
             interaction.showInformation("fighter "+fighter.name+" protect itself with "+str(self.defensePoints)+" temporary armor, total temporary armor:"+str(fighter.defensePoints))
         else:

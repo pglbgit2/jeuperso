@@ -54,6 +54,7 @@ class CHARACTER:
         self.shotBonus = shotBonus
         self.defenseByTurn = tempDefByTurn
         self.damageBonus = 0
+        self.DamageDivisor = 1
         
     def turnStrValDictToInt(self, someDict:Dict[str,int]):
         for key in someDict.keys():
@@ -71,6 +72,7 @@ class CHARACTER:
         self.magic = min(self.magic +math.ceil(self.stamina_regeneration/2), self.MaxMagic)
         self.dodgePercent = self.dodgeUsual
         self.damageBonus = 0
+        self.DamageDivisor = 1
         self.actions = []
         if self.HP < self.MaxHP/2:
             self.HP -= 1
@@ -241,16 +243,14 @@ class CHARACTER:
         damage -= race_reduction
         interaction.showInformation("damage of type "+damage_type+" reduced by "+str(self.resistance[damage_type]*100)+" percent because is "+self.race)
         if damage > 0:
-            if self.defensePoints < 0:
-                damage = damage / -self.defensePoints
-            else:
-                defense = self.defensePoints
-                if defense > 0:
-                    oldDamage = damage
-                    damage = max(0, damage - self.defensePoints)
-                    dif = oldDamage - damage
-                    interaction.showInformation("damage reduced by temporary armor by:"+str(dif))
-                    self.defensePoints -= dif
+          
+            damage = damage / self.DamageDivisor
+            if self.defensePoints > 0:
+                oldDamage = damage
+                damage = max(0, damage - self.defensePoints)
+                dif = oldDamage - damage
+                interaction.showInformation("damage reduced by temporary armor by:"+str(dif))
+                self.defensePoints -= dif
             if self.headArmor != None and damage > 0:
                 damage = self.protection_damage(damage, damage_type , self.headArmor)
             if self.bodyArmor != None and damage > 0:

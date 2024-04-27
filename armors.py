@@ -63,9 +63,9 @@ LEATHER_LP_WEIGHT = 20
 LEATHER_LP_COST = 30
 LEATHER_LP_ABSORPTION = {
     "blade" : 0.1,
-    "pierce" : 0.05,
-    "impact" : 0.1,
-    "cold" : 0.1
+    "pierce" : 0.1,
+    "impact" : 0.05,
+    "cold" : 0.05
 }
 LEATHER_LP = {"weight" : LEATHER_LP_WEIGHT, "durability" : LEATHER_LP_DURABILITY, "cost" : LEATHER_LP_COST, "absorption" : LEATHER_LP_ABSORPTION}
 

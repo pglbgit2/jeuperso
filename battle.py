@@ -140,6 +140,7 @@ class Battle:
         for name in namesList:
             if not any(name == dead.name for dead in self.defeatedWarriors):
                 fighters.append(self.fightersNames[name])
+          
         return fighters
     
     def killWarrior(self, warrior : fighter.CHARACTER):
