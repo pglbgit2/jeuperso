@@ -30,7 +30,7 @@ class Player(fighter.CHARACTER):
         
    
     def addSkill(self, skill:str):
-        if super(fighter.CHARACTER,self).addSkill(skill):
+        if super(Player,self).addSkill(skill):
             self.actionCounter[skill] = 0
                     
     def useSkill(self,skill:str):

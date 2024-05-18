@@ -20,7 +20,8 @@ WT = "Wrath_Torrent"
 EO = "EnergyOrb"
 ER = "EnergyRay"
 FB = "FireBreath"
-
+FBa = "FireBall"
+FS = "FireStorm"
 NOT_UPGRADABLE = [E, uC, MC]
 
 
@@ -28,10 +29,21 @@ DEFAULT_SKILLS = [QM, CM, SM, BA, QA, CA, LD, SD, CD, E, uC, MC, PS, QS, CS ]
 
 UPGRADABLE = { 
     FB : {
-        1 : {"ManaCost" : 2, "UpgradeExpCost" : 15, "damage" : 5, "dodge_alteration" : 0, "damageType" : "fire"},
-        2 : {"ManaCost" : 3, "UpgradeExpCost" : 30, "damage" : 7, "dodge_alteration" : 0, "damageType" : "fire"},
-        3 : {"ManaCost" : 4, "UpgradeExpCost" : 45, "damage" : 9, "dodge_alteration" : 0, "damageType" : "fire"},
+        1 : {"ManaCost" : 2, "UpgradeExpCost" : 15, "damage" : 4, "dodge_alteration" : 0, "damageType" : "fire"},
+        2 : {"ManaCost" : 3, "UpgradeExpCost" : 30, "damage" : 5, "dodge_alteration" : 0, "damageType" : "fire"},
+        3 : {"ManaCost" : 4, "UpgradeExpCost" : 45, "damage" : 6, "dodge_alteration" : 0, "damageType" : "fire"},
     },
+    FBa : {
+        1 : {"ManaCost" : 6, "UpgradeExpCost" : 15, "damage" : 10, "dodge_alteration" : 0, "damageType" : "fire"},
+        2 : {"ManaCost" : 7, "UpgradeExpCost" : 30, "damage" : 11, "dodge_alteration" : 0, "damageType" : "fire"},
+        3 : {"ManaCost" : 8, "UpgradeExpCost" : 45, "damage" : 12, "dodge_alteration" : 0, "damageType" : "fire"},
+    },
+    FS: {
+        1 : {"ManaCost" : 10, "UpgradeExpCost" : 15, "damage" : 15, "dodge_alteration" : 0, "damageType" : "fire"},
+        2 : {"ManaCost" : 11, "UpgradeExpCost" : 30, "damage" : 18, "dodge_alteration" : 0, "damageType" : "fire"},
+        3 : {"ManaCost" : 12, "UpgradeExpCost" : 45, "damage" : 20, "dodge_alteration" : 0, "damageType" : "fire"},
+    }
+    ,
     MS : {
         1 : {"ManaCost" : 3, "UpgradeExpCost" : 10, "protection" : 3, "dodge_alteration" : 0},
         2 : {"ManaCost" : 3, "UpgradeExpCost" : 25, "protection" : 5, "dodge_alteration" : 0},
@@ -97,18 +109,18 @@ UPGRADABLE = {
         1 : {"StaminaCost" : 2, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"damageFactor" : 1},
         2 : {"StaminaCost" : 2, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"damageFactor" : 1.15},
         3 : {"StaminaCost" : 1, "UpgradeExpCost" : 30, "dodge_alteration" : 0,"damageFactor" : 1.25},
-        4 : {"StaminaCost" : 1, "UpgradeExpCost" : 45, "dodge_alteration" : 0,"damageFactor" : 1.30},
-        5 : {"StaminaCost" : 1, "UpgradeExpCost" : 60, "dodge_alteration" : 0,"damageFactor" : 1.35},
-        6 : {"StaminaCost" : 1, "UpgradeExpCost" : 75, "dodge_alteration" : 0,"damageFactor" : 1.40},
-        7 : {"StaminaCost" : 1, "UpgradeExpCost" : 90, "dodge_alteration" : 0,"damageFactor" : 1.45}
+        4 : {"StaminaCost" : 1, "UpgradeExpCost" : 45, "dodge_alteration" : 0,"damageFactor" : 1.40},
+        5 : {"StaminaCost" : 1, "UpgradeExpCost" : 60, "dodge_alteration" : 0,"damageFactor" : 1.50},
+        6 : {"StaminaCost" : 1, "UpgradeExpCost" : 75, "dodge_alteration" : 0,"damageFactor" : 1.60},
+        7 : {"StaminaCost" : 1, "UpgradeExpCost" : 90, "dodge_alteration" : 0,"damageFactor" : 1.70}
     },
     LD : {
         1 : {"StaminaCost" : 1, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"defensePoints" : 1},
-        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"defensePoints" : 2},
-        3 : {"StaminaCost" : 3, "UpgradeExpCost" : 30, "dodge_alteration" : 0,"defensePoints" : 3},
-        4 : {"StaminaCost" : 3, "UpgradeExpCost" : 45, "dodge_alteration" : 0,"defensePoints" : 4},
-        5 : {"StaminaCost" : 3, "UpgradeExpCost" : 60, "dodge_alteration" : 0,"defensePoints" : 5},
-        6 : {"StaminaCost" : 3, "UpgradeExpCost" : 75, "dodge_alteration" : 0,"defensePoints" : 6}
+        2 : {"StaminaCost" : 1, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"defensePoints" : 2},
+        3 : {"StaminaCost" : 1, "UpgradeExpCost" : 30, "dodge_alteration" : 0,"defensePoints" : 3},
+        4 : {"StaminaCost" : 1, "UpgradeExpCost" : 45, "dodge_alteration" : 0,"defensePoints" : 4},
+        5 : {"StaminaCost" : 2, "UpgradeExpCost" : 60, "dodge_alteration" : 0,"defensePoints" : 5},
+        6 : {"StaminaCost" : 2, "UpgradeExpCost" : 75, "dodge_alteration" : 0,"defensePoints" : 6}
     },
     SD : {
         1 : {"StaminaCost" : 5, "UpgradeExpCost" : 10,  "dodge_alteration" : -100,"defensePoints" : -3},

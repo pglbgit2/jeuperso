@@ -58,6 +58,9 @@ class Battle:
                         return False
                 if someAction["hand"] == "right":
                     tool = fighter.rightTool
+                    if tool == None:
+                        interaction.throwError("no tool")
+                        return False
                 
             if ("Attack" in actionName or "Shot" in actionName or "EnergyRay" in actionName or "EnergyOrb" in actionName or "FireBreath" in actionName):
                 if any(target == allyName for allyName in alliesName for target in someAction["targets"]):
@@ -199,7 +202,7 @@ class Battle:
                         continue
                     if "Energy_Blade" == actionName:
                         action.Action.ACTIONS_DICT[actionName].acts(fighter)
-                    if "EnergyOrb" in actionName or "EnergyRay" in actionName or "FireBreath" in actionName:
+                    if "EnergyOrb" in actionName or "EnergyRay" in actionName or "FireBreath" in actionName or "FireBall" in actionName or "FireStorm" in actionName:
                         action.Action.ACTIONS_DICT[actionName].acts(fighter,self.namesToCharacters(actionDict["targets"]))
     
                     
@@ -288,17 +291,18 @@ class Battle:
         for fighter in self.fighters:
             if isinstance(fighter, player.Player):
                 for skill in fighter.actionCounter.keys():
-                    lvSkill = defaultSkills.UPGRADABLE[skill][fighter.basicSkillsLevel[skill]]
-                    while fighter.actionCounter[skill] > lvSkill["UpgradeExpCost"] and action.Action.ACTIONS_DICT[skill+fighter.getStrLevelOfSkill(skill)].upgrades != []:
-                        upgradable = action.Action.ACTIONS_DICT[skill+fighter.getStrLevelOfSkill(skill)]
-                        for upgradeSkill in upgradable.upgrades:
-                            if not upgradeSkill.name.startswith(skill):
-                                fighter.addSkill(upgradeSkill)
-                            else:
-                                hasLevelUp = fighter.upgradeSkill(skill)
-                                if not hasLevelUp:
-                                    fighter.actionCounter[skill] = 0 # to avoid leveling up this skill each turn after maxed out
-                                rules.skillLevelUp(fighter,skill)
+                    if skill not in defaultSkills.NOT_UPGRADABLE: 
+                        lvSkill = defaultSkills.UPGRADABLE[skill][fighter.basicSkillsLevel[skill]]
+                        while fighter.actionCounter[skill] > lvSkill["UpgradeExpCost"] and action.Action.ACTIONS_DICT[skill+fighter.getStrLevelOfSkill(skill)].upgrades != []:
+                            upgradable = action.Action.ACTIONS_DICT[skill+fighter.getStrLevelOfSkill(skill)]
+                            for upgradeSkill in upgradable.upgrades:
+                                if not upgradeSkill.name.startswith(skill):
+                                    fighter.addSkill(upgradeSkill)
+                                else:
+                                    hasLevelUp = fighter.upgradeSkill(skill)
+                                    if not hasLevelUp:
+                                        fighter.actionCounter[skill] = 0 # to avoid leveling up this skill each turn after maxed out
+                                    rules.skillLevelUp(fighter,skill)
                 fighter.saveFighter(fighter.name+".sav")
 
     @staticmethod             

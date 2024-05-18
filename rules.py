@@ -38,8 +38,11 @@ def skillLevelUp(fighter : fighter.CHARACTER, skill : str):
         shotBonus += 0.05
     if defaultSkills.CS == skill:
         shotBonus += 0.05
+    if any(skill == magicSkill for magicSkill in [defaultSkills.MS, defaultSkills.PF, defaultSkills.MAF, defaultSkills.WT, defaultSkills.EO, defaultSkills.ER, defaultSkills.FB, defaultSkills.FB, defaultSkills.FBa, defaultSkills.FS]):
+        MaxMagicBonus += 0.1
+        
     
-    fighter.MaxHp += MaxHPBonus
+    fighter.MaxHP += MaxHPBonus
     interaction.showInformation(fighter.name+" improve its MaxHP by "+str(MaxHPBonus)+", current MaxHP: "+str(fighter.MaxHP))
     fighter.stamina += staminaBonus
     interaction.showInformation(fighter.name+" improve its stamina by "+str(staminaBonus)+", current stamina: "+str(fighter.stamina))

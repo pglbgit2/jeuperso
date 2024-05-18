@@ -70,6 +70,18 @@ class FireBreath(MagicAggression):
     Level_Parameters = defaultSkills.UPGRADABLE[defaultSkills.FB]
     def __init__(self, level: int):
         super().__init__("FireBreath"+"-lv"+str(level), level=level, **FireBreath.Level_Parameters[level])
+        
+class FireBall(MagicAggression):
+    Level_Parameters = defaultSkills.UPGRADABLE[defaultSkills.FBa]
+    def __init__(self, level: int):
+        super().__init__("FireBall"+"-lv"+str(level), level=level, **FireBall.Level_Parameters[level])
+
+class FireStorm(MagicAggression):
+    Level_Parameters = defaultSkills.UPGRADABLE[defaultSkills.FS]
+    def __init__(self, level: int):
+        super().__init__("FireStorm"+"-lv"+str(level), level=level, **FireStorm.Level_Parameters[level])
+        
+
     
 class Invocation(EnergyUsingAction):
     def __init__(self, action_name: str, ManaCost: int, UpgradeExpCost: int, dodge_alteration :int, level : int, invocation:str):
@@ -220,9 +232,15 @@ class Attack(Action):
         super(Attack,self).acts(fighter, targets)
         potential_damage = 0
         if hand == "left" :
+            if fighter.leftTool == None:
+                Action.ACTIONS_DICT["Melee_Combat"].acts(fighter,targets,hand)
+                return
             potential_damage += fighter.leftTool.damage
             damage_type = fighter.leftTool.damageType
         else : 
+            if fighter.rightTool == None:
+                Action.ACTIONS_DICT["Melee_Combat"].acts(fighter,targets,hand)
+                return
             potential_damage += fighter.rightTool.damage
             damage_type = fighter.rightTool.damageType
         potential_damage = potential_damage * self.factor
@@ -260,8 +278,12 @@ class Shot(Action):
         super(Shot,self).acts(fighter,None)
         if hand == "left":
             weapon = fighter.leftTool
+            if weapon == None:
+                return
         else:
             weapon = fighter.rightTool
+            if weapon == None:
+                return
         assert (weapon != None and weapon.name in weapons.RANGE_WEAPONS) or weapon.name in weapons.THROWABLE
         
         if weapon.name in weapons.RANGE_WEAPONS:

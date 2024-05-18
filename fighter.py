@@ -179,7 +179,7 @@ class CHARACTER:
                 
 
     def upgradeSkill(self, skill):
-        if (self.basicSkillsLevel[skill]+1) in defaultSkills.UPGRADABLE[skill].keys():
+        if (self.basicSkillsLevel[skill]+1) in defaultSkills.UPGRADABLE[skill].keys() and skill not in defaultSkills.NOT_UPGRADABLE:
             self.basicSkillsLevel[skill] += 1
             interaction.showInformation("skill "+skill+" upgraded to level "+self.basicSkillsLevel[skill])
             return True
@@ -235,7 +235,7 @@ class CHARACTER:
         return damage
     
     def take_damage(self, damage : float, damage_type : str):
-        damage = math.floor(damage)
+        damage = math.floor(damage)  
         race_reduction = damage*self.resistance[damage_type]
         if race_reduction > 0 and race_reduction < 1:
             race_reduction += 1
