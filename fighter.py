@@ -181,7 +181,7 @@ class CHARACTER:
     def upgradeSkill(self, skill):
         if (self.basicSkillsLevel[skill]+1) in defaultSkills.UPGRADABLE[skill].keys() and skill not in defaultSkills.NOT_UPGRADABLE:
             self.basicSkillsLevel[skill] += 1
-            interaction.showInformation("skill "+skill+" upgraded to level "+self.basicSkillsLevel[skill])
+            interaction.showInformation("skill "+skill+" upgraded to level "+str(self.basicSkillsLevel[skill]))
             return True
         else: 
             interaction.showInformation("skill "+skill+" maxed")

@@ -291,9 +291,9 @@ class Battle:
         for fighter in self.fighters:
             if isinstance(fighter, player.Player):
                 for skill in fighter.actionCounter.keys():
-                    if skill not in defaultSkills.NOT_UPGRADABLE: 
+                    if skill not in defaultSkills.NOT_UPGRADABLE and skill in defaultSkills.UPGRADABLE.keys(): 
                         lvSkill = defaultSkills.UPGRADABLE[skill][fighter.basicSkillsLevel[skill]]
-                        while fighter.actionCounter[skill] > lvSkill["UpgradeExpCost"] and action.Action.ACTIONS_DICT[skill+fighter.getStrLevelOfSkill(skill)].upgrades != []:
+                        while fighter.actionCounter[skill] > defaultSkills.UPGRADABLE[skill][fighter.basicSkillsLevel[skill]]["UpgradeExpCost"] and action.Action.ACTIONS_DICT[skill+fighter.getStrLevelOfSkill(skill)].upgrades != []:
                             upgradable = action.Action.ACTIONS_DICT[skill+fighter.getStrLevelOfSkill(skill)]
                             for upgradeSkill in upgradable.upgrades:
                                 if not upgradeSkill.name.startswith(skill):

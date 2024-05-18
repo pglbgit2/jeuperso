@@ -22,12 +22,15 @@ if __name__ == '__main__':
     #eloi = player.Player.retrieveFighter("Eloi.sav")
     
     pluton = player.Player.retrieveFighter("Pluton.sav")
-    # #pluton.saveFighter("Pluton.sav")
+
+    # pluton.saveFighter("Pluton.sav")
     
-    # #pluton.printPlayerSheet()
+    pluton.printPlayerSheet()
     fabien = player.Player.retrieveFighter("Fabien.sav")
+ 
+    #fabien.saveFighter("Fabien.sav")
     # #fabien.saveFighter("Fabien.sav")
-    # #fabien.printPlayerSheet()
+    fabien.printPlayerSheet()
     
     # Sdrakeide = fighter.CHARACTER.retrieveFighter("Dorokaen.sav")
     # battle1 = battle.Battle([pluton, fabien])
@@ -57,7 +60,7 @@ if __name__ == '__main__':
     # StreetsWatcher2 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher2","Enemies","HUMAN")
     # StreetsWatcher3 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher3","Enemies","HUMAN")
     # Stilvor = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher4","Enemies","HUMAN")
-    battle1 = battle.Battle([bandit2, bandit3,bandit4,bandit5, pluton, fabien])
+    battle1 = battle.Battle([ pluton, fabien, bandit2])
     battle1.battle()
     
     
