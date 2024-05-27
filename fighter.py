@@ -93,7 +93,25 @@ class CHARACTER:
                     return item
         return None
     
-    
+
+    def tryToHit(self, bodyPart):
+        return bodyPart
+        # if bodyPart == "torso":
+        #     return "torso"
+        # if bodyPart == "legs":
+        #     if random.random() < 0.7:
+        #         return "legs"
+        #     else:
+        #         print("missed legs, got torso instead")
+        #         return "torso"
+        # if bodyPart == "head":
+        #     if random.random() < 0.1:
+        #         return "head"
+        #     else:
+        #         print("missed head, got torso instead")
+        #         return "torso"
+
+        
     def rollInRange(self,a:int,b:int):
         return random.randint(min([a,b]), max([a,b]))    
     
@@ -143,15 +161,16 @@ class CHARACTER:
             rightHandUsed = self.rightTool == None
             while staminaCost < self.stamina:
                 action = {}
-               
+                otherInfos = {}
+                action["otherInfos"] = otherInfos
                 if not (leftHandUsed and rightHandUsed) and random.random() <= attackProbability:
                     action["targets"] = [random.choice(fightersByFaction[random.choice([team for team in teamEstimatedPower.keys() if team != self.faction])]).name]
                     if not leftHandUsed: 
-                        action["hand"] = "left"
+                        otherInfos["hand"] = "left"
                         leftHandUsed = True
                         tool = self.leftTool
                     else:
-                        action["hand"] = "right"
+                        otherInfos["hand"] = "right"
                         rightHandUsed = True
                         tool = self.rightTool
                     
@@ -172,7 +191,7 @@ class CHARACTER:
                 removed = actions.pop()
                 staminaCost -= defaultSkills.UPGRADABLE[removed["name"]][self.basicSkillsLevel[action["name"]]]["StaminaCost"]
             while staminaCost != self.stamina:
-                actions.append({"name" : defaultSkills.LD, "target" : self.name})
+                actions.append({"name" : defaultSkills.LD, "target" : self.name, "otherInfos" : None})
                 staminaCost += 1
             self.actions = actions
             return actions
@@ -234,32 +253,54 @@ class CHARACTER:
             protection = None
         return damage
     
-    def take_damage(self, damage : float, damage_type : str):
+    def take_damage(self, damage : float, damage_type : str, bodyPart: str):
         damage = math.floor(damage)  
-        race_reduction = damage*self.resistance[damage_type]
-        if race_reduction > 0 and race_reduction < 1:
-            race_reduction += 1
-        elif race_reduction < 0 and race_reduction > -1: race_reduction -= 1
-        damage -= race_reduction
-        interaction.showInformation("damage of type "+damage_type+" reduced by "+str(self.resistance[damage_type]*100)+" percent because is "+self.race)
-        if damage > 0:
-          
-            damage = damage / self.DamageDivisor
+        print("fighter "+self.name+" attacked at "+bodyPart)
+        if self.headArmor != None and damage > 0 and bodyPart == "head":
+            damage = self.protection_damage(damage, damage_type , self.headArmor)
+        if self.bodyArmor != None and damage > 0 and bodyPart == "torso":
+            damage = self.protection_damage(damage, damage_type, self.bodyArmor)
+        if self.legsArmor != None and damage > 0 and bodyPart == "legs":
+            damage = self.protection_damage(damage, damage_type, self.legsArmor)
+        if damage > 0:    
+            race_reduction = damage*self.resistance[damage_type]
+            if race_reduction > 0 and race_reduction < 1:
+                race_reduction += 1
+            elif race_reduction < 0 and race_reduction > -1: race_reduction -= 1
+            damage -= race_reduction
+            interaction.showInformation("damage of type "+damage_type+" reduced by "+str(self.resistance[damage_type]*100)+" percent because is "+self.race)
+
             if self.defensePoints > 0:
                 oldDamage = damage
                 damage = max(0, damage - self.defensePoints)
                 dif = oldDamage - damage
                 interaction.showInformation("damage reduced by temporary armor by:"+str(dif))
                 self.defensePoints -= dif
-            if self.headArmor != None and damage > 0:
-                damage = self.protection_damage(damage, damage_type , self.headArmor)
-            if self.bodyArmor != None and damage > 0:
-                damage = self.protection_damage(damage, damage_type, self.bodyArmor)
-            if self.legsArmor != None and damage > 0:
-                damage = self.protection_damage(damage, damage_type, self.legsArmor)
-            damage = math.floor(damage)
-            interaction.showInformation("fighter "+self.name+" took "+str(damage)+" damage")
-            self.HP -= damage
+            if damage > 0:
+                damage = math.floor(damage / self.DamageDivisor)
+        interaction.showInformation("fighter "+self.name+" took "+str(damage)+" damage")
+        self.HP -= damage
+        if damage > self.MaxHP/10:
+            if bodyPart == "head":
+                if random.random() < 0.2:
+                    self.actions = []
+                elif random.random() < 0.5:
+                    if self.actions != []:
+                        self.actions.remove(random.choice(self.actions))
+            if bodyPart == "legs":
+                if random.random() < 0.3:
+                    self.removeAllMovementAction()
+        if damage > self.MaxHP/5:
+            if self.actions != []:
+                self.actions.remove(random.choice(self.actions))
+    
+    def removeAllMovementAction(self):
+        toRemove = []
+        for action in self.actions:
+            if "Movement" in action["name"]:
+                toRemove.append(action)
+        for toBeRemove in toRemove:
+            self.actions.remove(toBeRemove)
     
     def equipAll(self, loadsOfStuff : List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]], begin=False):
         for stuff in loadsOfStuff:
@@ -310,9 +351,20 @@ class CHARACTER:
         else:
             return ""
     
-    def dodge(self,modification=0):
+    def getBodyPartModifier(self, bodyPart):
+        if bodyPart == "torso":
+            return 0
+        if bodyPart == "head":
+            return 0.5
+        if bodyPart == "legs":
+            return 0.2
+    
+    def dodge(self,modification=0,bodyPart:str="torso"):
+        
         if self.dodgePercent > 0:
-            val = random.randint(0,100) <= self.dodgePercent + modification
+            bodyModifier = self.getBodyPartModifier(bodyPart)
+            value = random.randint(0,100)/100-bodyModifier
+            val = value <= self.dodgePercent + modification
             if val:
                 self.dodgePercent -= 0.1
             return val

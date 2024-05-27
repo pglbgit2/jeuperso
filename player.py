@@ -36,12 +36,13 @@ class Player(fighter.CHARACTER):
     def useSkill(self,skill:str):
         self.actionCounter[skill] += 1
         
-    def dodge(self,modification=0):
+    def dodge(self,modification=0, bodyPart:str="torso"):
         result = "nope"
         while not result.isdigit():
             result = interaction.askFor(self.name+", roll 1d100 dice for Dodging, Give result")
         #print(self.dodgePercent)
-        return int(result)/100 <= (self.dodgePercent + modification)
+        bodyModifier = self.getBodyPartModifier(bodyPart)
+        return int(result)/100-bodyModifier <= (self.dodgePercent + modification)
     
     def setUpActions(self, fightersByName : Dict[str, fighter.CHARACTER], teamEstimatedPower : Dict[str,int], fightersByFaction : Dict[str,List[fighter.CHARACTER]]):
         self.actions = interaction.getPlayerActions(self.name, fightersByName.keys(), self.skills)

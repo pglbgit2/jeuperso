@@ -2,6 +2,7 @@ from typing import List
 import ast, re
 import textwrap
 from fpdf import FPDF
+import actionsTypes
 
 TERMINAL = 1
 MOVEMENT = 0
@@ -94,6 +95,7 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                 while not allActionsInserted:
                     print("Actions input of "+playerName+"\n")
                     actionName = getStrInList(validActions, "Action Name")
+                    otherInfos = {}
                     #actionName = input("Action Name among+"+str(valid_actions)+" or end to stop\n")
                     if actionName == "end":
                         print(str(Actions))
@@ -106,46 +108,54 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                         raise Exception("given actionName is not valid")
                     
                     if actionName == "Energy_Blade":
-                        Actions.append({"name":actionName})
+                        Actions.append({"name":actionName, "otherInfos" : otherInfos})
                     
                     if "useConsumable" == actionName:
                         consumable = input("Name of consumable")
-                        Actions.append({"name":actionName, "target" : consumable})
+                        otherInfos["Equipment"] = consumable
+                        Actions.append({"name":actionName, "otherInfos" : otherInfos})
                     
                     if "Equip" == actionName:
                         objectToEquip = input("Name of Object to equip\n")
                         hand = input("hand : left or right or none \n")
-                        Actions.append({"name" : actionName, "target" : playerName, "object" : objectToEquip, "hand":hand})
+                        otherInfos["bodyPart"] = hand
+                        otherInfos["toEquip"] = objectToEquip
+                        Actions.append({"name" : actionName, "target" : playerName, "otherInfos" : otherInfos})
                         continue
                     if "Movement" in actionName:
                         if MOVEMENT == 1:
                             strCoordinates = input("Destination\n")
                             if not is_valid_tuple_string(strCoordinates):
                                 raise Exception('given tuple is not valid')
-                            Actions.append({"name" : actionName, "target" : ast.literal_eval(strCoordinates)})
+                            otherInfos["movement"] = ast.literal_eval(strCoordinates)
+                            Actions.append({"name" : actionName, "target" : [], "otherInfos" : otherInfos})
                         else:
-                            Actions.append({"name" : actionName, "target" : (-1,-1)})
+                            otherInfos["movement"] = (-1,-1)
+                            Actions.append({"name" : actionName, "target" : [], "otherInfos" : otherInfos})
                         continue        
                     
                     if "Defense" in actionName:
-                        Actions.append({"name" : actionName, "target" : playerName})
+                        Actions.append({"name" : actionName, "target" : playerName, "otherInfos" : otherInfos})
                         continue
                     
                     if actionName == "Minor_Aggressive_Flux" or actionName == "Wrath_Torrent":
-                        Actions.append({"name": actionName})
+                        Actions.append({"name": actionName, "otherInfos" : otherInfos})
                     
-                    if "Attack" in actionName or "Shot" in actionName or "Melee_Combat" == actionName or actionName == "Protection_Field" or actionName == "Minor_Shield" or "EnergyRay" == actionName or "EnergyOrb" == actionName or "FireBreath" == actionName or "FireBall" == actionName or "FireStorm" == actionName:
+                    if "Attack" in actionName or "Shot" in actionName or "Melee_Combat" == actionName or actionName == "Protection_Field" or actionName == "Minor_Shield" or any(actionName == EAA for EAA in actionsTypes.EnergyAggressiveActions) or "FireStorm" == actionName:
                         print("All potential targets:"+str(units_name)+"\n")
                         target = input("Targets Name\n")
                         if ", " in target:
                             fightersName = target.split(", ")
                         else: fightersName = [target]
                         
+                        bodyPart = getStrInList(["torso", "legs", "head"], "body part to hit")
+                        otherInfos["bodyPart"] = bodyPart
+                        
                         for fighterName in fightersName:
                             if fighterName not in units_name:
                                 raise Exception("given fighter name"+fighterName+" do not exist")   
                         action = {"name" : actionName, "targets" : fightersName}
-                        if actionName != "Melee_Combat" and actionName != "Protection_Field" and actionName != "Minor_Shield" and "EnergyRay" != actionName and "EnergyOrb" != actionName and "FireBreath" != actionName and "FireBall" != actionName and "FireStorm" != actionName:         
+                        if actionName != "Melee_Combat" and actionName != "Protection_Field" and actionName != "Minor_Shield" and all(actionName != EAA for EAA in actionsTypes.EnergyAggressiveActions) and "FireStorm" != actionName:         
                             hand = input("Used Hand to attack: left or right\n")
                             if hand == "left":
                                 if leftHandUsed == False:
@@ -159,7 +169,8 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                                 else: raise Exception("Right hand already used")
                             if hand != "left" and hand != "right":
                                 raise Exception("Not correct hand")
-                            action["hand"] = hand
+                            otherInfos["hand"] = hand
+                        action["otherInfos"] = otherInfos
                         Actions.append(action)
 
                 finished = True                    

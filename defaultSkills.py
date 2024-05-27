@@ -119,8 +119,8 @@ UPGRADABLE = {
         2 : {"StaminaCost" : 1, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"defensePoints" : 2},
         3 : {"StaminaCost" : 1, "UpgradeExpCost" : 30, "dodge_alteration" : 0,"defensePoints" : 3},
         4 : {"StaminaCost" : 1, "UpgradeExpCost" : 45, "dodge_alteration" : 0,"defensePoints" : 4},
-        5 : {"StaminaCost" : 2, "UpgradeExpCost" : 60, "dodge_alteration" : 0,"defensePoints" : 5},
-        6 : {"StaminaCost" : 2, "UpgradeExpCost" : 75, "dodge_alteration" : 0,"defensePoints" : 6}
+        5 : {"StaminaCost" : 1, "UpgradeExpCost" : 60, "dodge_alteration" : 0,"defensePoints" : 5},
+        6 : {"StaminaCost" : 1, "UpgradeExpCost" : 75, "dodge_alteration" : 0,"defensePoints" : 6}
     },
     SD : {
         1 : {"StaminaCost" : 5, "UpgradeExpCost" : 10,  "dodge_alteration" : -100,"defensePoints" : -3},

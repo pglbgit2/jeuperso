@@ -21,10 +21,10 @@ LEATHER_HELMET_DURABILITY = 27
 LEATHER_HELMET_WEIGHT = 15
 LEATHER_HELMET_COST = 30
 LEATHER_HELMET_ABSORPTION = {
-    "blade" : 0.1,
-    "pierce" : 0.1,
-    "impact" : 0.05,
-    "cold" : 0.05
+    "blade" : 0.2,
+    "pierce" : 0.2,
+    "impact" : 0.1,
+    "cold" : 0.1
 }
 LEATHER_HELMET = {"weight" : LEATHER_HELMET_WEIGHT, "durability" : LEATHER_HELMET_DURABILITY, "cost" : LEATHER_HELMET_COST, "absorption" : LEATHER_HELMET_ABSORPTION}
 
@@ -62,10 +62,10 @@ LEATHER_LP_DURABILITY = 22
 LEATHER_LP_WEIGHT = 20
 LEATHER_LP_COST = 30
 LEATHER_LP_ABSORPTION = {
-    "blade" : 0.1,
-    "pierce" : 0.1,
-    "impact" : 0.05,
-    "cold" : 0.05
+    "blade" : 0.2,
+    "pierce" : 0.2,
+    "impact" : 0.1,
+    "cold" : 0.1
 }
 LEATHER_LP = {"weight" : LEATHER_LP_WEIGHT, "durability" : LEATHER_LP_DURABILITY, "cost" : LEATHER_LP_COST, "absorption" : LEATHER_LP_ABSORPTION}
 

@@ -1,4 +1,4 @@
-import fighter, rules, action, player, interaction, items, readline, weapons, defaultSkills
+import fighter, rules, action, player, interaction, items, readline, weapons, defaultSkills, actionsTypes
 from typing import List, Dict, Union, Tuple
 
 class Battle:
@@ -45,24 +45,25 @@ class Battle:
                     interaction.throwError("Can not use item that fighter do not possess")
                     return False
             if ("Attack" in actionName or "Shot" in actionName):
-                if "hand" not in someAction.keys():
+                if "hand" not in someAction["otherInfos"].keys():
                     interaction.throwError("error in game logic")
                     return False
-                if someAction["hand"] == None:
+                hand = someAction["otherInfos"]["hand"]
+                if hand == None:
                     interaction.throwError("Can not attack without weapon")
                     return False
-                if someAction["hand"] == "left":
+                if hand == "left":
                     tool = fighter.leftTool
                     if tool == None:
                         interaction.throwError("no tool")
                         return False
-                if someAction["hand"] == "right":
+                if hand == "right":
                     tool = fighter.rightTool
                     if tool == None:
                         interaction.throwError("no tool")
                         return False
                 
-            if ("Attack" in actionName or "Shot" in actionName or "EnergyRay" in actionName or "EnergyOrb" in actionName or "FireBreath" in actionName):
+            if any(actionName in NoFriendlyFireAction for NoFriendlyFireAction in actionsTypes.NotFriendlyAggressiveActions):
                 if any(target == allyName for allyName in alliesName for target in someAction["targets"]):
                     interaction.throwError("Can not attack ally")
                     return False
@@ -86,8 +87,7 @@ class Battle:
                 if tool.name in weapons.THROWABLE and len(someAction["targets"] > 1):
                     interaction.throwError("Can not shot multi targets with throwable weapon")
                     return False
-
-            if actionName.startswith("Protection_Field") or actionName.startswith("Minor_Shield") or actionName.startswith("Minor_Aggressive_Flux") or actionName.startswith("Wrath_Torrent") or actionName == "Energy_Blade" or "EnergyRay" in actionName or "EnergyOrb" in actionName or "FireBreath" in actionName:
+            if any(actionName.startswith(manaCostingAction) for manaCostingAction in actionsTypes.ManaCostingActions):
                 manaCost += action.Action.ACTIONS_DICT[actionName].manaCost
                 
             if actionName.startswith("Protection_Field") or actionName.startswith("Minor_Shield"):
@@ -167,13 +167,13 @@ class Battle:
                 for actionDict in fighter.actions:
                     actionName = actionDict["name"]
                     if "Defense" in actionName:
-                        action.Action.ACTIONS_DICT[actionName].acts(fighter,None)
+                        action.Action.ACTIONS_DICT[actionName].acts(fighter,None,None)
                         continue
                     if "Protection_Field" in actionName or "Minor_Shield" in actionName:
-                        action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]))
+                        action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), None)
                         continue
                     if "Minor_Aggressive_Flux" in actionName or "Wrath_Torrent" in actionName:
-                        action.Action.ACTIONS_DICT[actionName].acts(fighter)
+                        action.Action.ACTIONS_DICT[actionName].acts(fighter,None, None)
         
         for fighter in rules.getTurnPriority(self.fighters):
                 interaction.showInformation("Turn of "+fighter.name)
@@ -182,28 +182,28 @@ class Battle:
                 for actionDict in fighter.actions:
                     actionName = actionDict["name"]
                     if "Movement" in actionName:
-                            action.Action.ACTIONS_DICT[actionName].acts(fighter, actionDict["target"])
+                            action.Action.ACTIONS_DICT[actionName].acts(fighter, actionDict["target"], actionDict["otherInfos"])
                     if "Attack" in actionName:
-                            action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["hand"])
+                            action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
                             continue
                     if "Equip" == actionName:
-                            action.Action.ACTIONS_DICT["Equip"].acts(fighter, fighter.getItemFromInventoryByName(actionDict["object"]), actionDict["hand"])
+                            action.Action.ACTIONS_DICT["Equip"].acts(fighter, None, {"item" : fighter.getItemFromInventoryByName(actionDict["object"]), "bodyPart" : actionDict["bodyPart"]})
                             continue
                     if "Shot" in actionName:
-                        throw = action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["hand"])
+                        throw = action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
                         if throw != None:
                             self.ground.append(throw)
                         continue
                     if "useConsumable" == actionName:
-                        action.Action.ACTIONS_DICT["useConsumable"].acts(fighter, actionDict["target"])
+                        action.Action.ACTIONS_DICT["useConsumable"].acts(fighter, None, actionDict["otherInfos"])
                         continue
                     if "Melee_Combat" == actionName:
-                        action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]))
+                        action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"], actionDict["otherInfos"]))
                         continue
                     if "Energy_Blade" == actionName:
-                        action.Action.ACTIONS_DICT[actionName].acts(fighter)
-                    if "EnergyOrb" in actionName or "EnergyRay" in actionName or "FireBreath" in actionName or "FireBall" in actionName or "FireStorm" in actionName:
-                        action.Action.ACTIONS_DICT[actionName].acts(fighter,self.namesToCharacters(actionDict["targets"]))
+                        action.Action.ACTIONS_DICT[actionName].acts(fighter,None,None)
+                    if any(actionName.startswith(EAA) for EAA in actionsTypes.EnergyAggressiveActions):
+                        action.Action.ACTIONS_DICT[actionName].acts(fighter,self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
     
                     
     def manualChanges(self):

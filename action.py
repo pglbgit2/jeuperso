@@ -20,7 +20,7 @@ class Action:
         if upgrade not in self.upgrades:
             self.upgrades.append(upgrade)
             
-    def acts(self, fighter : fighter.CHARACTER, targets : Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable], hand="left"):
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
         fighter.dodgePercent += fighter.dodgePercent * self.dodge_alteration
         actionName = self.name
         if "-lv" in actionName:
@@ -33,8 +33,8 @@ class EnergyUsingAction(Action):
         super().__init__(action_name, 0, UpgradeExpCost, level, dodge_alteration)
         self.manaCost = ManaCost
     
-    def acts(self, fighter : fighter.CHARACTER, targets : Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable], hand="left"):
-        super(EnergyUsingAction, self).acts(fighter,targets)
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
+        super(EnergyUsingAction, self).acts(fighter,targets,otherInfos)
         fighter.magic -= self.manaCost
 
 
@@ -44,12 +44,15 @@ class MagicAggression(EnergyUsingAction):
         self.damage = damage
         self.damageType = damageType
     
-    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER]):
-        super(MagicAggression, self).acts(fighter,targets)
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
+        super(MagicAggression, self).acts(fighter,targets,otherInfos)
         potential_damage = self.damage
         potential_damage += fighter.damageBonus
+
         for target in targets:
-            if target.dodge() != True:
+            bodyPart = target.tryToHit(otherInfos["bodyPart"])
+
+            if target.dodge(bodyPart=bodyPart) != True:
                 interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
                 target.take_damage(potential_damage, self.damageType)
             else:
@@ -88,7 +91,7 @@ class Invocation(EnergyUsingAction):
         super().__init__(action_name, ManaCost, UpgradeExpCost,level, dodge_alteration)
         self.invoke = invocation
         
-    def acts(self, fighter : fighter.CHARACTER, targets=None):
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
         interaction.showInformation(fighter.name+" invoke "+self.invoke)
         if self.invoke in weapons.INVOCATION:
             if self.invoke in weapons.MELEE_WEAPONS:
@@ -110,8 +113,8 @@ class Magic_Armor(EnergyUsingAction):
         super().__init__(action_name, ManaCost, UpgradeExpCost, level, dodge_alteration)
         self.protection = protection
     
-    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER]):
-        super(Magic_Armor,self).acts(fighter,targets)
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
+        super(Magic_Armor,self).acts(fighter,targets,otherInfos)
         protection = math.ceil((self.protection)/(1+len(targets)))
         fighter.defensePoints += protection
         interaction.showInformation(fighter.name+" protect itself using Magic Armor for "+str(protection))
@@ -142,8 +145,8 @@ class Energy_Damage_Boost(EnergyUsingAction):
         super().__init__(action_name, ManaCost, UpgradeExpCost, level, dodge_alteration)
         self.damageBoost = damageBoost
     
-    def acts(self, fighter : fighter.CHARACTER):
-        super(Energy_Damage_Boost,self).acts(fighter,None)
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
+        super(Energy_Damage_Boost,self).acts(fighter,None,otherInfos)
         fighter.damageBonus += self.damageBoost
         interaction.showInformation(fighter.name+" boost its damage using energy by "+str(self.damageBoost))
         
@@ -169,16 +172,16 @@ class useConsumable(Action):
     def __init__(self):
         super().__init__("useConsumable",1,0,1,0)
 
-    def acts(self, fighter : fighter.CHARACTER, targets:consumable.Consumable, hand="left"):
-        fighter.useConsumable(targets)
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
+        fighter.useConsumable(otherInfos["Equipment"])
 
 
 class Equip(Action): 
     def __init__(self):
         super().__init__("Equip", 1, 0, 1, 0)
     
-    def acts(self, fighter : fighter.CHARACTER, targets : Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], hand="left"):
-        fighter.equip(targets,hand)
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
+        fighter.equip(otherInfos["item"],otherInfos["bodyPart"])
     
 
 class Movement(Action):
@@ -186,9 +189,9 @@ class Movement(Action):
         super().__init__(action_name, StaminaCost, UpgradeExpCost, level, dodge_alteration)
         self.speed = speed
     
-    def acts(self, fighter : fighter.CHARACTER, targets : Tuple[int,int], hand="left"):
-        interaction.showInformation(fighter.name+" move to "+str(targets))
-        super(Movement, self).acts(fighter,targets)
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
+        interaction.showInformation(fighter.name+" move")
+        super(Movement, self).acts(fighter,targets,otherInfos)
         pass # move fighter at target emplacement if possible
 
 class Quick_Movement(Movement):
@@ -211,14 +214,16 @@ class Melee_Combat(Action):
     def __init__(self):
         super().__init__("Melee_Combat", 3, 0, 1, 0)
     
-    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], hand="left"):
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
         potential_damage = fighter.default_damage+fighter.damageBonus
         damage_type = fighter.default_damage_type
         
         for target in targets:
-            if target.dodge() != True:
+            bodyPart = target.tryToHit(otherInfos["bodyPart"])
+
+            if target.dodge(bodyPart=bodyPart) != True:
                 interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
-                target.take_damage(potential_damage, damage_type)
+                target.take_damage(potential_damage, damage_type, bodyPart)
             else:
                 interaction.showInformation(target.name+" dodged attack")      
                 
@@ -228,27 +233,28 @@ class Attack(Action):
         super().__init__(action_name, StaminaCost, UpgradeExpCost, level, dodge_alteration)
         self.factor = damageFactor
         
-    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], hand="left"):
-        super(Attack,self).acts(fighter, targets)
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
+        super(Attack,self).acts(fighter, targets, otherInfos)
         potential_damage = 0
-        if hand == "left" :
+        if otherInfos["hand"] == "left" :
             if fighter.leftTool == None:
-                Action.ACTIONS_DICT["Melee_Combat"].acts(fighter,targets,hand)
+                Action.ACTIONS_DICT["Melee_Combat"].acts(fighter,targets,otherInfos)
                 return
             potential_damage += fighter.leftTool.damage
             damage_type = fighter.leftTool.damageType
         else : 
             if fighter.rightTool == None:
-                Action.ACTIONS_DICT["Melee_Combat"].acts(fighter,targets,hand)
+                Action.ACTIONS_DICT["Melee_Combat"].acts(fighter,targets,otherInfos)
                 return
             potential_damage += fighter.rightTool.damage
             damage_type = fighter.rightTool.damageType
         potential_damage = potential_damage * self.factor
         potential_damage += fighter.damageBonus
         for target in targets:
-            if self.name.startswith("Quick_Attack") or target.dodge() != True:
+            bodyPart = target.tryToHit(otherInfos["bodyPart"])
+            if self.name.startswith("Quick_Attack") or target.dodge(bodyPart=bodyPart) != True:
                 interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
-                target.take_damage(potential_damage, damage_type)
+                target.take_damage(potential_damage, damage_type, bodyPart)
             else:
                 interaction.showInformation(target.name+" dodged attack")
         
@@ -274,9 +280,9 @@ class Shot(Action):
         super().__init__(action_name, StaminaCost, UpgradeExpCost, level, dodge_alteration)
         self.accuracy = accuracy
        
-    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], hand="left"):
-        super(Shot,self).acts(fighter,None)
-        if hand == "left":
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
+        super(Shot,self).acts(fighter,None,otherInfos)
+        if otherInfos["hand"] == "left":
             weapon = fighter.leftTool
             if weapon == None:
                 return
@@ -295,7 +301,8 @@ class Shot(Action):
                     damage_type = munition.damageType
                     if fighter.shot(self.accuracy+weapon.accuracy):
                         interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
-                        target.take_damage(potential_damage, damage_type)
+                        bodyPart = target.tryToHit(otherInfos["bodyPart"])
+                        target.take_damage(potential_damage, damage_type, bodyPart)
                     else:
                         interaction.showInformation(target.name+" dodged attack")
                 else:
@@ -308,7 +315,8 @@ class Shot(Action):
             damage_type = weapon.damage
             if fighter.shot(self.accuracy):
                 interaction.showInformation(fighter.name+" attack "+targets[0].name+" with "+str(potential_damage)+" damage")
-                targets[0].take_damage(potential_damage, damage_type)
+                bodyPart = target.tryToHit(otherInfos["bodyPart"])
+                targets[0].take_damage(potential_damage, damage_type, bodyPart)
             else:
                 interaction.showInformation(targets[0].name+" dodged attack")
             #targets[0].inventory.append(weapon)
@@ -340,8 +348,8 @@ class Defense(Action):
         super().__init__(action_name, StaminaCost, UpgradeExpCost, level, dodge_alteration)        
         self.defensePoints = defensePoints
         
-    def acts(self, fighter : fighter.CHARACTER, hand="left"):
-        super(Defense,self).acts(fighter,None)
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
+        super(Defense,self).acts(fighter,None,None)
         if self.defensePoints > 0:
             fighter.defensePoints += self.defensePoints
         if self.defensePoints < 0:

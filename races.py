@@ -24,7 +24,7 @@ GIANT_SPIDER = {
     "stamina_regeneration"  : 10, 
     "race"  :  "HUMAN",
     "dodge" : 0.20,
-    "raceResistance" : {"blade" : 0.2, "pierce" : 0.2, "impact" : -0.2,},
+    "raceResistance" : {"blade" : 0.4, "pierce" : 0.4, "impact" : -0.2,},
     "default_damage" : 12,
     "default_damage_type" : "pierce",
     "tempDefByTurn" : 5
@@ -40,7 +40,7 @@ SRAVAL = {
     "stamina_regeneration"  : 8, 
     "race"  :  "SRAVAL",
     "dodge" : 0.25,
-    "raceResistance" : {"blade" : 0.2, "pierce" : 0.2, "impact" : 0.2, "fire" : -0.5},
+    "raceResistance" : {"blade" : 0.3, "pierce" : 0.3, "impact" : 0.3, "fire" : -0.5},
     "default_damage" : 8,
     "default_damage_type" : "impact",
     "tempDefByTurn" : 5
@@ -56,7 +56,7 @@ ORC  = {
     "stamina_regeneration"  : 7, 
     "race"  :  "ORC",
     "dodge" : 0.10,
-    "raceResistance" : {"blade":0.1, "impact" : 0.1, "fire" : -0.1}
+    "raceResistance" : {"blade":0.2, "impact" : 0.2, "fire" : -0.1}
 }
 
 ## GOBLINS ##
@@ -80,7 +80,7 @@ UNDEAD  = {
     "stamina_regeneration" : 5, 
     "race"  :  "UNDEAD",
     "dodge" : 0.10,
-    "raceResistance" : {"blade" : 0.3, "pierce" : 0.4, "impact" : -0.2, "arcane" : -0.5}
+    "raceResistance" : {"blade" : 0.4, "pierce" : 0.4, "impact" : -0.3, "arcane" : -0.5}
 }
 
 ### CHARACTER CLASSES ###
