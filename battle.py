@@ -138,6 +138,33 @@ class Battle:
                 actionValidated = self.checkValidity(fighter, actions, self.factionsWarriors[fighter.faction])
             fighter.actions = actions
     
+    def prepareOneCharacterAction(self, fighterName:str):
+        if fighterName in self.fightersNames.keys():
+            chosenFighter = self.fightersNames[fighterName]
+            actionValidated = False
+            while not actionValidated :
+                interaction.showInformation("Choosed "+chosenFighter.name+"\n")
+                actions = chosenFighter.setUpActions(self.fightersNames, self.getEstimatedPowerOfFactions(), {faction : self.getWarriorsOfFaction(faction) for faction in self.factionsWarriors.keys()})
+                for someAction in actions:
+                    someAction["name"]+=str(chosenFighter.getStrLevelOfSkill(someAction["name"]))
+                actionValidated = self.checkValidity(chosenFighter, actions, self.factionsWarriors[chosenFighter.faction])
+            chosenFighter.actions = actions
+            
+    def executeOneCharacterAction(self, fighterName:str):
+        if fighterName in self.fightersNames.keys():
+            chosenFighter = self.fightersNames[fighterName]
+            for actionDict in chosenFighter.actions:
+                actionName = actionDict["name"]
+                if "Defense" in actionName:
+                    action.Action.ACTIONS_DICT[actionName].acts(chosenFighter,None,None)
+                    return
+                if "Protection_Field" in actionName or "Minor_Shield" in actionName:
+                    action.Action.ACTIONS_DICT[actionName].acts(chosenFighter, self.namesToCharacters(actionDict["targets"]), None)
+                    return
+                if "Minor_Aggressive_Flux" in actionName or "Wrath_Torrent" in actionName:
+                    action.Action.ACTIONS_DICT[actionName].acts(chosenFighter,None, None)
+                        
+                        
     def namesToCharacters(self, namesList : List[str]):
         fighters = []
         for name in namesList:
@@ -158,52 +185,63 @@ class Battle:
     def killByName(self, name: str):
         if name in self.fightersNames.keys():
             self.killWarrior(self.fightersNames[name])
+        
+    def doPassiveAction(self, fighter:fighter.CHARACTER):
+        for actionDict in fighter.actions:
+            actionName = actionDict["name"]
+            if "Defense" in actionName:
+                action.Action.ACTIONS_DICT[actionName].acts(fighter,None,None)
+                return
+            if "Protection_Field" in actionName or "Minor_Shield" in actionName:
+                action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), None)
+                return
+            if "Minor_Aggressive_Flux" in actionName or "Wrath_Torrent" in actionName:
+                action.Action.ACTIONS_DICT[actionName].acts(fighter,None, None)
+    
+    
+    def doActiveActions(self, fighter:fighter.CHARACTER):
+        for actionDict in fighter.actions:
+            actionName = actionDict["name"]
+            if "Movement" in actionName:
+                action.Action.ACTIONS_DICT[actionName].acts(fighter, actionDict["target"], actionDict["otherInfos"])
+                return
+            if "Attack" in actionName:
+                action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
+                return
+            if "Equip" == actionName:
+                action.Action.ACTIONS_DICT["Equip"].acts(fighter, None, {"item" : fighter.getItemFromInventoryByName(actionDict["object"]), "bodyPart" : actionDict["bodyPart"]})
+                return
+            if "Shot" in actionName:
+                throw = action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
+                return
+            if throw != None:
+                self.ground.append(throw)
+                return
+            if "useConsumable" == actionName:
+                action.Action.ACTIONS_DICT["useConsumable"].acts(fighter, None, actionDict["otherInfos"])
+                return
+            if "Melee_Combat" == actionName:
+                action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"], actionDict["otherInfos"]))
+                return
+            if "Energy_Blade" == actionName:
+                action.Action.ACTIONS_DICT[actionName].acts(fighter,None,None)
+                return
+            if any(actionName.startswith(EAA) for EAA in actionsTypes.EnergyAggressiveActions):
+                action.Action.ACTIONS_DICT[actionName].acts(fighter,self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
     
     def executeActions(self):
         for fighter in self.fighters:
             if fighter.HP <= 0:
                 self.killWarrior(fighter)
             else:    
-                for actionDict in fighter.actions:
-                    actionName = actionDict["name"]
-                    if "Defense" in actionName:
-                        action.Action.ACTIONS_DICT[actionName].acts(fighter,None,None)
-                        continue
-                    if "Protection_Field" in actionName or "Minor_Shield" in actionName:
-                        action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), None)
-                        continue
-                    if "Minor_Aggressive_Flux" in actionName or "Wrath_Torrent" in actionName:
-                        action.Action.ACTIONS_DICT[actionName].acts(fighter,None, None)
+                self.doPassiveAction(fighter)
         
         for fighter in rules.getTurnPriority(self.fighters):
                 interaction.showInformation("Turn of "+fighter.name)
                 if interaction.MOD == interaction.TERMINAL:
                     self.manualChanges()
-                for actionDict in fighter.actions:
-                    actionName = actionDict["name"]
-                    if "Movement" in actionName:
-                            action.Action.ACTIONS_DICT[actionName].acts(fighter, actionDict["target"], actionDict["otherInfos"])
-                    if "Attack" in actionName:
-                            action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
-                            continue
-                    if "Equip" == actionName:
-                            action.Action.ACTIONS_DICT["Equip"].acts(fighter, None, {"item" : fighter.getItemFromInventoryByName(actionDict["object"]), "bodyPart" : actionDict["bodyPart"]})
-                            continue
-                    if "Shot" in actionName:
-                        throw = action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
-                        if throw != None:
-                            self.ground.append(throw)
-                        continue
-                    if "useConsumable" == actionName:
-                        action.Action.ACTIONS_DICT["useConsumable"].acts(fighter, None, actionDict["otherInfos"])
-                        continue
-                    if "Melee_Combat" == actionName:
-                        action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"], actionDict["otherInfos"]))
-                        continue
-                    if "Energy_Blade" == actionName:
-                        action.Action.ACTIONS_DICT[actionName].acts(fighter,None,None)
-                    if any(actionName.startswith(EAA) for EAA in actionsTypes.EnergyAggressiveActions):
-                        action.Action.ACTIONS_DICT[actionName].acts(fighter,self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
+                self.doActiveActions(fighter)
+                    
     
                     
     def manualChanges(self):
