@@ -8,9 +8,9 @@ CHAIN_MAIL_DURABILITY = 50
 CHAIN_MAIL_WEIGHT = 40
 CHAIN_MAIL_COST = 70
 CHAIN_MAIL_ABSORPTION = {
-    "blade" : 0.5,
-    "pierce" : 0.4,
-    "impact" : 0.25
+    "blade" : 0.6,
+    "pierce" : 0.6,
+    "impact" : 0.4
 }
 CHAIN_MAIL = {"weight" : CHAIN_MAIL_WEIGHT, "durability" : CHAIN_MAIL_DURABILITY, "cost" : CHAIN_MAIL_COST, "absorption" : CHAIN_MAIL_ABSORPTION}
 
@@ -21,9 +21,9 @@ LEATHER_HELMET_DURABILITY = 27
 LEATHER_HELMET_WEIGHT = 15
 LEATHER_HELMET_COST = 30
 LEATHER_HELMET_ABSORPTION = {
-    "blade" : 0.2,
-    "pierce" : 0.2,
-    "impact" : 0.1,
+    "blade" : 0.3,
+    "pierce" : 0.3,
+    "impact" : 0.3,
     "cold" : 0.1
 }
 LEATHER_HELMET = {"weight" : LEATHER_HELMET_WEIGHT, "durability" : LEATHER_HELMET_DURABILITY, "cost" : LEATHER_HELMET_COST, "absorption" : LEATHER_HELMET_ABSORPTION}
@@ -35,9 +35,9 @@ IRON_HELMET_DURABILITY = 35
 IRON_HELMET_WEIGHT = 27
 IRON_HELMET_COST = 45
 IRON_HELMET_ABSORPTION = {
-    "blade" : 0.2,
-    "pierce" : 0.1,
-    "impact" : 0.1
+    "blade" : 0.5,
+    "pierce" : 0.6,
+    "impact" : 0.4
 }
 IRON_HELMET = {"weight" : IRON_HELMET_WEIGHT, "durability" : IRON_HELMET_DURABILITY, "cost" : IRON_HELMET_COST, "absorption" : IRON_HELMET_ABSORPTION}
 
@@ -48,9 +48,9 @@ STEEL_HELMET_DURABILITY = 45
 STEEL_HELMET_WEIGHT = 39
 STEEL_HELMET_COST = 70
 STEEL_HELMET_ABSORPTION = {
-    "blade" : 0.3,
-    "pierce" : 0.3,
-    "impact" : 0.2,
+    "blade" : 0.8,
+    "pierce" : 0.9,
+    "impact" : 0.6,
 }
 STEEL_HELMET = {"weight" : STEEL_HELMET_WEIGHT, "durability" : STEEL_HELMET_DURABILITY, "cost" : STEEL_HELMET_COST, "absorption" : STEEL_HELMET_ABSORPTION}
 
@@ -62,9 +62,9 @@ LEATHER_LP_DURABILITY = 22
 LEATHER_LP_WEIGHT = 20
 LEATHER_LP_COST = 30
 LEATHER_LP_ABSORPTION = {
-    "blade" : 0.2,
-    "pierce" : 0.2,
-    "impact" : 0.1,
+    "blade" : 0.3,
+    "pierce" : 0.3,
+    "impact" : 0.3,
     "cold" : 0.1
 }
 LEATHER_LP = {"weight" : LEATHER_LP_WEIGHT, "durability" : LEATHER_LP_DURABILITY, "cost" : LEATHER_LP_COST, "absorption" : LEATHER_LP_ABSORPTION}
@@ -76,9 +76,9 @@ IRON_LP_DURABILITY = 33
 IRON_LP_WEIGHT = 24
 IRON_LP_COST = 45
 IRON_LP_ABSORPTION = {
-    "blade" : 0.25,
-    "pierce" : 0.15,
-    "impact" : 0.15
+    "blade" : 0.5,
+    "pierce" : 0.6,
+    "impact" : 0.4
 }
 IRON_LP = {"weight" : IRON_LP_WEIGHT, "durability" : IRON_LP_DURABILITY, "cost" : IRON_LP_COST, "absorption" : IRON_LP_ABSORPTION}
 
@@ -88,9 +88,9 @@ STEEL_LP_DURABILITY = 47
 STEEL_LP_WEIGHT = 37
 STEEL_LP_COST = 60
 STEEL_LP_ABSORPTION = {
-    "blade" : 0.4,
-    "pierce" : 0.2,
-    "impact" : 0.2
+    "blade" : 0.8,
+    "pierce" : 0.8,
+    "impact" : 0.6
 }
 STEEL_LP = {"weight" : STEEL_LP_WEIGHT, "durability" : STEEL_LP_DURABILITY, "cost" : STEEL_LP_COST, "absorption" : STEEL_LP_ABSORPTION}
 
@@ -102,9 +102,9 @@ PADDED_ARMOR_DURABILITY = 35
 PADDED_ARMOR_WEIGHT = 28
 PADDED_ARMOR_COST = 40
 PADDED_ARMOR_ABSORPTION = {
-    "blade" : 0.15,
-    "pierce" : 0.15,
-    "impact" : 0.15,
+    "blade" : 0.3,
+    "pierce" : 0.3,
+    "impact" : 0.3,
     "cold" : 0.1
 }
 PADDED_ARMOR = {"weight" : PADDED_ARMOR_WEIGHT, "durability" : PADDED_ARMOR_DURABILITY, "cost" : PADDED_ARMOR_COST, "absorption" : PADDED_ARMOR_ABSORPTION}
@@ -116,10 +116,10 @@ SCALE_ARMOR_DURABILITY = 45
 SCALE_ARMOR_WEIGHT = 35
 SCALE_ARMOR_COST = 50
 SCALE_ARMOR_ABSORPTION = {
-    "blade" : 0.30,
-    "pierce" : 0.25,
-    "impact" : 0.25,
-    "fire" : 0.15,
+    "blade" : 0.50,
+    "pierce" : 0.40,
+    "impact" : 0.40,
+    "fire" : 0.30,
 }
 SCALE_ARMOR = {"weight" : SCALE_ARMOR_WEIGHT, "durability" : SCALE_ARMOR_DURABILITY, "cost" : SCALE_ARMOR_COST, "absorption" : SCALE_ARMOR_ABSORPTION}
 
@@ -130,9 +130,9 @@ PLATE_ARMOR_DURABILITY = 60
 PLATE_ARMOR_WEIGHT = 50
 PLATE_ARMOR_COST = 90
 PLATE_ARMOR_ABSORPTION = {
-    "blade" : 0.6,
-    "pierce" : 0.5,
-    "impact" : 0.4
+    "blade" : 1,
+    "pierce" : 1,
+    "impact" : 0.9
 }
 PLATE_ARMOR = {"weight" : PLATE_ARMOR_WEIGHT, "durability" : PLATE_ARMOR_DURABILITY, "cost" : PLATE_ARMOR_COST, "absorption" : PLATE_ARMOR_ABSORPTION}
 

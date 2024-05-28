@@ -27,7 +27,7 @@ GIANT_SPIDER = {
     "raceResistance" : {"blade" : 0.4, "pierce" : 0.4, "impact" : -0.2,},
     "default_damage" : 12,
     "default_damage_type" : "pierce",
-    "tempDefByTurn" : 10
+    "tempDefByTurn" : {"head" : 10, "torso" : 45, "legs": 30}
 }
 
 

@@ -29,7 +29,7 @@ def skillLevelUp(fighter : fighter.CHARACTER, skill : str):
     if defaultSkills.LD == skill:
         MaxHPBonus += 0.25
     if defaultSkills.SD == skill:
-        defenseByTurnBonus = 1
+        defenseByTurnBonus = 5
     if defaultSkills.CD == skill:
         stamina_regenerationBonus += 0.2
     if defaultSkills.PS == skill:
@@ -50,8 +50,9 @@ def skillLevelUp(fighter : fighter.CHARACTER, skill : str):
     interaction.showInformation(fighter.name+" improve its stamina_regeneration by "+str(stamina_regenerationBonus)+", current MaxHP: "+str(fighter.stamina_regeneration))
     fighter.MaxMagic += MaxMagicBonus
     interaction.showInformation(fighter.name+" improve its MaxMagicBonus by "+str(MaxMagicBonus)+", current MaxHP: "+str(fighter.MaxMagic))
-    fighter.defenseByTurn += defenseByTurnBonus
-    interaction.showInformation(fighter.name+" improve its defenseByTurn by "+str(defenseByTurnBonus)+", current MaxHP: "+str(fighter.defenseByTurn))
+    for part in ["head", "legs", "torso"]:
+        fighter.defenseByBodyPart[part] += defenseByTurnBonus
+    interaction.showInformation(fighter.name+" improve its body Defense by "+str(defenseByTurnBonus))
     fighter.shotBonus += shotBonus
     interaction.showInformation(fighter.name+" improve its shotBonus by "+str(shotBonus)+", current shotBonus: "+str(fighter.shotBonus))
 

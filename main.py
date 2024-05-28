@@ -44,24 +44,24 @@ if __name__ == '__main__':
     # Efraim = player.Player.retrieveFighter("Efraim.sav")    
     # bandit1 = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory","Enemies","HUMAN")
     #bandit1.isControlledByGM = False
-    bandit2 = fighter.CHARACTER.instantiate_from_class("FOOTPAD","Mallory2","Enemies","HUMAN")
+    #bandit2 = fighter.CHARACTER.instantiate_from_class("FOOTPAD","Mallory2","Enemies","HUMAN")
     #bandit2.isControlledByGM = False
     
-    bandit3 = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory3","Enemies","HUMAN")
+    #bandit3 = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory3","Enemies","HUMAN")
     #bandit3.isControlledByGM = False
 
-    bandit4 = fighter.CHARACTER.instantiate_from_class("FOOTPAD","Mallory4","Enemies","HUMAN")
+    #bandit4 = fighter.CHARACTER.instantiate_from_class("FOOTPAD","Mallory4","Enemies","HUMAN")
     #bandit4.isControlledByGM = False
 
-    bandit5 = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory5","Enemies","HUMAN")
+    #bandit5 = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory5","Enemies","HUMAN")
     #bandit5.isControlledByGM = False
 
     # StreetsWatcher1 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher1","Enemies","HUMAN")
     # StreetsWatcher2 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher2","Enemies","HUMAN")
     # StreetsWatcher3 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher3","Enemies","HUMAN")
     # Stilvor = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher4","Enemies","HUMAN")
-    battle1 = battle.Battle([ pluton, fabien, bandit2])
-    battle1.battle()
+    # battle1 = battle.Battle([ pluton, fabien, bandit2])
+    # battle1.battle()
     
     
     
@@ -89,6 +89,6 @@ if __name__ == '__main__':
     # battle1.battle()
     
      ## TEST 3 ##
-    # battle2 = battle.Battle.instantiate_from_infos([billy],[{"characterClass":"DEFAULT_CLASS", "name":"spider", "faction":"Enemies", "race":"GIANT_SPIDER"}])
-    # battle2.battle()
+    battle2 = battle.Battle.instantiate_from_infos([pluton, fabien],[{"characterClass":"DEFAULT_CLASS", "name":"spider", "faction":"Enemies", "race":"GIANT_SPIDER"}])
+    battle2.battle()
         

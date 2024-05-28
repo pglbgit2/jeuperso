@@ -24,7 +24,7 @@ class Battle:
         if interaction.MOD == interaction.TERMINAL:
             for name in self.fightersNames.keys():
                 someFighter = self.fightersNames[name]
-                print(someFighter.name+" HP:"+str(someFighter.HP)+" Magic:"+str(someFighter.magic))
+                print(someFighter.name+" HP:"+str(someFighter.HP)+" Magic:"+str(someFighter.magic)+" left hand:"+someFighter.leftTool.name+" right hand:"+someFighter.rightTool.name)
     
     def beginTurn(self):
         self.actualizeHP()
