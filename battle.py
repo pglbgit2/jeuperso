@@ -213,9 +213,8 @@ class Battle:
                 return
             if "Shot" in actionName:
                 throw = action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
-                return
-            if throw != None:
-                self.ground.append(throw)
+                if throw != None:
+                    self.ground.append(throw)
                 return
             if "useConsumable" == actionName:
                 action.Action.ACTIONS_DICT["useConsumable"].acts(fighter, None, actionDict["otherInfos"])

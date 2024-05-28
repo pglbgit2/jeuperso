@@ -157,16 +157,16 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                         action = {"name" : actionName, "targets" : fightersName}
                         if actionName != "Melee_Combat" and actionName != "Protection_Field" and actionName != "Minor_Shield" and all(actionName != EAA for EAA in actionsTypes.EnergyAggressiveActions) and "FireStorm" != actionName:         
                             hand = input("Used Hand to attack: left or right\n")
-                            if hand == "left":
-                                if leftHandUsed == False:
-                                    leftHandUsed = True
-                                else: raise Exception("Left hand already used")
-                            if hand == "right":
-                                if rightHandUsed == False:
-                                    rightHandUsed = True
-                                    if not isinstance(fightersName, List):
-                                        fightersName = [fightersName]
-                                else: raise Exception("Right hand already used")
+                            # if hand == "left":
+                            #     if leftHandUsed == False:
+                            #         leftHandUsed = True
+                            #     else: raise Exception("Left hand already used")
+                            # if hand == "right":
+                            #     if rightHandUsed == False:
+                            #         rightHandUsed = True
+                            #     else: raise Exception("Right hand already used")
+    
+                                
                             if hand != "left" and hand != "right":
                                 raise Exception("Not correct hand")
                             otherInfos["hand"] = hand

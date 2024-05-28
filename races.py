@@ -24,7 +24,7 @@ GIANT_SPIDER = {
     "stamina_regeneration"  : 10, 
     "race"  :  "HUMAN",
     "dodge" : 0.20,
-    "raceResistance" : {"blade" : 0.4, "pierce" : 0.4, "impact" : -0.2,},
+    "raceResistance" : {"blade" : 0.3, "pierce" : 0.3, "impact" : -0.2},
     "default_damage" : 18,
     "default_damage_type" : "pierce",
     "tempDefByTurn" : {"head" : 10, "torso" : 45, "legs": 30}
