@@ -62,7 +62,10 @@ class Battle:
                     if tool == None:
                         interaction.throwError("no tool")
                         return False
-                
+            if "Quick_Attack" in actionName and tool in weapons.HEAVY:
+                interaction.throwError("Can not quick attack with heavy weapon")
+
+                return False
             if any(actionName in NoFriendlyFireAction for NoFriendlyFireAction in actionsTypes.NotFriendlyAggressiveActions):
                 if any(target == allyName for allyName in alliesName for target in someAction["targets"]):
                     interaction.throwError("Can not attack ally")

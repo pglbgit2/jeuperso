@@ -185,7 +185,7 @@ class CHARACTER:
                         tool = self.rightTool
                     
                     if tool.name in weapons.MELEE_WEAPONS:
-                            action["name"] = random.choice([defaultSkills.CA, defaultSkills.QA, defaultSkills.BA])
+                            action["name"] = random.choice([defaultSkills.CA, defaultSkills.BA])
                     else:
                         if tool.name in weapons.RANGE_WEAPONS:
                             action["name"] = random.choice([defaultSkills.QS, defaultSkills.CS, defaultSkills.PS])
@@ -301,6 +301,7 @@ class CHARACTER:
             if bodyPart == "head":
                 if random.random() < 0.2:
                     self.actions = []
+                    interaction.showInformation(self.name+" is stunned")
                 elif random.random() < 0.5:
                     if self.actions != []:
                         self.actions.remove(random.choice(self.actions))
@@ -372,9 +373,9 @@ class CHARACTER:
         if bodyPart == "torso":
             return 0
         if bodyPart == "head":
-            return 0.5
+            return 0.4
         if bodyPart == "legs":
-            return 0.2
+            return 0.15
     
     def dodge(self,modification=0,bodyPart:str="torso"):
         

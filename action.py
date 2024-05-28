@@ -242,17 +242,26 @@ class Attack(Action):
                 return
             potential_damage += fighter.leftTool.damage
             damage_type = fighter.leftTool.damageType
+            aWeapon = fighter.leftTool
         else : 
             if fighter.rightTool == None:
                 Action.ACTIONS_DICT["Melee_Combat"].acts(fighter,targets,otherInfos)
                 return
             potential_damage += fighter.rightTool.damage
             damage_type = fighter.rightTool.damageType
+            aWeapon = fighter.rightTool
         potential_damage = potential_damage * self.factor
         potential_damage += fighter.damageBonus
         for target in targets:
             bodyPart = target.tryToHit(otherInfos["bodyPart"])
-            if self.name.startswith("Quick_Attack") or target.dodge(bodyPart=bodyPart) != True:
+            noFail = False
+            modifier = 0
+            if self.name.startswith("Quick_Attack"):
+                if aWeapon in weapons.SMALL_WEAPON:
+                    noFail = True
+                else:
+                    modifier = 0.4
+            if noFail or not target.dodge(bodyPart=bodyPart, modification=-modifier):
                 interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
                 target.take_damage(potential_damage, damage_type, bodyPart)
             else:
