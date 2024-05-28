@@ -285,7 +285,7 @@ class CHARACTER:
                 damage = max(0, damage - bodyDef)
                 dif = oldDamage - damage
                 self.defenseByBodyPart[bodyPart] -= dif
-                interaction.showInformation("damage reduced by body defense by:"+str(dif)+" remaining defense for "+bodyPart+": "+self.defenseByBodyPart[bodyPart])
+                interaction.showInformation("damage reduced by body defense by:"+str(dif)+" remaining defense for "+bodyPart+": "+str(self.defenseByBodyPart[bodyPart]))
 
             if self.defensePoints > 0:
                 oldDamage = damage
