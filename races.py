@@ -12,7 +12,7 @@ HUMAN  = {
     "race"  :  "HUMAN",
     "dodge" : 0.15,
     "raceResistance" : {},
-    "default_damage" : 2
+    "default_damage" : 3
 }
 
 ## GIANT_SPIDER ##
@@ -25,7 +25,7 @@ GIANT_SPIDER = {
     "race"  :  "HUMAN",
     "dodge" : 0.20,
     "raceResistance" : {"blade" : 0.4, "pierce" : 0.4, "impact" : -0.2,},
-    "default_damage" : 12,
+    "default_damage" : 18,
     "default_damage_type" : "pierce",
     "tempDefByTurn" : {"head" : 10, "torso" : 45, "legs": 30}
 }
