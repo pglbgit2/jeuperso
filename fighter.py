@@ -77,9 +77,9 @@ class CHARACTER:
         return someDict
     
     def newTurn(self):
-        self.stamina = min(self.stamina +self.stamina_regeneration, self.MaxStamina)
+        self.stamina = min([self.stamina +self.stamina_regeneration, self.MaxStamina])
         self.defensePoints = 0
-        self.magic = min(self.magic +math.ceil(self.stamina_regeneration/2), self.MaxMagic)
+        self.magic = min([self.magic+math.ceil(self.stamina_regeneration/2), self.MaxMagic])
         self.dodgePercent = self.dodgeUsual
         self.damageBonus = 0
         self.DamageDivisor = 1
@@ -248,12 +248,8 @@ class CHARACTER:
                         if side == "left":
                             if self.leftTool == None or not beginningEquipping:
                                 self.leftTool = stuff
-                                if self.rightTool in weapons.TWO_HAND_WEAPONS:
-                                    self.rightTool = None
                                 return
-                        self.rightTool = stuff
-                        if self.leftTool in weapons.TWO_HAND_WEAPONS:
-                            self.leftTool = None
+                        self.rightTool = stuff   
                     else:
                         interaction.throwError("weapon neither in one hand weapon or two hand weapon")
     
@@ -279,20 +275,24 @@ class CHARACTER:
             elif race_reduction < 0 and race_reduction > -1: race_reduction -= 1
             damage -= race_reduction
             interaction.showInformation("damage of type "+damage_type+" reduced by "+str(self.resistance[damage_type]*100)+" percent because is "+self.race)
+            
+            if self.defensePoints > 0:
+                oldDamage = damage
+                damage = max([0, damage - self.defensePoints])
+                dif = oldDamage - damage
+                interaction.showInformation("damage reduced by temporary armor by:"+str(dif))
+                self.defensePoints -= dif
+            
+            
             bodyDef = self.defenseByBodyPart[bodyPart]
             if bodyDef > 0:
                 oldDamage = damage
-                damage = max(0, damage - bodyDef)
+                damage = max([0, damage - bodyDef])
                 dif = oldDamage - damage
                 self.defenseByBodyPart[bodyPart] -= dif
                 interaction.showInformation("damage reduced by body defense by:"+str(dif)+" remaining defense for "+bodyPart+": "+str(self.defenseByBodyPart[bodyPart]))
 
-            if self.defensePoints > 0:
-                oldDamage = damage
-                damage = max(0, damage - self.defensePoints)
-                dif = oldDamage - damage
-                interaction.showInformation("damage reduced by temporary armor by:"+str(dif))
-                self.defensePoints -= dif
+            
             if damage > 0:
                 damage = math.floor(damage / self.DamageDivisor)
         interaction.showInformation("fighter "+self.name+" took "+str(damage)+" damage")
@@ -305,10 +305,12 @@ class CHARACTER:
                 elif random.random() < 0.5:
                     if self.actions != []:
                         self.actions.remove(random.choice(self.actions))
+                        interaction.showInformation(self.name+" has lost his balance for a secund");
             if bodyPart == "legs":
                 if random.random() < 0.3:
                     self.removeAllMovementAction()
-        if damage > self.MaxHP/5:
+                    interaction.showInformation(self.name+" imobilized for turn");
+        if damage > self.MaxHP/8:
             if self.actions != []:
                 self.actions.remove(random.choice(self.actions))
     
@@ -324,7 +326,34 @@ class CHARACTER:
         for stuff in loadsOfStuff:
             if stuff != None:
                 self.equip(stuff,beginningEquipping=begin)
+
+    def getParryInfos(self):
+        tool = None
+        if self.leftTool != None and self.leftTool.name in weapons.MELEE_WEAPONS:
+            hand = "left"
+            tool = self.leftTool
             
+        if self.rightTool != None and self.rightTool.name in weapons.MELEE_WEAPONS and not self.rightTool.name in weapons.DEFENSIVE_WEAPON:
+            hand = "right"
+            tool = self.rightTool
+
+        if tool.name not in weapons.HEAVY:
+            canQuickAttack = True
+        bodyPartList = ["torso", "head", "legs"]
+        if self.isControlledByGM:
+            bodyPart = interaction.getStrInList(bodyPartList, "parry target")
+        else:
+            bodyPart = random.choice(bodyPartList)
+        
+        if canQuickAttack:
+            if self.isControlledByGM:
+                doQuickAttack = interaction.getStrInList(["True", "False"], "Do Quick Attack ? (otherwise Classic Attack)") == "True"
+            else:
+                doQuickAttack = self.basicSkillsLevel["Classic_Attack"] < self.basicSkillsLevel["Quick_Attack"]
+        else:
+            doQuickAttack = False
+        return (hand, bodyPart, doQuickAttack) 
+
             
     def total_weight(self):
         if self.weight == 0:
@@ -382,7 +411,7 @@ class CHARACTER:
         if self.dodgePercent > 0:
             bodyModifier = self.getBodyPartModifier(bodyPart)
             value = random.randint(0,100)/100-bodyModifier
-            val = value <= self.dodgePercent + modification
+            val = value <= (self.dodgePercent + modification)
             if val:
                 self.dodgePercent -= 0.1
             return val

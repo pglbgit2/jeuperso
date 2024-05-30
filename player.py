@@ -42,7 +42,15 @@ class Player(fighter.CHARACTER):
             result = interaction.askFor(self.name+", roll 1d100 dice for Dodging, Give result")
         #print(self.dodgePercent)
         bodyModifier = self.getBodyPartModifier(bodyPart)
-        return int(result)/100-bodyModifier <= (self.dodgePercent + modification)
+        value = (int(result)/100)-bodyModifier
+        print(value)
+        print(modification)
+        print(self.dodgePercent)
+        val = value <= (self.dodgePercent + modification)
+        if val:
+            self.dodgePercent -= 0.1
+        return val
+
     
     def setUpActions(self, fightersByName : Dict[str, fighter.CHARACTER], teamEstimatedPower : Dict[str,int], fightersByFaction : Dict[str,List[fighter.CHARACTER]]):
         self.actions = interaction.getPlayerActions(self.name, fightersByName.keys(), self.skills)

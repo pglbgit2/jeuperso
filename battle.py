@@ -27,9 +27,10 @@ class Battle:
                 print(someFighter.name+" HP:"+str(someFighter.HP)+" Magic:"+str(someFighter.magic)+" left hand: "+ ("Nothing" if someFighter.leftTool == None else str(someFighter.leftTool.name))+" right hand:"+ ("Nothing" if someFighter.rightTool == None else str(someFighter.rightTool.name)))
     
     def beginTurn(self):
-        self.actualizeHP()
         for fighter in self.fighters:
-            fighter.newTurn()    
+            fighter.newTurn() 
+        self.actualizeHP()
+   
         
     
     def checkValidity(self, fighter : fighter.CHARACTER, actions : List[Dict[str,Union[str,Tuple[int,int]]]], alliesName : List[str]):
@@ -223,7 +224,7 @@ class Battle:
                 action.Action.ACTIONS_DICT["useConsumable"].acts(fighter, None, actionDict["otherInfos"])
                 return
             if "Melee_Combat" == actionName:
-                action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"], actionDict["otherInfos"]))
+                action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
                 return
             if "Energy_Blade" == actionName:
                 action.Action.ACTIONS_DICT[actionName].acts(fighter,None,None)

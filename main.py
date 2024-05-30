@@ -40,7 +40,7 @@ if __name__ == '__main__':
     # gothi = fighter.CHARACTER.retrieveFighter("Gothi.sav")
     # elowen = fighter.CHARACTER.retrieveFighter("Elowen.sav")
     # Wa_En = fighter.CHARACTER.retrieveFighter("Wa_Hen.sav")
-    # Eloi = player.Player.retrieveFighter("Eloi.sav")
+    Eloi = player.Player.retrieveFighter("Eloi.sav")
     # Efraim = player.Player.retrieveFighter("Efraim.sav")    
     # bandit1 = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory","Enemies","HUMAN")
     #bandit1.isControlledByGM = False
@@ -89,6 +89,6 @@ if __name__ == '__main__':
     # battle1.battle()
     
      ## TEST 3 ##
-    battle2 = battle.Battle.instantiate_from_infos([pluton, fabien],[{"characterClass":"DEFAULT_CLASS", "name":"spider", "faction":"Enemies", "race":"GIANT_SPIDER"}])
+    battle2 = battle.Battle.instantiate_from_infos([pluton, fabien, Eloi],[{"characterClass":"DEFAULT_CLASS", "name":"spider", "faction":"Enemies", "race":"GIANT_SPIDER"}])
     battle2.battle()
         

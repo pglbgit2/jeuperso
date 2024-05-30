@@ -209,6 +209,16 @@ class Slow_Movement(Movement):
     def __init__(self, level: int):
         super().__init__("Slow_Movement"+"-lv"+str(level), level=level, **Slow_Movement.Level_Parameters[level])
 
+
+
+def parry(target : fighter.CHARACTER, fighter : fighter.CHARACTER):
+    if random.random() < 0.3:
+        (hand, bodyPart, doQuickAttack) = target.getParryInfos()
+        if not doQuickAttack:
+            Action.ACTIONS_DICT["Classic_Attack"+target.getStrLevelOfSkill("Classic_Attack")].acts(target,[fighter], {"hand":hand,"bodyPart" : bodyPart, "name" : "Classic_Attack"})
+        else:
+            Action.ACTIONS_DICT["Quick_Attack"+target.getStrLevelOfSkill("Quick_Attack")].acts(target,[fighter], {"hand":hand,"bodyPart" : bodyPart, "name" : "Quick_Attack"})
+
         
 class Melee_Combat(Action):
     def __init__(self):
@@ -220,13 +230,20 @@ class Melee_Combat(Action):
         
         for target in targets:
             bodyPart = target.tryToHit(otherInfos["bodyPart"])
-
-            if target.dodge(bodyPart=bodyPart) != True:
-                interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
-                target.take_damage(potential_damage, damage_type, bodyPart)
+            canParry = False
+            modifier = 0
+            if (target.leftTool != None and target.leftTool.name in weapons.DEFENSIVE_WEAPON ) or (target.rightTool != None and target.rightTool.name in weapons.DEFENSIVE_WEAPON):
+                canParry = True
+                if bodyPart == "torso":
+                    modifier += 0.2
+            if not target.dodge(bodyPart=bodyPart, modification=modifier):
+                    interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
+                    target.take_damage(potential_damage, damage_type, bodyPart)
             else:
-                interaction.showInformation(target.name+" dodged attack")      
-                
+                interaction.showInformation(target.name+" dodged attack")
+                if canParry :
+                    parry(target, fighter)
+                    
                 
 class Attack(Action):
     def __init__(self, action_name: str, StaminaCost: int, UpgradeExpCost: int, damageFactor : int, level : int, dodge_alteration : int):
@@ -257,15 +274,22 @@ class Attack(Action):
             noFail = False
             modifier = 0
             if self.name.startswith("Quick_Attack"):
-                if aWeapon in weapons.SMALL_WEAPON:
+                if aWeapon.name in weapons.SMALL_WEAPON:
                     noFail = True
                 else:
-                    modifier = 0.4
-            if noFail or not target.dodge(bodyPart=bodyPart, modification=-modifier):
+                    modifier = -0.4
+            canParry = False
+            if (target.leftTool != None and target.leftTool.name in weapons.DEFENSIVE_WEAPON ) or (target.rightTool != None and target.rightTool.name in weapons.DEFENSIVE_WEAPON):
+                canParry = True
+                if bodyPart == "torso":
+                    modifier += 0.2
+            if noFail or not target.dodge(bodyPart=bodyPart, modification=modifier):
                 interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
                 target.take_damage(potential_damage, damage_type, bodyPart)
             else:
                 interaction.showInformation(target.name+" dodged attack")
+                if canParry :
+                    parry(target, fighter)
         
 class Brutal_Attack(Attack):
     Level_Parameters = defaultSkills.UPGRADABLE[defaultSkills.BA]
