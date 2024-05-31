@@ -195,10 +195,10 @@ class Battle:
             actionName = actionDict["name"]
             if "Defense" in actionName:
                 action.Action.ACTIONS_DICT[actionName].acts(fighter,None,None)
-                return
+                continue
             if "Protection_Field" in actionName or "Minor_Shield" in actionName:
                 action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), None)
-                return
+                continue
             if "Minor_Aggressive_Flux" in actionName or "Wrath_Torrent" in actionName:
                 action.Action.ACTIONS_DICT[actionName].acts(fighter,None, None)
     
@@ -208,27 +208,27 @@ class Battle:
             actionName = actionDict["name"]
             if "Movement" in actionName:
                 action.Action.ACTIONS_DICT[actionName].acts(fighter, actionDict["target"], actionDict["otherInfos"])
-                return
+                continue
             if "Attack" in actionName:
                 action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
-                return
+                continue
             if "Equip" == actionName:
                 action.Action.ACTIONS_DICT["Equip"].acts(fighter, None, {"item" : fighter.getItemFromInventoryByName(actionDict["object"]), "bodyPart" : actionDict["bodyPart"]})
-                return
+                continue
             if "Shot" in actionName:
                 throw = action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
                 if throw != None:
                     self.ground.append(throw)
-                return
+                continue
             if "useConsumable" == actionName:
                 action.Action.ACTIONS_DICT["useConsumable"].acts(fighter, None, actionDict["otherInfos"])
-                return
+                continue
             if "Melee_Combat" == actionName:
                 action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
-                return
+                continue
             if "Energy_Blade" == actionName:
                 action.Action.ACTIONS_DICT[actionName].acts(fighter,None,None)
-                return
+                continue
             if any(actionName.startswith(EAA) for EAA in actionsTypes.EnergyAggressiveActions):
                 action.Action.ACTIONS_DICT[actionName].acts(fighter,self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
     

@@ -84,14 +84,13 @@ def getStrInList(strList:List[str],subject):
 def getPlayerActions(playerName : str, units_name : List[str], valid_actions : List[str], mod=MOD):
     if mod == TERMINAL:
         finished = False
-        Actions = []
+        validActions = list(valid_actions)+["end"]
         while finished == False:
             try:
                 Actions = []
                 allActionsInserted = False
                 leftHandUsed = False
                 rightHandUsed = False
-                validActions = list(valid_actions)+["end"]
                 while not allActionsInserted:
                     print("Actions input of "+playerName+"\n")
                     actionName = getStrInList(validActions, "Action Name")
