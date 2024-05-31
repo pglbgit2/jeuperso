@@ -310,10 +310,11 @@ class CHARACTER:
                 if random.random() < 0.3:
                     self.removeAllMovementAction()
                     interaction.showInformation(self.name+" immobilized for turn")
-        if damage > self.MaxHP/6:
+        if damage > self.MaxHP/4:
             if self.actions != []:
-                self.actions.remove(random.choice(self.actions))
-                interaction.showInformation(self.name+" has lost his balance for a secund")
+                if random.random() < 0.6:
+                    self.actions.remove(random.choice(self.actions))
+                    interaction.showInformation(self.name+" has lost his balance for a secund")
 
     
     def removeAllMovementAction(self):

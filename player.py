@@ -3,7 +3,7 @@ from typing import List, Union, Dict
 
 
 class Player(fighter.CHARACTER):
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = list(defaultSkills.DEFAULT_SKILLS), dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = None, tempDefByTurn: int = 0, counter : Union[Dict[str,int],str]= {}):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "Human",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = list(defaultSkills.DEFAULT_SKILLS), dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = None, tempDefByTurn : Union[int, Dict[str, int]]=0, counter : Union[Dict[str,int],str]= {}):
         super().__init__(name,faction,gold,HP,MaxHP,Stamina, magic,  stamina_regeneration, race, Equipment, Inventory, skills,dodge, skillsLevel,shotBonus, raceResistance, tempDefByTurn=tempDefByTurn)
         self.actionCounter = {skillName : 0 for skillName in self.skills}
         if isinstance(counter,str):
@@ -102,6 +102,8 @@ class Player(fighter.CHARACTER):
             return None
     
 
+
+
     @staticmethod
     def retrieveFighter(filename : str):
         path = "./characters/"+filename
@@ -111,8 +113,13 @@ class Player(fighter.CHARACTER):
                 factionLine = file.readline()[:-1]
                 raceLine = file.readline()[:-1]
                 dictLine = file.readline()[:-1]
+
                 if dictLine != None:
                     fighterDictStr = ast.literal_eval(dictLine)
+                    try:
+                        fighterDictStr["tempDefByTurn"] = ast.literal_eval(fighterDictStr["tempDefByTurn"])
+                    except:
+                        fighterDictStr["tempDefByTurn"] = int(fighterDictStr["tempDefByTurn"])
                     file.close()
                     if isinstance(fighterDictStr, Dict):
                         return Player.instantiate_from_dict(name=NameLine, faction=factionLine, classAttributes=fighterDictStr, race=raceLine)

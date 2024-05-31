@@ -5,8 +5,8 @@ if __name__ == '__main__':
     action.setupActions()
     
     ## CREATE NEW PLAYER
-    newPlayer = player.Player(**player.Player.getCharacterInfos())
-    newPlayer.saveFighter(newPlayer.name+".sav")
+    # newPlayer = player.Player(**player.Player.getCharacterInfos())
+    # newPlayer.saveFighter(newPlayer.name+".sav")
     
     
     ## CREATE NEW FIGHTER
@@ -19,14 +19,12 @@ if __name__ == '__main__':
     # billy.inventory.append(consumable.Consumable.get_consumable("HEALTH_POTION"))
     
     
-    #eloi = player.Player.retrieveFighter("Eloi.sav")
-    
-    #pluton = player.Player.retrieveFighter("Pluton.sav")
+    pluton = player.Player.retrieveFighter("Pluton.sav")
 
     # pluton.saveFighter("Pluton.sav")
     
     # pluton.printPlayerSheet()
-    # fabien = player.Player.retrieveFighter("Fabien.sav")
+    fabien = player.Player.retrieveFighter("Fabien.sav")
  
     #fabien.saveFighter("Fabien.sav")
     # #fabien.saveFighter("Fabien.sav")
@@ -41,6 +39,7 @@ if __name__ == '__main__':
     # elowen = fighter.CHARACTER.retrieveFighter("Elowen.sav")
     # Wa_En = fighter.CHARACTER.retrieveFighter("Wa_Hen.sav")
     Eloi = player.Player.retrieveFighter("Eloi.sav")
+    # Eloi.saveFighter("Eloi.sav")
     # Efraim = player.Player.retrieveFighter("Efraim.sav")    
     # bandit1 = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory","Enemies","HUMAN")
     #bandit1.isControlledByGM = False
@@ -60,8 +59,8 @@ if __name__ == '__main__':
     # StreetsWatcher2 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher2","Enemies","HUMAN")
     # StreetsWatcher3 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher3","Enemies","HUMAN")
     # Stilvor = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher4","Enemies","HUMAN")
-    # battle1 = battle.Battle([ pluton, fabien])
-    # battle1.battle()
+    battle1 = battle.Battle([ pluton, fabien, StreetsWatcher1])
+    battle1.battle()
     
         
     
