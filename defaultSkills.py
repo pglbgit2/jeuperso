@@ -22,12 +22,25 @@ ER = "EnergyRay"
 FB = "FireBreath"
 FBa = "FireBall"
 FS = "FireStorm"
+UF = "Unshakable_Fortress"
+SS = "Solid_Skin"
 NOT_UPGRADABLE = [E, uC, MC]
 
 
 DEFAULT_SKILLS = [QM, CM, SM, BA, QA, CA, LD, SD, CD, E, uC, MC, PS, QS, CS ]
-
 UPGRADABLE = { 
+    UF : {
+        1 : {"ManaCost" : 5, "UpgradeExpCost" : 20, "protection" : 2, "dodge_alteration" : 0},
+        2 : {"ManaCost" : 5, "UpgradeExpCost" : 40, "protection" : 3, "dodge_alteration" : 0},
+        3 : {"ManaCost" : 5, "UpgradeExpCost" : 60, "protection" : 4, "dodge_alteration" : 0},
+        4 : {"ManaCost" : 5, "UpgradeExpCost" : 80, "protection" : 5, "dodge_alteration" : 0}
+    },        
+    SS : {
+        1 : {"ManaCost" : 9, "UpgradeExpCost" : 20, "protection" : 7, "dodge_alteration" : 0},
+        2 : {"ManaCost" : 9, "UpgradeExpCost" : 40, "protection" : 9, "dodge_alteration" : 0},
+        3 : {"ManaCost" : 9, "UpgradeExpCost" : 60, "protection" : 11, "dodge_alteration" : 0},
+        4 : {"ManaCost" : 9, "UpgradeExpCost" : 80, "protection" : 15, "dodge_alteration" : 0}
+    },
     FB : {
         1 : {"ManaCost" : 2, "UpgradeExpCost" : 15, "damage" : 4, "dodge_alteration" : 0, "damageType" : "fire"},
         2 : {"ManaCost" : 3, "UpgradeExpCost" : 30, "damage" : 5, "dodge_alteration" : 0, "damageType" : "fire"},
@@ -45,15 +58,15 @@ UPGRADABLE = {
     }
     ,
     MS : {
-        1 : {"ManaCost" : 3, "UpgradeExpCost" : 10, "protection" : 3, "dodge_alteration" : 0},
-        2 : {"ManaCost" : 3, "UpgradeExpCost" : 25, "protection" : 5, "dodge_alteration" : 0},
-        3 : {"ManaCost" : 3, "UpgradeExpCost" : 25, "protection" : 8, "dodge_alteration" : 0},
+        1 : {"ManaCost" : 3, "UpgradeExpCost" : 10, "energyDefense" : 3, "dodge_alteration" : 0},
+        2 : {"ManaCost" : 3, "UpgradeExpCost" : 25, "energyDefense" : 5, "dodge_alteration" : 0},
+        3 : {"ManaCost" : 3, "UpgradeExpCost" : 25, "energyDefense" : 8, "dodge_alteration" : 0},
 
     },
     PF:{
-        1 : {"ManaCost" : 6, "UpgradeExpCost" : 10, "protection" : 8, "dodge_alteration" : 0},
-        2 : {"ManaCost" : 6, "UpgradeExpCost" : 25, "protection" : 12, "dodge_alteration" : 0},
-        3 : {"ManaCost" : 6, "UpgradeExpCost" : 30, "protection" : 15, "dodge_alteration" : 0},
+        1 : {"ManaCost" : 6, "UpgradeExpCost" : 10, "energyDefense" : 8, "dodge_alteration" : 0},
+        2 : {"ManaCost" : 6, "UpgradeExpCost" : 25, "energyDefense" : 12, "dodge_alteration" : 0},
+        3 : {"ManaCost" : 6, "UpgradeExpCost" : 30, "energyDefense" : 15, "dodge_alteration" : 0},
     },
     EO : {
          1 : {"ManaCost" : 8, "UpgradeExpCost" : 10, "damage" : 10, "dodge_alteration" : 0, "damageType" : "impact"},

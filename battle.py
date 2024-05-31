@@ -201,6 +201,10 @@ class Battle:
                 continue
             if "Minor_Aggressive_Flux" in actionName or "Wrath_Torrent" in actionName:
                 action.Action.ACTIONS_DICT[actionName].acts(fighter,None, None)
+                continue
+            if "Unshakable_Fortress" in actionName or "Solid_Skin" in actionName:
+                action.Action.ACTIONS_DICT[actionName].acts(fighter,None, actionDict["otherInfos"])
+
     
     
     def doActiveActions(self, fighter:fighter.CHARACTER):
@@ -209,7 +213,7 @@ class Battle:
             if "Movement" in actionName:
                 action.Action.ACTIONS_DICT[actionName].acts(fighter, actionDict["target"], actionDict["otherInfos"])
                 continue
-            if "Attack" in actionName:
+            if "Attack" in actionName or "Melee_Combat" in actionName:
                 action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
                 continue
             if "Equip" == actionName:
@@ -222,9 +226,6 @@ class Battle:
                 continue
             if "useConsumable" == actionName:
                 action.Action.ACTIONS_DICT["useConsumable"].acts(fighter, None, actionDict["otherInfos"])
-                continue
-            if "Melee_Combat" == actionName:
-                action.Action.ACTIONS_DICT[actionName].acts(fighter, self.namesToCharacters(actionDict["targets"]), actionDict["otherInfos"])
                 continue
             if "Energy_Blade" == actionName:
                 action.Action.ACTIONS_DICT[actionName].acts(fighter,None,None)

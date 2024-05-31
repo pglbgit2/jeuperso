@@ -5,8 +5,8 @@ if __name__ == '__main__':
     action.setupActions()
     
     ## CREATE NEW PLAYER
-    # newPlayer = player.Player(**player.Player.getCharacterInfos())
-    # newPlayer.saveFighter(newPlayer.name+".sav")
+    newPlayer = player.Player(**player.Player.getCharacterInfos())
+    newPlayer.saveFighter(newPlayer.name+".sav")
     
     
     ## CREATE NEW FIGHTER
@@ -21,16 +21,16 @@ if __name__ == '__main__':
     
     #eloi = player.Player.retrieveFighter("Eloi.sav")
     
-    pluton = player.Player.retrieveFighter("Pluton.sav")
+    #pluton = player.Player.retrieveFighter("Pluton.sav")
 
     # pluton.saveFighter("Pluton.sav")
     
-    pluton.printPlayerSheet()
-    fabien = player.Player.retrieveFighter("Fabien.sav")
+    # pluton.printPlayerSheet()
+    # fabien = player.Player.retrieveFighter("Fabien.sav")
  
     #fabien.saveFighter("Fabien.sav")
     # #fabien.saveFighter("Fabien.sav")
-    fabien.printPlayerSheet()
+    # fabien.printPlayerSheet()
     
     # Sdrakeide = fighter.CHARACTER.retrieveFighter("Dorokaen.sav")
     # battle1 = battle.Battle([pluton, fabien])
@@ -56,18 +56,13 @@ if __name__ == '__main__':
     #bandit5 = fighter.CHARACTER.instantiate_from_class("THIEF","Mallory5","Enemies","HUMAN")
     #bandit5.isControlledByGM = False
 
-    # StreetsWatcher1 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher1","Enemies","HUMAN")
+    StreetsWatcher1 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher1","Enemies","HUMAN")
     # StreetsWatcher2 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher2","Enemies","HUMAN")
     # StreetsWatcher3 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher3","Enemies","HUMAN")
     # Stilvor = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher4","Enemies","HUMAN")
-    # battle1 = battle.Battle([ pluton, fabien, bandit2])
+    # battle1 = battle.Battle([ pluton, fabien])
     # battle1.battle()
     
-    
-    
-    
-    # battle2 = battle.Battle.instantiate_from_infos([pluton, fabien],[{"characterClass":"DEFAULT_CLASS", "name":"spider", "faction":"Enemies", "race":"GIANT_SPIDER"}])
-    # battle2.battle()
         
     
     ## TEST 1 ##
@@ -89,6 +84,6 @@ if __name__ == '__main__':
     # battle1.battle()
     
      ## TEST 3 ##
-    battle2 = battle.Battle.instantiate_from_infos([pluton, fabien, Eloi],[{"characterClass":"DEFAULT_CLASS", "name":"spider", "faction":"Enemies", "race":"GIANT_SPIDER"}])
-    battle2.battle()
+    # battle2 = battle.Battle.instantiate_from_infos([pluton, fabien, Eloi],[{"characterClass":"DEFAULT_CLASS", "name":"spider", "faction":"Enemies", "race":"GIANT_SPIDER"}])
+    # battle2.battle()
         

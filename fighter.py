@@ -459,7 +459,7 @@ class CHARACTER:
             "shotBonus" : self.shotBonus,
             "skills" : self.skills,
             "skillsLevel" : str(self.basicSkillsLevel),
-            "tempDefByTurn" : self.defenseByTurn
+            "tempDefByTurn" : str(self.defenseByBodyPart)
         }
         if self.inventory != []:
             fighterDict["Inventory"] = {}
@@ -659,9 +659,10 @@ class CHARACTER:
             race = input("race: \n")
         infos["race"] = race
         
-        for value in ["gold", "HP", "MaxHP","magic","Stamina", "stamina_regeneration"]:
+        for value in ["gold"]:
             infos[value] = interaction.askForInt(value+":\n")
-                
+        for value in ["HP", "MaxHP","magic","Stamina", "stamina_regeneration"]:
+            infos[value] = interaction.askForDouble(value+":\n")
         fighterFaction = "nope"
         while fighterFaction not in FACTIONS:
             fighterFaction = input("faction: \n")

@@ -22,6 +22,18 @@ def askForInt(something:str, mod=MOD):
             someInteger = input(something)
         return someInteger
 
+
+def askForDouble(something:str, mod=MOD):
+    if mod == TERMINAL:
+        someDouble = ""
+        while True:
+            someDouble = input(something)
+            try:
+                someDouble = float(someDouble)
+                return someDouble
+            except ValueError:
+                continue
+
 def throwError(someError:str, mod=MOD):
     if mod == TERMINAL:
         print(someError)
@@ -138,6 +150,12 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                         continue
                     
                     if actionName == "Minor_Aggressive_Flux" or actionName == "Wrath_Torrent":
+                        Actions.append({"name": actionName, "otherInfos" : otherInfos})
+                        
+                        
+                    if actionName == "Unshakable_Fortress" or actionName == "Solid_Skin":
+                        bodyPart = getStrInList(["torso", "legs", "head"], "body part to protect")
+                        otherInfos["bodyPart"] = bodyPart
                         Actions.append({"name": actionName, "otherInfos" : otherInfos})
                     
                     if "Attack" in actionName or "Shot" in actionName or "Melee_Combat" == actionName or actionName == "Protection_Field" or actionName == "Minor_Shield" or any(actionName == EAA for EAA in actionsTypes.EnergyAggressiveActions) or "FireStorm" == actionName:

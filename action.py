@@ -108,14 +108,39 @@ class Energy_Blade(Invocation):
         super().__init__("Energy_Blade", ManaCost=5, UpgradeExpCost=0, level=1, dodge_alteration=0,invocation="ENERGY_BLADE")
     
 
-class Magic_Armor(EnergyUsingAction):
+
+
+class Magic_Protection(EnergyUsingAction):
     def __init__(self, action_name: str, ManaCost: int, UpgradeExpCost: int, protection : int, dodge_alteration :int, level : int):
         super().__init__(action_name, ManaCost, UpgradeExpCost, level, dodge_alteration)
         self.protection = protection
     
     def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
-        super(Magic_Armor,self).acts(fighter,targets,otherInfos)
-        protection = math.ceil((self.protection)/(1+len(targets)))
+        super(Magic_Protection,self).acts(fighter,targets,otherInfos)
+        fighter.defenseByBodyPart[otherInfos["bodyPart"]] += self.protection
+        interaction.showInformation(fighter.name+" protect itself using magic defense for "+str(self.protection)+" on "+otherInfos["bodyPart"])
+        
+
+class Solid_Skin(Magic_Protection):
+    Level_Parameters = defaultSkills.UPGRADABLE[defaultSkills.SS]
+    def __init__(self, level: int):
+        super().__init__("Solid_Skin"+"-lv"+str(level), level=level, **Solid_Skin.Level_Parameters[level])
+
+class Unshakable_Fortress(Magic_Protection):
+    Level_Parameters = defaultSkills.UPGRADABLE[defaultSkills.UF]
+    def __init__(self, level: int):
+        super().__init__("Unshakable_Fortress"+"-lv"+str(level), level=level, **Unshakable_Fortress.Level_Parameters[level])
+
+
+
+class Magic_Defense(EnergyUsingAction):
+    def __init__(self, action_name: str, ManaCost: int, UpgradeExpCost: int, energyDefense : int, dodge_alteration :int, level : int):
+        super().__init__(action_name, ManaCost, UpgradeExpCost, level, dodge_alteration)
+        self.energyDefense = energyDefense
+    
+    def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
+        super(Magic_Defense,self).acts(fighter,targets,otherInfos)
+        protection = math.ceil((self.energyDefense)/(1+len(targets)))
         fighter.defensePoints += protection
         interaction.showInformation(fighter.name+" protect itself using Magic Armor for "+str(protection))
         
@@ -125,12 +150,12 @@ class Magic_Armor(EnergyUsingAction):
             
             
 
-class Minor_Shield(Magic_Armor):
+class Minor_Shield(Magic_Defense):
     Level_Parameters = defaultSkills.UPGRADABLE[defaultSkills.MS]
     def __init__(self, level: int):
         super().__init__("Minor_Shield"+"-lv"+str(level), level=level, **Minor_Shield.Level_Parameters[level])
     
-class Protection_Field(Magic_Armor):
+class Protection_Field(Magic_Defense):
     Level_Parameters = defaultSkills.UPGRADABLE[defaultSkills.PF]
     def __init__(self, level: int):
         super().__init__("Protection_Field"+"-lv"+str(level), level=level, **Protection_Field.Level_Parameters[level])
@@ -427,7 +452,7 @@ def setupActions():
                 else:
                     obj()
 
-ABSTRACT = [Action, Attack, Defense, Movement, Shot, EnergyUsingAction, Magic_Armor, Energy_Damage_Boost, Invocation, MagicAggression]
+ABSTRACT = [Action, Attack, Defense, Movement, Shot, EnergyUsingAction, Magic_Defense, Magic_Protection, Energy_Damage_Boost, Invocation, MagicAggression]
 
                 
 if __name__ == '__main__':
