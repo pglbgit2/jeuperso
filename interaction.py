@@ -158,9 +158,8 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                         otherInfos["bodyPart"] = bodyPart
                         Actions.append({"name": actionName, "otherInfos" : otherInfos})
                     
-                    if "Attack" in actionName or "Shot" in actionName or "Melee_Combat" == actionName or actionName == "Protection_Field" or actionName == "Minor_Shield" or any(actionName == EAA for EAA in actionsTypes.EnergyAggressiveActions) or "FireStorm" == actionName:
-                        print("All potential targets:"+str(units_name)+"\n")
-                        target = input("Targets Name\n")
+                    if "Attack" in actionName or "Shot" in actionName or "Melee_Combat" == actionName or actionName == "Protection_Field" or actionName == "Minor_Shield" or any(actionName == EAA for EAA in actionsTypes.EnergyAggressiveActions):
+                        target = getStrInList(units_name,"Targets Name\n")
                         if ", " in target:
                             fightersName = target.split(", ")
                         else: fightersName = [target]

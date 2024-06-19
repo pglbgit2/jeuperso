@@ -42,7 +42,7 @@ class Battle:
                 interaction.throwError("Can not use Stoical_defense and other action in same turn")
                 return False
             if "useConsumable" == actionName:
-                if fighter.getItemFromInventoryByName(someAction["target"]) == None:
+                if fighter.getItemFromInventoryByName(someAction["otherInfos"]["Equipment"]) == None:
                     interaction.throwError("Can not use item that fighter do not possess")
                     return False
             if ("Attack" in actionName or "Shot" in actionName):

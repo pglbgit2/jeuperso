@@ -59,6 +59,7 @@ class CHARACTER:
         self.MaxDefByBodyPart = copy.deepcopy(self.defenseByBodyPart)
         self.damageBonus = 0
         self.DamageDivisor = 1
+        self.isPoisoned = False
 
     
     def recoverArmorByBodyPart(self):
@@ -87,6 +88,9 @@ class CHARACTER:
         if self.HP < self.MaxHP/2:
             self.HP -= 1
             interaction.showInformation(self.name+" lost 1HP due to bleeding")
+        if self.isPoisoned:
+            self.HP -= 2
+            interaction.showInformation(self.name+" lost 2HP due to poison")
             
     
     def canHealItself(self):
@@ -130,13 +134,35 @@ class CHARACTER:
         if "Health" in item.effect.keys():
             (minHp, maxHP) = item.effect["Health"]
             recovery = self.rollInRange(minHp,maxHP)
-            self.HP += recovery
+            self.HP = max([self.HP+recovery, self.MaxHP])
             if recovery > 0:
                 interaction.showInformation(self.name+" healed by "+str(recovery)+" HP using "+item.name)
             else:
                 interaction.showInformation(self.name+" injured by "+str(recovery)+" HP using "+item.name) 
-    
-    
+        if "Treat" in item.effect.keys():
+            self.isPoisoned = False
+            interaction.showInformation(self.name+" recover from poison")
+
+        if "Poison" in item.effect.keys():
+            targetList = ["self", "abort"]
+            if self.leftTool != None:
+                targetList.append(self.leftTool.name)
+            if self.rightTool != None:
+                targetList.append(self.rightTool.name)
+            target = interaction.getStrInList(targetList,"target of poison")
+            if target == "self":
+                self.isPoisoned = True
+                interaction.showInformation(self.name+" poisoned itself")
+                return
+            if self.leftTool != None and target == self.leftTool.name:
+                self.leftTool.canPoison = True
+                interaction.showInformation(self.name+" poisoned his left weapon")
+                return
+            if self.rightTool != None and target == self.rightTool.name:
+                self.rightTool.canPoison = True
+                interaction.showInformation(self.name+" poisoned his right weapon")
+
+            
     def useConsumable(self, consumableName):
         for item in self.inventory:
             if item.name == consumableName:
@@ -147,9 +173,21 @@ class CHARACTER:
     def getEstimatedPower(self):
         return self.HP
     
+    
+    def getUsableSkills(self):
+        skills = copy.copy(self.skills)
+        toRemove = []
+        if self.leftTool == None and self.rightTool == None:
+            for skill in skills:
+                if "Attack" in skill:
+                    toRemove.append(skill)
+        for skillIssue in toRemove:
+            skills.remove(skillIssue)
+        return skills
+    
     def setUpActions(self, fightersByName : Dict[str, 'CHARACTER'], teamEstimatedPower : Dict[str,int], fightersByFaction : Dict[str,List['CHARACTER']]):
         if self.isControlledByGM:
-            self.actions = interaction.getPlayerActions(self.name, fightersByName.keys(), self.skills)
+            self.actions = interaction.getPlayerActions(self.name, fightersByName.keys(), self.getUsableSkills())
             return self.actions
         else:
             actions = []
@@ -297,6 +335,7 @@ class CHARACTER:
                 damage = math.floor(damage / self.DamageDivisor)
         interaction.showInformation("fighter "+self.name+" took "+str(damage)+" damage")
         self.HP -= damage
+        
         if damage > self.MaxHP/10:
             if bodyPart == "head":
                 if random.random() < 0.2:
@@ -315,7 +354,7 @@ class CHARACTER:
                 if random.random() < 0.6:
                     self.actions.remove(random.choice(self.actions))
                     interaction.showInformation(self.name+" has lost his balance for a secund")
-
+        return damage
     
     def removeAllMovementAction(self):
         toRemove = []

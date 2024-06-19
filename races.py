@@ -32,6 +32,35 @@ GIANT_SPIDER = {
     "tempDefByTurn" : {"head" : 10, "torso" : 45, "legs": 30}
 }
 
+## BAT ##
+BAT = {
+    "HP" : 10,
+    "MaxHP" : 10,
+    "Stamina" : 5,
+    "magic" : 0,
+    "stamina_regeneration"  : 5, 
+    "race"  :  "BAT",
+    "dodge" : 0.50,
+    "raceResistance" : {},
+    "default_damage" : 4,
+    "default_damage_type" : "pierce",
+    "tempDefByTurn" : {"head" : 0, "torso" : 0, "legs": 0}
+}
+
+## SNAKE ##
+SNAKE = {
+    "HP" : 12,
+    "MaxHP" : 12,
+    "Stamina" : 5,
+    "magic" : 0,
+    "stamina_regeneration"  : 5, 
+    "race"  :  "SNAKE",
+    "dodge" : 0.20,
+    "raceResistance" : {},
+    "default_damage" : 4,
+    "default_damage_type" : "pierce",
+    "tempDefByTurn" : {"head" : 0, "torso" : 0, "legs": 0}
+}
 
 ## SRAVAL ##
 SRAVAL = {
@@ -173,8 +202,8 @@ MAGE = {
 ### ALL RACES & CLASSES LISTED BELOW ###
 
 
-
-RACES = ["HUMAN","ORC","GOBLIN", "UNDEAD", "GIANT_SPIDER", "SRAVAL"]
+POISONER = ["SNAKE"]
+RACES = ["HUMAN","ORC","GOBLIN", "UNDEAD", "GIANT_SPIDER", "SRAVAL", "SNAKE", "BAT"]
 CLASSES = ["THIEF", "CITY_GARD", "FOOTPAD", "ARCHER", "WARRIOR", "DEFAULT_CLASS", "MAGE","APPRENTICE"]
 
 DEFAULT_RESISTANCE = {

@@ -160,6 +160,7 @@ class WEAPON(items.ITEM):
         self.damage = damage
         self.speed = speed
         self.damageType = type
+        self.canPoison = False
         
     def upgrade(self, damage_boost : int):
         self.damage += damage_boost

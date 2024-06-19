@@ -1,6 +1,22 @@
 
 from typing import List, Tuple, Dict, Union
-import fighter, armors, weapons, defaultSkills, interaction, random, math, consumable
+import fighter, armors, weapons, defaultSkills, interaction, random, math, consumable, races
+
+
+def inflict_damage(action_name, target:fighter.CHARACTER, fighter:fighter.CHARACTER, bodyPart, damageType, damage, weapon:weapons.WEAPON=None):
+    canPoison = False
+    if action_name == "Melee_Combat":
+        if fighter.race in races.POISONER:
+            canPoison = True
+    if "Attack" in action_name:
+        canPoison = weapon.canPoison
+    dealt_damage = target.take_damage(damage, damageType, bodyPart)
+    if dealt_damage > 0:
+        if canPoison:
+            if random.random() < 0.4:
+                interaction.showInformation("fighter "+target.name+" has been poisoned !")
+                target.isPoisoned = True
+
 
 class Action:
     ACTIONS_DICT : Dict[str,'Action'] = {}
@@ -54,7 +70,7 @@ class MagicAggression(EnergyUsingAction):
 
             if target.dodge(bodyPart=bodyPart) != True:
                 interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
-                target.take_damage(potential_damage, self.damageType)
+                inflict_damage(self.name, target, fighter, bodyPart, self.damageType, potential_damage, None)
             else:
                 interaction.showInformation(target.name+" dodged attack")
  
@@ -263,7 +279,7 @@ class Melee_Combat(Action):
                     modifier += 0.2
             if not target.dodge(bodyPart=bodyPart, modification=modifier):
                     interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
-                    target.take_damage(potential_damage, damage_type, bodyPart)
+                    inflict_damage(self.name, target, fighter, bodyPart, damage_type, potential_damage, None)
             else:
                 interaction.showInformation(target.name+" dodged attack")
                 if canParry :
@@ -310,7 +326,7 @@ class Attack(Action):
                     modifier += 0.2
             if noFail or not target.dodge(bodyPart=bodyPart, modification=modifier):
                 interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
-                target.take_damage(potential_damage, damage_type, bodyPart)
+                inflict_damage(self.name, target, fighter, bodyPart, damage_type, potential_damage, aWeapon)
             else:
                 interaction.showInformation(target.name+" dodged attack")
                 if canParry :
@@ -360,7 +376,7 @@ class Shot(Action):
                     if fighter.shot(self.accuracy+weapon.accuracy):
                         interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
                         bodyPart = target.tryToHit(otherInfos["bodyPart"])
-                        target.take_damage(potential_damage, damage_type, bodyPart)
+                        inflict_damage(self.name, target, fighter, bodyPart, damage_type, potential_damage, munition)
                     else:
                         interaction.showInformation(target.name+" dodged attack")
                 else:
@@ -374,7 +390,7 @@ class Shot(Action):
             if fighter.shot(self.accuracy):
                 interaction.showInformation(fighter.name+" attack "+targets[0].name+" with "+str(potential_damage)+" damage")
                 bodyPart = target.tryToHit(otherInfos["bodyPart"])
-                targets[0].take_damage(potential_damage, damage_type, bodyPart)
+                inflict_damage(self.name, targets[0], fighter, bodyPart, damage_type, potential_damage, weapon)
             else:
                 interaction.showInformation(targets[0].name+" dodged attack")
             #targets[0].inventory.append(weapon)
