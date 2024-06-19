@@ -12,7 +12,9 @@ HUMAN  = {
     "race"  :  "HUMAN",
     "dodge" : 0.15,
     "raceResistance" : {},
-    "default_damage" : 3
+    "default_damage" : 3,
+    "default_damage_type" : "impact",
+
 }
 
 ## GIANT_SPIDER ##
@@ -56,7 +58,9 @@ ORC  = {
     "stamina_regeneration"  : 7, 
     "race"  :  "ORC",
     "dodge" : 0.10,
-    "raceResistance" : {"blade":0.2, "impact" : 0.2, "fire" : -0.1}
+    "raceResistance" : {"blade":0.2, "impact" : 0.2, "fire" : -0.1},
+    "default_damage" : 4,
+    "default_damage_type" : "impact",
 }
 
 ## GOBLINS ##
@@ -68,7 +72,9 @@ GOBLIN  = {
     "stamina_regeneration" : 5, 
     "race"  :  "GOBLIN",
     "dodge" : 0.25,
-    "raceResistance" : {}
+    "raceResistance" : {},
+    "default_damage" : 1,
+    "default_damage_type" : "impact",
 }
 
 ## UNDEAD ##
@@ -80,7 +86,9 @@ UNDEAD  = {
     "stamina_regeneration" : 5, 
     "race"  :  "UNDEAD",
     "dodge" : 0.10,
-    "raceResistance" : {"blade" : 0.4, "pierce" : 0.4, "impact" : -0.3, "arcane" : -0.5}
+    "raceResistance" : {"blade" : 0.4, "pierce" : 0.4, "impact" : -0.3, "arcane" : -0.5},
+    "default_damage" : 2,
+    "default_damage_type" : "necrotic",
 }
 
 ### CHARACTER CLASSES ###
