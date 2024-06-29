@@ -36,7 +36,7 @@ class CHARACTER:
                 self.skills = self.skills+[skill]
         
         self.basicSkillsLevel = {}
-        for skill in self.skills:
+        for skill in defaultSkills.UPGRADABLE.keys():
             if skill in defaultSkills.UPGRADABLE.keys():
                 self.basicSkillsLevel[skill] = 1
         if isinstance(skillsLevel,str):
@@ -199,45 +199,67 @@ class CHARACTER:
                     self.useConsumable(item.name)
 
             if self.HP < self.MaxHP /2:
-                attackProbability = 0.4
-            else: 
                 attackProbability = 0.6
+            else: 
+                attackProbability = 0.8
                 
             if all(teamEstimatedPower[self.faction] <= teamEstimatedPower[enemy] for enemy in teamEstimatedPower.keys()):
                 attackProbability -= 0.2
             leftHandUsed = self.leftTool == None
             rightHandUsed = self.rightTool == None
             while staminaCost < self.stamina:
-                action = {}
+                action = {} 
                 otherInfos = {}
                 action["otherInfos"] = otherInfos
-                if not (leftHandUsed and rightHandUsed) and random.random() <= attackProbability:
-                    action["targets"] = [random.choice(fightersByFaction[random.choice([team for team in teamEstimatedPower.keys() if team != self.faction])]).name]
-                    if not leftHandUsed: 
-                        otherInfos["hand"] = "left"
-                        leftHandUsed = True
-                        tool = self.leftTool
-                    else:
-                        otherInfos["hand"] = "right"
-                        rightHandUsed = True
-                        tool = self.rightTool
-                    
-                    if tool.name in weapons.MELEE_WEAPONS:
-                            action["name"] = random.choice([defaultSkills.CA, defaultSkills.BA])
-                    else:
-                        if tool.name in weapons.RANGE_WEAPONS:
-                            action["name"] = random.choice([defaultSkills.QS, defaultSkills.CS, defaultSkills.PS])
+                if random.random() <= attackProbability:
+                    if not (leftHandUsed and rightHandUsed):
+                        action["targets"] = [random.choice(fightersByFaction[random.choice([team for team in teamEstimatedPower.keys() if team != self.faction])]).name]
+                        intBody = random.random()
+                        if intBody < 0.85:
+                            otherInfos["bodyPart"] = "torso"
                         else:
-                            interaction.throwError("Problem in game logic")
+                            if intBody < 0.95:
+                                otherInfos["bodyPart"] = "legs"
+                            else:
+                                otherInfos["bodyPart"] = "head"
+                        if not leftHandUsed: 
+                            otherInfos["hand"] = "left"
+                            leftHandUsed = True
+                            tool = self.leftTool
+                        else:
+                            otherInfos["hand"] = "right"
+                            rightHandUsed = True
+                            tool = self.rightTool
+                        
+                        if tool.name in weapons.MELEE_WEAPONS:
+                                action["name"] = random.choice([defaultSkills.CA, defaultSkills.BA, defaultSkills.QA])
+                        else:
+                            if tool.name in weapons.RANGE_WEAPONS:
+                                action["name"] = random.choice([defaultSkills.QS, defaultSkills.CS, defaultSkills.PS])
+                            else:
+                                interaction.throwError("Problem in game logic")
+                    else:
+                        action["name"] = defaultSkills.MC
+                        otherInfos["bodyPart"] = "torso"
+                        action["targets"] = [random.choice(fightersByFaction[random.choice([team for team in teamEstimatedPower.keys() if team != self.faction])]).name]
+
                 else:
                     action["name"] = defaultSkills.CD
                     action["target"] = self.name
                 if action != None:
                     actions.append(action)
-                    staminaCost += defaultSkills.UPGRADABLE[action["name"]][self.basicSkillsLevel[action["name"]]]["StaminaCost"]
+                    if action["name"] in defaultSkills.UPGRADABLE.keys():
+                        staminaCost += defaultSkills.UPGRADABLE[action["name"]][self.basicSkillsLevel[action["name"]]]["StaminaCost"]
+                    else:
+                        if action["name"] == defaultSkills.MC:
+                            staminaCost += 3
             while staminaCost > self.stamina:
                 removed = actions.pop()
-                staminaCost -= defaultSkills.UPGRADABLE[removed["name"]][self.basicSkillsLevel[action["name"]]]["StaminaCost"]
+                if action["name"] in defaultSkills.UPGRADABLE.keys():
+                        staminaCost -= defaultSkills.UPGRADABLE[action["name"]][self.basicSkillsLevel[action["name"]]]["StaminaCost"]
+                else:
+                    if action["name"] == defaultSkills.MC:
+                        staminaCost -= 3    
             while staminaCost != self.stamina:
                 actions.append({"name" : defaultSkills.LD, "target" : self.name, "otherInfos" : None})
                 staminaCost += 1
@@ -375,7 +397,7 @@ class CHARACTER:
             hand = "left"
             tool = self.leftTool
             
-        if self.rightTool != None and self.rightTool.name in weapons.MELEE_WEAPONS and not self.rightTool.name in weapons.DEFENSIVE_WEAPON:
+        if self.rightTool != None and self.rightTool.name in weapons.MELEE_WEAPONS and (tool == None or self.rightTool.name not in weapons.DEFENSIVE_WEAPON):
             hand = "right"
             tool = self.rightTool
 
@@ -420,7 +442,16 @@ class CHARACTER:
             self.put_into_inventory(item)
 
     def getInitiative(self):
-        return random.randint(0,100)
+        modif = 0
+        quick_attack_used = False
+        for action in self.actions:
+            if not quick_attack_used and "Quick_Attack" in action["name"]:
+                modif += 10
+                quick_attack_used = True
+            if "Quick_Movement" in action["name"]:
+                modif += 10
+                
+        return random.randint(0,100)+modif
     
     def addSkill(self, skill:str, Upgradable = False):
         if skill not in self.skills:
@@ -449,7 +480,9 @@ class CHARACTER:
             return 0.15
     
     def dodge(self,modification=0,bodyPart:str="torso"):
-        
+        for action in self.actions:
+            if "Brutal_Attack" in action["name"]:
+                return False
         if self.dodgePercent > 0:
             bodyModifier = self.getBodyPartModifier(bodyPart)
             value = random.randint(0,100)/100-bodyModifier

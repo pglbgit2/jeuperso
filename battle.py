@@ -241,6 +241,9 @@ class Battle:
                 self.doPassiveAction(fighter)
         
         for fighter in rules.getTurnPriority(self.fighters):
+                if fighter.HP <= 0:
+                    self.killWarrior(fighter)
+                    continue
                 interaction.showInformation("Turn of "+fighter.name)
                 if interaction.MOD == interaction.TERMINAL:
                     self.manualChanges()
@@ -317,14 +320,18 @@ class Battle:
             if amount > loot[1]:
                 continue
             else: 
-                self.fightersNames[characterName].money += amount
-                loot[1] -= amount
+                self.fightersNames[characterName].money += int(amount)
+                loot[1] -= int(amount)
                 
     
     def battle(self):
         self.checkForDeath(self.fighters)
         while not self.hasBattleEnded():
             self.turn()
+        for fighter in self.fighters:
+            if isinstance(fighter, player.Player):
+                fighter.saveFighter(fighter.name+".sav")
+
         loot = self.collectLoot()
         self.shareLoot(loot)
         
@@ -332,6 +339,8 @@ class Battle:
         ## checking for upgrades ##
         for fighter in self.fighters:
             if isinstance(fighter, player.Player):
+                fighter.saveFighter(fighter.name+".sav")
+
                 for skill in fighter.actionCounter.keys():
                     if skill not in defaultSkills.NOT_UPGRADABLE and skill in defaultSkills.UPGRADABLE.keys(): 
                         lvSkill = defaultSkills.UPGRADABLE[skill][fighter.basicSkillsLevel[skill]]

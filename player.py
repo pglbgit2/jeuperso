@@ -12,9 +12,17 @@ class Player(fighter.CHARACTER):
     
     def getInitiative(self):
         result = "nope"
+        modif = 0
+        quick_attack_used = False
+        for action in self.actions:
+            if not quick_attack_used and "Quick_Attack" in action["name"]:
+                modif += 10
+                quick_attack_used = True
+            if "Quick_Movement" in action["name"]:
+                modif += 10
         while not result.isdigit():
             result = interaction.askFor(self.name+", roll 1d100 dice for Initiative, Give result")
-        return int(result)
+        return int(result)+modif
    
     def shot(self, accuracy : int):
         result = "nope"
@@ -37,6 +45,9 @@ class Player(fighter.CHARACTER):
         self.actionCounter[skill] += 1
         
     def dodge(self,modification=0, bodyPart:str="torso"):
+        for action in self.actions:
+            if "Brutal_Attack" in action["name"]:
+                return False
         result = "nope"
         while not result.isdigit():
             result = interaction.askFor(self.name+", roll 1d100 dice for Dodging, Give result")

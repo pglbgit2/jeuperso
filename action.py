@@ -219,7 +219,7 @@ class useConsumable(Action):
 
 class Equip(Action): 
     def __init__(self):
-        super().__init__("Equip", 1, 0, 1, 0)
+        super().__init__("Equip", 0, 0, 1, 0)
     
     def acts(self, fighter : fighter.CHARACTER, targets : List[fighter.CHARACTER], otherInfos : Dict[str, Union[Tuple[int,int], List[fighter.CHARACTER], Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON], consumable.Consumable]]):
         fighter.equip(otherInfos["item"],otherInfos["bodyPart"])
@@ -371,7 +371,8 @@ class Shot(Action):
                 munition : weapons.WEAPON = fighter.removeItemFromInventoryByName(getattr(weapons,weapon.name,None)["munition"])
                 potential_damage = 0
                 if munition != None:
-                    potential_damage += munition.damage
+                    potential_damage += round(munition.damage*2.5)
+                    potential_damage += fighter.damageBonus
                     damage_type = munition.damageType
                     if fighter.shot(self.accuracy+weapon.accuracy):
                         interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
@@ -385,7 +386,8 @@ class Shot(Action):
         elif weapon.name in weapons.THROWABLE:
             fighter.removeItemFromInventoryByName(weapon.name)
             assert len(targets) == 1
-            potential_damage = weapon.damage
+            potential_damage = round(weapon.damage*2.5)
+            potential_damage += fighter.damageBonus
             damage_type = weapon.damage
             if fighter.shot(self.accuracy):
                 interaction.showInformation(fighter.name+" attack "+targets[0].name+" with "+str(potential_damage)+" damage")
