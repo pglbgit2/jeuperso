@@ -159,18 +159,22 @@ def getPlayerActions(playerName : str, units_name : List[str], valid_actions : L
                         Actions.append({"name": actionName, "otherInfos" : otherInfos})
                     
                     if "Attack" in actionName or "Shot" in actionName or "Melee_Combat" == actionName or actionName == "Protection_Field" or actionName == "Minor_Shield" or any(actionName == EAA for EAA in actionsTypes.EnergyAggressiveActions):
-                        target = getStrInList(units_name,"Targets Name\n")
-                        if ", " in target:
-                            fightersName = target.split(", ")
-                        else: fightersName = [target]
+                        targets = []
+                        potential_targets = list(units_name)
+                        while True:
+                            target = getStrInList(potential_targets+["none"],"Targets Name\n")
+                            if target == "none":
+                                break
+                            if target not in targets:
+                                targets.append(target)
                         
                         bodyPart = getStrInList(["torso", "legs", "head"], "body part to hit")
                         otherInfos["bodyPart"] = bodyPart
                         
-                        for fighterName in fightersName:
+                        for fighterName in targets:
                             if fighterName not in units_name:
                                 raise Exception("given fighter name"+fighterName+" do not exist")   
-                        action = {"name" : actionName, "targets" : fightersName}
+                        action = {"name" : actionName, "targets" : targets}
                         if actionName != "Melee_Combat" and actionName != "Protection_Field" and actionName != "Minor_Shield" and all(actionName != EAA for EAA in actionsTypes.EnergyAggressiveActions) and "FireStorm" != actionName:         
                             hand = input("Used Hand to attack: left or right\n")
                             # if hand == "left":

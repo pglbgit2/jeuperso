@@ -46,7 +46,8 @@ if __name__ == '__main__':
     snake1 = fighter.CHARACTER.instantiate_from_class("DEFAULT_CLASS", "snake1", "Enemies", "SNAKE")
     bat1 = fighter.CHARACTER.instantiate_from_class("DEFAULT_CLASS", "bat1", "Enemies", "BAT")
     spider1 = fighter.CHARACTER.instantiate_from_class("DEFAULT_CLASS", "spider1", "Enemies", "GIANT_SPIDER")
-    
+    troll1 = fighter.CHARACTER.instantiate_from_class("BRUTE", "troll1", "Enemies", "TROLL")
+
     goblin1 = fighter.CHARACTER.instantiate_from_class("THIEF","goblin1","Enemies","GOBLIN")
     goblin1.isControlledByGM = False
     goblin2 = fighter.CHARACTER.instantiate_from_class("THIEF","goblin2","Enemies","GOBLIN")
@@ -64,7 +65,7 @@ if __name__ == '__main__':
     # StreetsWatcher1 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher1","Enemies","HUMAN")
    
     # Stilvor = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher4","Enemies","HUMAN")
-    battle1 = battle.Battle([ pluton, fabien, Eloi, Cryftoren, goblin1, goblin2])
+    battle1 = battle.Battle([ pluton, fabien, troll1])
     battle1.battle()
     
     

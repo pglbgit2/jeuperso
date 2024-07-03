@@ -25,11 +25,11 @@ GIANT_SPIDER = {
     "magic" : 0,
     "stamina_regeneration"  : 10, 
     "race"  :  "HUMAN",
-    "dodge" : 0.20,
+    "dodge" : 0.15,
     "raceResistance" : {"blade" : 0.3, "pierce" : 0.3, "impact" : -0.2},
     "default_damage" : 18,
     "default_damage_type" : "pierce",
-    "tempDefByTurn" : {"head" : 10, "torso" : 45, "legs": 30}
+    "bodyBaseResistance" : {"head" : 10, "torso" : 45, "legs": 30}
 }
 
 ## BAT ##
@@ -44,7 +44,7 @@ BAT = {
     "raceResistance" : {},
     "default_damage" : 4,
     "default_damage_type" : "pierce",
-    "tempDefByTurn" : {"head" : 0, "torso" : 0, "legs": 0}
+    "bodyBaseResistance" : {"head" : 0, "torso" : 0, "legs": 0}
 }
 
 ## SNAKE ##
@@ -59,7 +59,7 @@ SNAKE = {
     "raceResistance" : {},
     "default_damage" : 4,
     "default_damage_type" : "pierce",
-    "tempDefByTurn" : {"head" : 0, "torso" : 0, "legs": 0}
+    "bodyBaseResistance" : {"head" : 0, "torso" : 0, "legs": 0}
 }
 
 ## SRAVAL ##
@@ -74,7 +74,7 @@ SRAVAL = {
     "raceResistance" : {"blade" : 0.3, "pierce" : 0.3, "impact" : 0.3, "fire" : -0.5},
     "default_damage" : 8,
     "default_damage_type" : "impact",
-    "tempDefByTurn" : 5
+    "bodyBaseResistance" : 5
 }
 
 
@@ -91,6 +91,23 @@ ORC  = {
     "default_damage" : 4,
     "default_damage_type" : "impact",
 }
+
+### TROLL
+TROLL  = {
+    "HP" : 110,
+    "MaxHP" : 110,
+    "Stamina" : 9,
+    "magic" : 0,
+    "stamina_regeneration"  : 7, 
+    "race"  :  "TROLL",
+    "dodge" : 0.05,
+    "raceResistance" : {"blade":0.4, "impact" : 0.3, "fire" : 0.3, "arcane":-0.3},
+    "default_damage" : 8,
+    "default_damage_type" : "impact",
+    "skillsLevel" : {"Brutal_Attack" : 4},
+    "bodyBaseResistance" : {"head" : 0, "torso" : 70, "legs": 0}
+}
+
 
 ## GOBLINS ##
 GOBLIN  = {
@@ -125,10 +142,7 @@ UNDEAD  = {
 DEFAULT_CLASS = {}
 
 THIEF = {
-    "HP" : 22,
-    "MaxHP" : 22,
     "Stamina" : 5,
-    "magic" : 0,
     "gold" : 5,
     "stamina_regeneration" : 5,
     "dodge" : 0.20,
@@ -146,8 +160,6 @@ CITY_GARD = {
 }
 
 FOOTPAD = {
-    "HP" : 22,
-    "MaxHP" : 22,
     "magic" : 0,
     "gold" : 5,
     "stamina_regeneration" : 5,
@@ -156,8 +168,6 @@ FOOTPAD = {
 }
 
 ARCHER = {
-    "HP" : 22,
-    "MaxHP" : 22,
     "magic" : 0,
     "gold" : 5,
     "stamina_regeneration" : 5,
@@ -166,15 +176,15 @@ ARCHER = {
 }
 
 WARRIOR = {
-    "HP" : 25,
-    "MaxHP" : 25,
-    "magic" : 0,
     "gold" : 5,
     "stamina_regeneration" : 6,
     "dodge" : 0.15,
     "Inventory" : {"weapons" : [["random",True,["SPIKED_CLUB", "SWORD"]]], "armors" : [], "items" : []}
 }
 
+BRUTE = {
+    "Inventory" : {"weapons" : [["random",True,["WOODEN_STAFF", "SPIKED_CLUB"]]], "armors" : [], "items" : []}
+}
 
 APPRENTICE = {
     "HP" : 20,
@@ -203,8 +213,8 @@ MAGE = {
 
 
 POISONER = ["SNAKE"]
-RACES = ["HUMAN","ORC","GOBLIN", "UNDEAD", "GIANT_SPIDER", "SRAVAL", "SNAKE", "BAT"]
-CLASSES = ["THIEF", "CITY_GARD", "FOOTPAD", "ARCHER", "WARRIOR", "DEFAULT_CLASS", "MAGE","APPRENTICE"]
+RACES = ["HUMAN","ORC","GOBLIN", "UNDEAD", "GIANT_SPIDER", "SRAVAL", "SNAKE", "BAT", "TROLL"]
+CLASSES = ["THIEF", "CITY_GARD", "FOOTPAD", "ARCHER", "WARRIOR", "DEFAULT_CLASS", "MAGE","APPRENTICE", "BRUTE"]
 
 DEFAULT_RESISTANCE = {
     "impact" : 0,

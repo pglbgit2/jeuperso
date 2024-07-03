@@ -6,7 +6,7 @@ FACTIONS = ["Players","Enemies"]
 
 
 class CHARACTER:
-    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "HUMAN",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = list(defaultSkills.DEFAULT_SKILLS), dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = None, default_damage :int = 2, default_damage_type:int = "impact", tempDefByTurn : Union[int, Dict[str, int]]=0):
+    def __init__(self, name:str, faction:str, gold:int = 0, HP:int =20, MaxHP:int =20, Stamina:int =5, magic:int =0, stamina_regeneration:int =5, race :str = "HUMAN",  Equipment: List[Union[armors.ARMOR, weapons.WEAPON, weapons.RANGE_WEAPON]] = [], Inventory: List[items.ITEM] = [], skills : List[str] = list(defaultSkills.DEFAULT_SKILLS), dodge : float = 0.15, skillsLevel : Union[Dict[str,int], str] = {}, shotBonus : float = 0, raceResistance : Dict[str,float] = None, default_damage :int = 2, default_damage_type:int = "impact", bodyBaseResistance : Union[int, Dict[str, int]]=0):
         self.HP = float(HP)
         self.MaxHP = float(MaxHP)
         self.stamina = float(Stamina)
@@ -52,10 +52,10 @@ class CHARACTER:
         self.actions = []
         self.isControlledByGM = True
         self.shotBonus = shotBonus
-        if isinstance(tempDefByTurn, dict):
-            self.defenseByBodyPart = tempDefByTurn
-        elif isinstance(tempDefByTurn, int):
-            self.defenseByBodyPart = {"head" : tempDefByTurn, "torso" : tempDefByTurn, "legs" : tempDefByTurn}
+        if isinstance(bodyBaseResistance, dict):
+            self.defenseByBodyPart = bodyBaseResistance
+        elif isinstance(bodyBaseResistance, int):
+            self.defenseByBodyPart = {"head" : bodyBaseResistance, "torso" : bodyBaseResistance, "legs" : bodyBaseResistance}
         self.MaxDefByBodyPart = copy.deepcopy(self.defenseByBodyPart)
         self.damageBonus = 0
         self.DamageDivisor = 1
@@ -532,7 +532,7 @@ class CHARACTER:
             "shotBonus" : self.shotBonus,
             "skills" : self.skills,
             "skillsLevel" : str(self.basicSkillsLevel),
-            "tempDefByTurn" : str(self.defenseByBodyPart)
+            "bodyBaseResistance" : str(self.defenseByBodyPart)
         }
         if self.inventory != []:
             fighterDict["Inventory"] = {}
@@ -577,7 +577,7 @@ class CHARACTER:
                 dictLine = file.readline()[:-1]
                 if dictLine != None:
                     fighterDictStr = ast.literal_eval(dictLine)
-                    fighterDictStr["tempDefByTurn"] = ast.literal_eval(fighterDictStr["tempDefByTurn"])
+                    fighterDictStr["bodyBaseResistance"] = ast.literal_eval(fighterDictStr["bodyBaseResistance"])
                     file.close()
                     if isinstance(fighterDictStr, Dict):
                         return CHARACTER.instantiate_from_dict(name=NameLine, faction=factionLine, classAttributes=fighterDictStr, race=raceLine)
