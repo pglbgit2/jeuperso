@@ -96,7 +96,7 @@ ORC  = {
 TROLL  = {
     "HP" : 110,
     "MaxHP" : 110,
-    "Stamina" : 9,
+    "Stamina" : 10,
     "magic" : 0,
     "stamina_regeneration"  : 7, 
     "race"  :  "TROLL",
@@ -215,8 +215,7 @@ MAGE = {
 POISONER = ["SNAKE"]
 RACES = ["HUMAN","ORC","GOBLIN", "UNDEAD", "GIANT_SPIDER", "SRAVAL", "SNAKE", "BAT", "TROLL"]
 CLASSES = ["THIEF", "CITY_GARD", "FOOTPAD", "ARCHER", "WARRIOR", "DEFAULT_CLASS", "MAGE","APPRENTICE", "BRUTE"]
-INVENTORY_ONLY_CLASSES = ["DEFAULT_CLASSES", "BRUTE"]
-
+INVENTORY_CLASSES = ["BRUTE"]
 DEFAULT_RESISTANCE = {
     "impact" : 0,
     "pierce" : 0,

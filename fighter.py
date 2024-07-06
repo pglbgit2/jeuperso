@@ -671,13 +671,14 @@ class CHARACTER:
     @staticmethod
     def instantiate_from_class(characterClass:str, name:str, faction: str, race:str):
         if characterClass in races.CLASSES:
-            if characterClass not in races.INVENTORY_ONLY_CLASSES:
+            if characterClass != "DEFAULT_CLASS" and characterClass not in races.INVENTORY_CLASSES:
                 classAttributes = copy.copy(getattr(races, characterClass))
             else:
                 classAttributes = copy.copy(getattr(races, race))
                 del classAttributes["race"]
                 del classAttributes["raceResistance"]
-
+                if characterClass in races.INVENTORY_CLASSES:
+                    classAttributes.update(getattr(races, copy.copy(characterClass)))
             return CHARACTER.instantiate_from_dict(classAttributes, name, faction,race)
         else : 
             interaction.throwError("Class do not exist, create it and add it to class array")
