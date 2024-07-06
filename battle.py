@@ -55,14 +55,14 @@ class Battle:
                     return False
                 if hand == "left":
                     tool = fighter.leftTool
-                    if tool == None:
-                        interaction.throwError("no tool")
-                        return False
+                    # if tool == None:
+                    #     interaction.throwError("no tool")
+                    #     return False
                 if hand == "right":
                     tool = fighter.rightTool
-                    if tool == None:
-                        interaction.throwError("no tool")
-                        return False
+                    # if tool == None:
+                    #     interaction.throwError("no tool")
+                    #     return False
             if "Quick_Attack" in actionName and tool in weapons.HEAVY:
                 interaction.throwError("Can not quick attack with heavy weapon")
 
@@ -72,10 +72,10 @@ class Battle:
                     interaction.throwError("Can not attack ally")
                     return False
                 
-            if "Attack" in actionName:
-                if tool.name not in weapons.MELEE_WEAPONS:
-                    interaction.throwError("Can not attack frontally with non melee weapon")
-                    return False
+            # if "Attack" in actionName:
+            #     if tool.name not in weapons.MELEE_WEAPONS:
+            #         interaction.throwError("Can not attack frontally with non melee weapon")
+            #         return False
 
             if actionName not in action.Action.ACTIONS_DICT.keys():
                 interaction.throwError("Using an action "+actionName+" that does not exist")

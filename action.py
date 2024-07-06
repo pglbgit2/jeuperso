@@ -9,7 +9,8 @@ def inflict_damage(action_name, target:fighter.CHARACTER, fighter:fighter.CHARAC
         if fighter.race in races.POISONER:
             canPoison = True
     if "Attack" in action_name:
-        canPoison = weapon.canPoison
+        if weapon != None:
+            canPoison = weapon.canPoison
     dealt_damage = target.take_damage(damage, damageType, bodyPart)
     if dealt_damage > 0:
         if canPoison:
@@ -295,19 +296,19 @@ class Attack(Action):
         super(Attack,self).acts(fighter, targets, otherInfos)
         potential_damage = 0
         if otherInfos["hand"] == "left" :
-            if fighter.leftTool == None:
-                Action.ACTIONS_DICT["Melee_Combat"].acts(fighter,targets,otherInfos)
-                return
-            potential_damage += fighter.leftTool.damage
-            damage_type = fighter.leftTool.damageType
-            aWeapon = fighter.leftTool
-        else : 
-            if fighter.rightTool == None:
-                Action.ACTIONS_DICT["Melee_Combat"].acts(fighter,targets,otherInfos)
-                return
-            potential_damage += fighter.rightTool.damage
-            damage_type = fighter.rightTool.damageType
-            aWeapon = fighter.rightTool
+            tool = fighter.leftTool
+        else:
+            tool = fighter.rightTool
+            
+        if tool == None:
+            potential_damage = fighter.default_damage
+            damage_type = fighter.default_damage_type
+            #Action.ACTIONS_DICT["Melee_Combat"].acts(fighter,targets,otherInfos)
+            #return
+        else:
+            potential_damage += tool.damage + fighter.default_damage
+            damage_type = tool.damageType
+            
         potential_damage = potential_damage * self.factor
         potential_damage += fighter.damageBonus
         for target in targets:
@@ -315,7 +316,7 @@ class Attack(Action):
             noFail = False
             modifier = 0
             if self.name.startswith("Quick_Attack"):
-                if aWeapon.name in weapons.SMALL_WEAPON:
+                if tool != None and tool.name in weapons.SMALL_WEAPON:
                     noFail = True
                 else:
                     modifier = -0.4
@@ -326,7 +327,7 @@ class Attack(Action):
                     modifier += 0.2
             if noFail or not target.dodge(bodyPart=bodyPart, modification=modifier):
                 interaction.showInformation(fighter.name+" attack "+target.name+" with "+str(potential_damage)+" damage")
-                inflict_damage(self.name, target, fighter, bodyPart, damage_type, potential_damage, aWeapon)
+                inflict_damage(self.name, target, fighter, bodyPart, damage_type, potential_damage, tool)
             else:
                 interaction.showInformation(target.name+" dodged attack")
                 if canParry :

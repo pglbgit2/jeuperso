@@ -177,10 +177,10 @@ class CHARACTER:
     def getUsableSkills(self):
         skills = copy.copy(self.skills)
         toRemove = []
-        if self.leftTool == None and self.rightTool == None:
-            for skill in skills:
-                if "Attack" in skill:
-                    toRemove.append(skill)
+        # if self.leftTool == None and self.rightTool == None:
+        #     for skill in skills:
+        #         if "Attack" in skill:
+        #             toRemove.append(skill)
         for skillIssue in toRemove:
             skills.remove(skillIssue)
         return skills
@@ -671,7 +671,7 @@ class CHARACTER:
     @staticmethod
     def instantiate_from_class(characterClass:str, name:str, faction: str, race:str):
         if characterClass in races.CLASSES:
-            if characterClass != "DEFAULT_CLASS":
+            if characterClass not in races.INVENTORY_ONLY_CLASSES:
                 classAttributes = copy.copy(getattr(races, characterClass))
             else:
                 classAttributes = copy.copy(getattr(races, race))
