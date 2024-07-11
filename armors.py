@@ -1,5 +1,6 @@
-import items, interaction, math, copy, races
+import items, interaction, math, copy, races, os,json
 from typing import Dict
+from inspect import signature
 
 
 ## DEFAULT CHAIN_MAIL ATTRIBUTES ##
@@ -152,13 +153,43 @@ LEGS = ["LEATHER_LP","IRON_LP","STEEL_LP"]
 ARMORS = BODY+HEAD+LEGS
 
 class ARMOR(items.ITEM):
-    def __init__(self,name:str, cost : int, weight : int, durability : int, absorption : Dict[str,int]):
+    def __init__(self,name:str, cost : int, weight : int, durability : int, absorption : Dict[str,int], maxDurability=-1):
         super().__init__(name,cost,weight)
-        self.maxDur = durability
+        if maxDurability == -1:
+            self.maxDur = durability
+        else:
+            self.maxDur = maxDurability
         self.absorption = copy.copy(DEFAULT_ABSORPTION)
         self.absorption.update(absorption)
         self.durability = durability
-        
+    
+    @staticmethod
+    def get_armor_from_file(armor_name):
+        directory = "armors"
+        target_file = f"{armor_name}.json"
+        for root, dirs, files in os.walk(directory):
+            if target_file in files:
+                file_path = os.path.join(root, target_file)
+                with open(file_path, 'r', encoding='utf-8') as file:
+                    armor = json.load(file)
+                    if "categories" in armor.keys():
+                        categories = armor["categories"]
+                        del armor['categories']
+                    class_args = signature(ARMOR).parameters.keys()
+                    if all(key in armor for key in class_args):
+                        for category in categories:
+                            if category in globals().keys() and type(globals()[category]) is list:
+                                Category = globals()[category]
+                                if armor["name"] not in Category:
+                                    Category.append(armor["name"])
+                        instance = ARMOR(**armor)
+                        return instance
+                    else:
+                        print("Keys do not match the class constructor arguments.")
+                        return None
+    
+    
+    
     @staticmethod
     def get_armor(armor_name):
         if armor_name in globals():
@@ -184,4 +215,4 @@ class ARMOR(items.ITEM):
         if self.durability > self.maxDur:
             self.durability = self.maxDur
             
-            
+#print(ARMOR.get_armor_from_file("CHAIN_MAIL").durability)

@@ -1,0 +1,13 @@
+
+{
+    "name" : "CHAIN_MAIL",
+    "maxDurability" : 50,
+    "durability" : 30,
+    "cost" : 70,
+    "weight" : 40,
+    "absorption" : {
+        "blade" : 0.6,
+        "pierce" : 0.6,
+        "impact" : 0.4},
+    "categories" : ["BODY"]
+}

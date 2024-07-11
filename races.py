@@ -27,7 +27,7 @@ GIANT_SPIDER = {
     "race"  :  "GIANT_SPIDER",
     "dodge" : 0.15,
     "raceResistance" : {"blade" : 0.3, "pierce" : 0.3, "impact" : -0.2},
-    "default_damage" : 18,
+    "default_damage" : 8,
     "default_damage_type" : "pierce",
     "bodyBaseResistance" : {"head" : 10, "torso" : 45, "legs": 30}
 }
@@ -72,7 +72,7 @@ SRAVAL = {
     "race"  :  "SRAVAL",
     "dodge" : 0.25,
     "raceResistance" : {"blade" : 0.3, "pierce" : 0.3, "impact" : 0.3, "fire" : -0.5},
-    "default_damage" : 8,
+    "default_damage" : 4,
     "default_damage_type" : "impact",
     "bodyBaseResistance" : 5
 }
@@ -104,8 +104,8 @@ TROLL  = {
     "raceResistance" : {"blade":0.4, "impact" : 0.3, "fire" : 0.3, "arcane":-0.3},
     "default_damage" : 8,
     "default_damage_type" : "impact",
-    "skillsLevel" : {"Brutal_Attack" : 4},
-    "bodyBaseResistance" : {"head" : 0, "torso" : 70, "legs": 0}
+    "skillsLevel" : {"Brutal_Attack" : 4, "Classic_Attack": 4},
+    "bodyBaseResistance" : {"head" : 0, "torso" : 70, "legs": 20}
 }
 
 

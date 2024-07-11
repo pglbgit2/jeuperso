@@ -343,7 +343,10 @@ class CHARACTER:
                 interaction.showInformation("damage reduced by temporary armor by:"+str(dif))
                 self.defensePoints -= dif
             
-            
+            if bodyPart == "head":
+                damage = damage * 2
+                interaction.showInformation("damage multiplied by 2 because hitting head")
+
             bodyDef = self.defenseByBodyPart[bodyPart]
             if bodyDef > 0:
                 oldDamage = damage

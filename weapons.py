@@ -1,5 +1,5 @@
-import items, interaction
-
+import items, interaction, os, json
+from inspect import signature
 ###### MELEE WEAPON ######
 ## DEFAULT SWORD ATTRIBUTES ##
 
@@ -191,7 +191,32 @@ class WEAPON(items.ITEM):
         else:
             interaction.throwError("No Weapon with such name")
             return None
-    
+        
+    @staticmethod
+    def get_weapon_from_file(weapon_name):
+        directory = "weapons"
+        target_file = f"{weapon_name}.json"
+        for root, dirs, files in os.walk(directory):
+            if target_file in files:
+                file_path = os.path.join(root, target_file)
+                with open(file_path, 'r', encoding='utf-8') as file:
+                    weapon = json.load(file)
+                    if "categories" in weapon.keys():
+                        categories = weapon["categories"]
+                        del weapon['categories']
+                    class_args = signature(WEAPON).parameters.keys()
+                    if all(key in weapon for key in class_args):
+                        for category in categories:
+                            if category in globals().keys() and type(globals()[category]) is list:
+                                Category = globals()[category]
+                                if weapon["name"] not in Category:
+                                    Category.append(weapon["name"])
+                        instance = WEAPON(**weapon)
+                        return instance
+                    else:
+                        print("Keys do not match the class constructor arguments.")
+                        return None
+            
 class RANGE_WEAPON(items.ITEM):
     def __init__(self, name, cost : int, accuracy : int, weight : int, munition : str):      
         super().__init__(name,cost,weight)
@@ -206,5 +231,6 @@ class RANGE_WEAPON(items.ITEM):
         else:
             interaction.throwError("No Weapon with such name")
             return None
+        
 
-#print(WEAPON.get_melee_weapon("SWORD"))
+#print(WEAPON.get_weapon_from_file("sword"))

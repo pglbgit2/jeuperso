@@ -1,0 +1,9 @@
+{
+    "name" : "FORK",
+    "cost" : 40,
+    "damage" : 6,
+    "speed" : 15,
+    "weight" : 20,
+    "type" : "blade",
+    "categories" : ["MELEE_WEAPONS", "THROWABLE", "ONE_HAND_WEAPONS"]
+}
