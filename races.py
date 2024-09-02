@@ -136,6 +136,20 @@ UNDEAD  = {
     "default_damage" : 2,
     "default_damage_type" : "necrotic",
 }
+### WARG ###
+WARG  = {
+    "HP" : 45,
+    "MaxHP" : 45,
+    "Stamina" : 8,
+    "magic" : 0,
+    "stamina_regeneration" : 8, 
+    "race"  :  "WARG",
+    "dodge" : 0.20,
+    "raceResistance" : {"blade" : 0.2, "pierce" : 0.2},
+    "default_damage" : 6,
+    "default_damage_type" : "pierce",    
+    "bodyBaseResistance" : {"head" : 0, "torso" : 30, "legs": 0}
+}
 
 ### CHARACTER CLASSES ###
 
@@ -213,7 +227,7 @@ MAGE = {
 
 
 POISONER = ["SNAKE"]
-RACES = ["HUMAN","ORC","GOBLIN", "UNDEAD", "GIANT_SPIDER", "SRAVAL", "SNAKE", "BAT", "TROLL"]
+RACES = ["HUMAN","ORC","GOBLIN", "UNDEAD", "GIANT_SPIDER", "SRAVAL", "SNAKE", "BAT", "TROLL", "WARG"]
 CLASSES = ["THIEF", "CITY_GARD", "FOOTPAD", "ARCHER", "WARRIOR", "DEFAULT_CLASS", "MAGE","APPRENTICE", "BRUTE"]
 INVENTORY_CLASSES = ["BRUTE"]
 DEFAULT_RESISTANCE = {

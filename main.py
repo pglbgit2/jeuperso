@@ -5,8 +5,8 @@ if __name__ == '__main__':
     action.setupActions()
     
     ## CREATE NEW PLAYER
-    # newPlayer = player.Player(**player.Player.getCharacterInfos())
-    # newPlayer.saveFighter(newPlayer.name+".sav")
+    newPlayer = player.Player(**player.Player.getCharacterInfos())
+    newPlayer.saveFighter(newPlayer.name+".sav")
     
     
     ## CREATE NEW FIGHTER
@@ -46,12 +46,17 @@ if __name__ == '__main__':
     snake1 = fighter.CHARACTER.instantiate_from_class("DEFAULT_CLASS", "snake1", "Enemies", "SNAKE")
     bat1 = fighter.CHARACTER.instantiate_from_class("DEFAULT_CLASS", "bat1", "Enemies", "BAT")
     spider1 = fighter.CHARACTER.instantiate_from_class("DEFAULT_CLASS", "spider1", "Enemies", "GIANT_SPIDER")
-    troll1 = fighter.CHARACTER.instantiate_from_class("BRUTE", "troll1", "Enemies", "TROLL")
-
+    warg1 = fighter.CHARACTER.instantiate_from_class("DEFAULT_CLASS", "warg1", "Enemies", "WARG")
+    # troll1 = fighter.CHARACTER.instantiate_from_class("BRUTE", "troll1", "Enemies", "TROLL")
+    # troll1.defenseByBodyPart["head"] -= 9
+    # troll1.defenseByBodyPart["legs"] = 0
+    # troll1.defenseByBodyPart["torso"] -= 9
     goblin1 = fighter.CHARACTER.instantiate_from_class("THIEF","goblin1","Enemies","GOBLIN")
     goblin1.isControlledByGM = False
     goblin2 = fighter.CHARACTER.instantiate_from_class("THIEF","goblin2","Enemies","GOBLIN")
     goblin2.isControlledByGM = False
+
+    
 
     # goblin3 = fighter.CHARACTER.instantiate_from_class("THIEF","goblin3","Enemies","GOBLIN")
     # goblin4 = fighter.CHARACTER.instantiate_from_class("THIEF","goblin4","Enemies","GOBLIN")
@@ -65,7 +70,7 @@ if __name__ == '__main__':
     # StreetsWatcher1 = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher1","Enemies","HUMAN")
    
     # Stilvor = fighter.CHARACTER.instantiate_from_class("MAGE","StreetWatcher4","Enemies","HUMAN")
-    battle1 = battle.Battle([ pluton, fabien, troll1])
+    battle1 = battle.Battle([ pluton, fabien, warg1, goblin1])
     battle1.battle()
     
     

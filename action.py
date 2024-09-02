@@ -386,8 +386,8 @@ class Shot(Action):
         
         elif weapon.name in weapons.THROWABLE:
             fighter.removeItemFromInventoryByName(weapon.name)
-            assert len(targets) == 1
-            potential_damage = round(weapon.damage*2.5)
+            #assert len(targets) == 1
+            potential_damage = round(weapon.damage*3)
             potential_damage += fighter.damageBonus
             damage_type = weapon.damage
             if fighter.shot(self.accuracy):

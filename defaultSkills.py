@@ -158,25 +158,25 @@ UPGRADABLE = {
         6 : {"StaminaCost" : 7, "UpgradeExpCost" : 60, "dodge_alteration" : -200, "damageFactor" : 6}  
     },
     PS : {
-        1 : {"StaminaCost" : 4, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.6},
+        1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.6},
         2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.65},
         3 : {"StaminaCost" : 3, "UpgradeExpCost" : 30, "dodge_alteration" : 0,"accuracy" : 0.70},
         4 : {"StaminaCost" : 3, "UpgradeExpCost" : 45, "dodge_alteration" : 0,"accuracy" : 0.75},
         5 : {"StaminaCost" : 3, "UpgradeExpCost" : 60, "dodge_alteration" : 0,"accuracy" : 0.85}
     },
     QS : {
-        1 : {"StaminaCost" : 2, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.2},
-        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0.1,"accuracy" : 0.25},
-        3 : {"StaminaCost" : 3, "UpgradeExpCost" : 30, "dodge_alteration" : 0.15,"accuracy" : 0.3},
-        4 : {"StaminaCost" : 3, "UpgradeExpCost" : 45, "dodge_alteration" : 0.20,"accuracy" : 0.4},
-        5 : {"StaminaCost" : 3, "UpgradeExpCost" : 60, "dodge_alteration" : 0.25,"accuracy" : 0.5}
+        1 : {"StaminaCost" : 1, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.2},
+        2 : {"StaminaCost" : 1, "UpgradeExpCost" : 20, "dodge_alteration" : 0.1,"accuracy" : 0.25},
+        3 : {"StaminaCost" : 2, "UpgradeExpCost" : 30, "dodge_alteration" : 0.15,"accuracy" : 0.3},
+        4 : {"StaminaCost" : 2, "UpgradeExpCost" : 45, "dodge_alteration" : 0.20,"accuracy" : 0.4},
+        5 : {"StaminaCost" : 2, "UpgradeExpCost" : 60, "dodge_alteration" : 0.25,"accuracy" : 0.5}
     },
     CS : {
-        1 : {"StaminaCost" : 3, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.4},
-        2 : {"StaminaCost" : 3, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.45},
-        3 : {"StaminaCost" : 3, "UpgradeExpCost" : 30, "dodge_alteration" : 0,"accuracy" : 0.5},
-        4 : {"StaminaCost" : 3, "UpgradeExpCost" : 45, "dodge_alteration" : 0,"accuracy" : 0.55},
-        5 : {"StaminaCost" : 3, "UpgradeExpCost" : 60, "dodge_alteration" : 0,"accuracy" : 0.6},
+        1 : {"StaminaCost" : 2, "UpgradeExpCost" : 10,  "dodge_alteration" : 0,"accuracy" : 0.4},
+        2 : {"StaminaCost" : 2, "UpgradeExpCost" : 20, "dodge_alteration" : 0,"accuracy" : 0.45},
+        3 : {"StaminaCost" : 2, "UpgradeExpCost" : 30, "dodge_alteration" : 0,"accuracy" : 0.5},
+        4 : {"StaminaCost" : 2, "UpgradeExpCost" : 45, "dodge_alteration" : 0,"accuracy" : 0.55},
+        5 : {"StaminaCost" : 2, "UpgradeExpCost" : 60, "dodge_alteration" : 0,"accuracy" : 0.6},
     }, 
    
     
